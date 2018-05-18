@@ -1,0 +1,58 @@
+<style>
+	a{
+		color: #C0BEBF;
+	}
+	h1{
+		font-family:courier;
+		background-color:#afb5c2;
+		padding:5px;
+		text-align:center;
+		color:#d0d1d8;
+	}
+	h2{
+		border-bottom:dashed;
+		border-radius: 2px;
+	}
+	body{
+		background-image: url("flipboard-652081-unsplash.jpg");
+		font-family:courier;
+		color:#a0a1a8;
+		text-align:center;
+	}
+	.infoSection{
+		max-width:800px;
+		margin:auto;
+		background-color: white;
+		padding:10px;
+		border-radius:25px;
+		border:1px solid #ddd;
+	}
+	input[type=text], select {
+	    width: 50%;
+		height:10%;
+	    padding: 12px 20px;
+	    margin: 8px 0;
+	    display: inline-block;
+	    border: 1px solid #ccc;
+	    border-radius: 4px;
+	    box-sizing: border-box;
+	}
+	input[type=submit] {
+	    width: 20%;
+	    background-color: #567490;
+	    color: white;
+	    padding: 14px 20px;
+	    margin: 8px 0;
+	    border: none;
+	    border-radius: 4px;
+	    cursor: pointer;
+	}
+	input[type=submit]:hover {
+	    background-color: #8597ac;
+	}
+	.home{
+		position: fixed;
+		bottom:0;
+		text-align: center;
+	}
+</style>
