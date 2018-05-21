@@ -1,6 +1,15 @@
 <style>
-	a{
-		color: #C0BEBF;
+	a:link{
+		color:white;
+	}
+	a:visited{
+		color:white;
+	}
+	a:active{
+		color:white;
+	}
+	a:hover{
+		color: #8597AC;
 	}
 	h1{
 		font-family:courier;

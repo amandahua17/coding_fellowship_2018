@@ -12,8 +12,8 @@
 	</head>
 	<body class='bg'>
 		<h1>suggestions for calming</h1>
-		<div class="infoSection">
-			<p>the author of this page has written down a personal list of steps for feeling better. we note that not everyone works the same way, and this is only a list of suggestions. feel free to add to the list below.</p>
+		<div>
+			<p>the author of this page has written down a personal list of steps for feeling better.<br>we note that not everyone works the same way, and this is only a list of suggestions. feel free to add to the list below.</p>
 			<h2>suggestions:</h2>
 			<ol>
 				<li>give yourself a short period of time to wallow in negative feeling<br>

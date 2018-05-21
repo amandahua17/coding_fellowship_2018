@@ -5,7 +5,7 @@
 	</head>
 	<body class='bg'>
 		<h1>playlists</h1>
-		<div class='infosection'>
+		<div>
 			<a target='_blank' href='https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/2qPlEDx72NGKkKhJkgIw1A?si=I7-UH57XRrqBuQiHqQ7x9g'>tired/quiet moods</a><br>
 			<a target='_blank' href='https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/6RH5vWE1Cvd3bItS13KrCd?si=nmtixRLCTWOkTHtntjS_Lw'>light/warm moods</a><br>
 			<a target='_blank' href='https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/6npCX62HU1NYi804GFzWCW?si=QlES2yAiQfeK7rM6Yyrc7w'>cold/icy moods</a><br>

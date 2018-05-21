@@ -5,7 +5,7 @@
 	</head>
 	<body class='bg'>
 		<h1>helplines</h1>
-		<div class='infoSection'>
+		<div>
 			<p>here's a list of helplines that you can call if you need to talk to someone about anything</p>
 			<ul>
 				US

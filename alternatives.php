@@ -1,7 +1,7 @@
 
 
 <?php
-	$listNum = 7;
+	$listNum = 2;
 	$switch = false;
  ?>
 <html>
@@ -12,16 +12,12 @@
 	</head>
 	<body class='bg'>
 		<h1>suggestions for calming</h1>
-		<div class="infoSection">
+		<div>
 			<h2>alternatives to self harm:</h2>
 			<ol>
 				<li>draw lines or doodles where you want to cut</li><br>
 				<li>play some loud music<br>
 					(suggested playlists: <a target='_blank'href='https://open.spotify.com/user/spotify/playlist/37i9dQZF1DX4fpCWaHOned?si=YbaxeAjaTcGqWhClPaMMkA'>Spotify playlist</a>)</li><br>
-				<li>get dressed immediately, turn on the lights, eat something</li><br>
-				<li>open the windows/shades</li><br>
-				<li>drink some cold water</li><br>
-				<li>if it's sunny, go outside</li>
 			</ol>
 			<?php
 					//$placeholder = $_REQUEST['suggestion'];

@@ -1,10 +1,16 @@
 <style>
-	a{
-		color: #C0BEBF;
+	a:link{
+		color: #D0D1D8;
+	}
+	a:visited{
+		color: white;
+	}
+	a:hover{
+		color: #8597AC;
 	}
 	h1{
 		font-family:courier;
-		background-color:#afb5c2;
+		background-color:white;
 		padding:5px;
 		text-align:center;
 		color:#d0d1d8;
@@ -25,7 +31,7 @@
 	}
 	body{
 		font-family:courier;
-		color:#a0a1a8;
+		color:white;
 		text-align:center;
 	}
 	.infoSection{
@@ -37,8 +43,8 @@
 		border:1px solid #ddd;
 	}
 	input[type=text], select {
-	    width: 50%;
-		height:10%;
+	    width: 20%;
+		height:8%;
 	    padding: 12px 20px;
 	    margin: 8px 0;
 	    display: inline-block;
@@ -47,7 +53,7 @@
 	    box-sizing: border-box;
 	}
 	input[type=submit] {
-	    width: 20%;
+	    width: 10%;
 	    background-color: #567490;
 	    color: white;
 	    padding: 14px 20px;
@@ -60,15 +66,14 @@
 	    background-color: #8597ac;
 	}
 	.home{
-		position: fixed;
+		position:sticky;
 		bottom:0;
 		text-align: center;
-		max-width:800px;
 		margin:auto;
-		background-color: white;
+		/*background-color: white;
 		padding:2px;
 		border-radius:25px;
-		border:1px solid #ddd;
+		border:1px solid #ddd;*/
 	}
 	span{
 		font-weight: normal;
