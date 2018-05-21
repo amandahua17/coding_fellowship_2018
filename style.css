@@ -70,7 +70,13 @@
 		border-radius:25px;
 		border:1px solid #ddd;
 	}
-	ol {
+	span{
+		font-weight: normal;
+	}
+	ol, ul {
 		list-style-position: inside;
+	}
+	li{
+		font-weight:bold;
 	}
 </style>
