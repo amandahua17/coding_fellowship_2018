@@ -1,21 +1,10 @@
 <?php
-	$combined = "fff";
-
-	if(isset($_REQUEST['color1'])&&isset($_REQUEST['color2'])){
-		//$combined=(unpack('I',$_REQUEST['color1'])['int'])+(unpack('I', $_REQUEST['color2'])['int']);
-		$combined=$_REQUEST['color1'];
-	}
-	echo "
-
-		<style>
-		body{
-			background-color: #$combined;
-		}
-		</style>
+	$hex = "ff0";
+	echo"
 		<form action=''>
 			<select name = 'color1'>
-				<option value='0xf00'>red</option>
-				<option value='0x0f0'>green</option>
+				<option value='f00'>red</option>
+				<option value='0f0'>green</option>
 				<option value='0x00f'>blue</option>
 				<option value='0x000'>black</option>
 				<option value='0xfff'>white</option>
@@ -35,7 +24,22 @@
 			</select>
 			<input type = 'submit' />
 		</form>
-	";
+		";
+	while(true){
+		if(isset($_REQUEST['color1'])&&isset($_REQUEST['color2'])){
+			$combined=(hexdec($_REQUEST['color1']))+(hexdec($_REQUEST['color2']));
+			$hex=dechex($combined);
+			//$combined=$_REQUEST['color1'];
+			echo "
+
+				<style>
+				body{
+					background-color: #$hex;
+				}
+				</style>";
+		}
+
+	}
 
 
 
