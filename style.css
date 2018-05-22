@@ -1,12 +1,19 @@
 <style>
+	body{
+
+	}
 	h1{
- 		color: white;
+		color: #fff;
+		text-align: left;
+		padding-left: 20%;
+		font-family: 'Lato', Arial, Helvetica,sans-serif;
+		font-weight: 600;
+		text-shadow: 0px 0px 1px #000;
+		line-height: 1.2em;
+	}
+	div{
 		background-color: #2980b9;
-
+		padding: 2em;
 	}
-	h2{
-
-	}
-
 
 </style>
