@@ -1,8 +1,15 @@
 
 
 <?php
-	$listNum = 7;
-	$switch = false;
+	session_start();
+	$suggestion = array("give yourself a short period of time to wallow in negative feeling<br>(suggested times: 5 minutes, 15 minutes)",
+	"take a shower",
+	"play some upbeat music<br>
+	(suggested playlists: <a target='_blank'href='https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/55vFMBQnGhzfabmeExGle3?si=dAwY38qRQq6cJMbVQI07CQ'>Spotify playlist</a>)",
+	"get dressed immediately, turn on the lights, eat something",
+	"open the windows/shades",
+	"drink some cold water",
+	"if it's sunny, go outside");
  ?>
 <html>
 	<head>
@@ -16,26 +23,37 @@
 			<p>the author of this page has written down a personal list of steps for feeling better.<br>we note that not everyone works the same way, and this is only a list of suggestions. feel free to add to the list below.</p>
 			<h2>suggestions:</h2>
 			<ol>
-				<li>give yourself a short period of time to wallow in negative feeling<br>
-					(suggested times: 5 minutes, 15 minutes)</li><br>
-				<li>take a shower</li><br>
-				<li>play some upbeat music<br>
-					(suggested playlists: <a target='_blank'href='https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/55vFMBQnGhzfabmeExGle3?si=dAwY38qRQq6cJMbVQI07CQ'>Spotify playlist</a>)</li><br>
-				<li>get dressed immediately, turn on the lights, eat something</li><br>
-				<li>open the windows/shades</li><br>
-				<li>drink some cold water</li><br>
-				<li>if it's sunny, go outside</li>
-			</ol>
-			<?php
-					//$placeholder = $_REQUEST['suggestion'];
-					//$REQUEST['suggestion'] = NULL;
-					if(isset($_REQUEST['suggestion'])){
-						$listNum++;
+				<?php
+					if(isset($_POST['suggestion'])){
+						var_dump($suggestion);
+						array_push($suggestion, $_POST['suggestion']);
+						var_dump($suggestion);
+					}
+					for($i=0;$i<count($suggestion);$i++){
 						echo"
-							$listNum. $_REQUEST[suggestion]<br\>
+							<li>$suggestion[$i]</li><br>
 						";
 					}
-			 ?>
+					// global $i;
+					// global $suggestion;
+					// var_dump($i);
+					// if(isset($_REQUEST['suggestion'])){
+					// 	$suggestion[$i]=$_REQUEST['suggestion'];
+					// 	// echo"
+					// 	// 	<li>$_REQUEST[suggestion]</li><br>
+					// 	// ";
+					// 	var_dump($suggestion);
+					// 	var_dump($i);
+					// 	echo"<li>$suggestion[$i]</li><br>";
+					// 	$i++;
+					// 	var_dump($i);
+					// }
+					// // for($i=0;$i<12;$i++){
+					// // 	echo"test<br><br>";
+					// // 	var_dump($i);
+					// // }
+				 ?>
+			</ol>
 			</p>
 			<h3>personal suggestions</h3>
 			<!--ADD A BOX HERE FOR SUGGESTIONS!!!!-->
