@@ -1,10 +1,19 @@
 <?php
-	//var_dump($_REQUEST);
-
-	//exit;
-
 	$posts=array(
 		'1'=>array(
+			'title'=>'about',
+			'header1'=>'about',
+			'p'=>'the goal of this website is to create a space where people can come to relieve stress or calm down whenever necessary.<br>
+			having access to a site where many if not all resources are congregated (like this one, hopefully)',
+			'listelement'=> '',
+			'header2'=>'the website',
+			'header3'=>'',
+			'sugg'=>false,
+			'ol'=>false,
+			'ul'=>false,
+			'links'=>false
+		),
+		'2'=>array(
 			'title'=>'list',
 			'header1'=>'suggestions for calming',
 			'p'=>'the author of this page has written down a personal list of steps for feeling better.<br>
@@ -23,6 +32,22 @@
 			'sugg'=>true,
 			'ol'=>true,
 			'ul'=>false,
+			'links'=>false
+		),'6'=>array(
+			'title'=>'exercises',
+			'header1'=>'exercises',
+			'p'=>"",
+			'listelement'=> array(
+				"NOTLI: if you're feeling sleepy or low-energy",
+				"<a target='blank' href='https://www.youtube.com/watch?v=r7oBejx1PHM'>tuck jumps x5</a>",
+				"NOTLI: for frustration or disappointment",
+				"go for a run"
+			),
+			'header2'=>'',
+			'header3'=>'',
+			'sugg'=>false,
+			'ol'=>false,
+			'ul'=>true,
 			'links'=>false
 		),
 		'7'=>array(
@@ -105,6 +130,15 @@
 			'listelement'=> '',
 			'header2'=>'',
 			'header3'=>'',
+			'linkarray'=>array(
+				'tired/quiet moods'=>'https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/2qPlEDx72NGKkKhJkgIw1A?si=I7-UH57XRrqBuQiHqQ7x9g',
+				'light/warm moods'=>'https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/6RH5vWE1Cvd3bItS13KrCd?si=nmtixRLCTWOkTHtntjS_Lw',
+				'cold/icy moods'=>'https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/6npCX62HU1NYi804GFzWCW?si=QlES2yAiQfeK7rM6Yyrc7w',
+				'heavy edm'=>'https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/6IKXyKgX75A5p67ZbQqvvt?si=GOO6dpPEQaKH__uacKBXEA',
+				'monthly'=>'https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/6jd9clieyQgb3UyKZaMaQc?si=S5ZS9j8tQCiY0oXwM-3COQ',
+				'summer pop'=>'https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/1yQIUrswAZhbIpzL9vLd4b?si=FOp19-FTSheioNaDfki58Q',
+				'classic rock and others from the same era'=>'https://open.spotify.com/user/22k343m6upq3jz5sylnsoshsa/playlist/6yalt8yoor2dfaBpG8qYWQ?si=eJWaJKSbRSaFwCMY6meKfg',
+			),
 			'sugg'=>false,
 			'ol'=>false,
 			'ul'=>false,
@@ -129,6 +163,14 @@
 					echo"<h2>".
 					$posts[$_REQUEST['postID']]['header2']."</h2>
 		";
+	}
+	if($posts[$_REQUEST['postID']]['links']){
+		//put down code for linked array (keys are titles)
+		foreach($posts[$_REQUEST['postID']]['linkarray'] as $key=>$link){
+			echo"
+				<a target='_blank' href=$link>$key</a><br>
+			";
+		}
 	}
 	if($posts[$_REQUEST['postID']]['sugg']){
 		if(isset($_REQUEST['suggestion'])){
