@@ -56,7 +56,6 @@
 					// // }
 				 ?>
 			</ol>
-			</p>
 			<h3>personal suggestions</h3>
 			<!--ADD A BOX HERE FOR SUGGESTIONS!!!!-->
 			<!--<input style="text-align:center"type='text' id='sugg' name='suggestion' placeholder='suggest away'><br>
