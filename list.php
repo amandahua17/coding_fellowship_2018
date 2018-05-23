@@ -25,8 +25,10 @@
 			<ol>
 				<?php
 					if(isset($_POST['suggestion'])){
+						$cookie_value=$_POST['suggestion'];
+						setcookie('sugg', $_POST['suggestion']);
 						var_dump($suggestion);
-						array_push($suggestion, $_POST['suggestion']);
+						array_push($suggestion, $_COOKIE['sugg']);
 						var_dump($suggestion);
 					}
 					for($i=0;$i<count($suggestion);$i++){
