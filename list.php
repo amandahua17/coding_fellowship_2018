@@ -1,4 +1,4 @@
-
+<!--post 0-->
 
 <?php
 	session_start();
@@ -24,7 +24,7 @@
 			<h2>suggestions:</h2>
 			<ol>
 				<?php
-					if(isset($_POST['suggestion'])){
+					if(isset($_REQUEST['suggestion'])){
 						$cookie_value=$_POST['suggestion'];
 						setcookie('sugg', $_POST['suggestion']);
 						var_dump($suggestion);

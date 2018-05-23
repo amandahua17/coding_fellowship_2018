@@ -25,7 +25,6 @@
 	.bg{
 		background-image: url("flipboard-652081-unsplash.jpg") ;
 		background-position: center;
-		background-repeat: no-repeat;
 		background-size: cover;
 		height: 100%;
 	}
