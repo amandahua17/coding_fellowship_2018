@@ -1,0 +1,86 @@
+<style>
+	a:link{
+		color: #white;
+	}
+	a:visited{
+		color: white;
+	}
+	a:hover{
+		color: #8597AC;
+	}
+	h1{
+		font-family:courier;
+		background-color:white;
+		padding:5px;
+		text-align:center;
+		color:#d0d1d8;
+	}
+	h2{
+		border-bottom:dashed;
+		border-radius: 2px;
+	}
+	body, html{
+		height:100%;
+	}
+	.bg{
+		background-image: url("flipboard-652081-unsplash.jpg") ;
+		background-position: center;
+		background-size: cover;
+		height: 100%;
+	}
+	body{
+		font-family:courier;
+		color:white;
+		text-align:center;
+	}
+	.infoSection{
+		max-width:800px;
+		margin:auto;
+		background-color: white;
+		padding:10px;
+		border-radius:25px;
+		border:1px solid #ddd;
+	}
+	input[type=text], select {
+	    width: 20%;
+		height:8%;
+	    padding: 12px 20px;
+	    margin: 8px 0;
+	    display: inline-block;
+	    border: 1px solid #ccc;
+	    border-radius: 4px;
+	    box-sizing: border-box;
+	}
+	input[type=submit] {
+	    width: 10%;
+	    background-color: #567490;
+	    color: white;
+	    padding: 14px 20px;
+	    margin: 8px 0;
+	    border: none;
+	    border-radius: 4px;
+	    cursor: pointer;
+	}
+	input[type=submit]:hover {
+	    background-color: #8597ac;
+	}
+	.home{
+		position:sticky;
+		bottom:0;
+		text-align: center;
+		margin:auto;
+		/*background-color: white;
+		padding:2px;
+		border-radius:25px;
+		border:1px solid #ddd;*/
+	}
+	span{
+		font-weight: normal;
+	}
+	ol, ul {
+		list-style-position: inside;
+	}
+	li{
+		font-weight:bold;
+	}
+</style>
