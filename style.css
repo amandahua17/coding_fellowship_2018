@@ -1,10 +1,7 @@
 <style>
 	*{
 	}
-	body{
-		font-family: sans-serif;
-	}
-	.HalfWidthImage.FloatLeft{
+	/* .HalfWidthImage.FloatLeft{
 		float:left;
 		margin-right:1em;
 	}
@@ -16,40 +13,40 @@
 	.HalfWidthImage{
 		max-width: 40%!important;
 		margin-bottom: 1em;
-	}
-	img{
+	} */
+	/* img{
 		max-width: 400px;
 		max-height: 400px;
-	}
-	p{
+	} */
+	/* p{
 		max-width: 400px;
 		font-size: 150%;
 	}
 	h1{
 		text-shadow: 0px 0px 1px black;
 		font-size: 50px;
-	}
-	.headerbg{
+	} */
+	/* .headerbg{
 		background-color: #2980b9;
 		padding: 1em;
 		padding-left: 20%;
 		color: white;
-	}
-	h3{
+	} */
+	/* h3{
 		color: #aaa;
 		font-style:italic;
 		font-size: 18px;
-	}
-	.maininfo{
+	} */
+	/* .maininfo{
 		padding-left: 20%;
-	}
-	h2{
+	} */
+	/* h2{
 		border-bottom: solid grey 1px;
 		font-size: 40px;
-	}
-	div{
+	} */
+	/* div{
 		border: solid;
 		border-color: white;
 
-	}
+	} */
 </style>
