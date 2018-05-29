@@ -4,6 +4,7 @@
 		include('include/databaseFunctions.php');
 
 	$postCount=getTotalPosts();
+	// var_dump($postCount);
 	// $picCount=getNumberPics();
 
 	echo"
@@ -18,17 +19,19 @@
 					<h2>Blog Posts</h2>
 					<div>";
 				// var_dump($postCount, $picCount);
-			for($i=1;$i<=$postCount;$i++){
+			for($i=1, $posti=1;$i<=$postCount;$i++){
+				// var_dump($i, $postCount, ($i<=$postCount), isPicture(GetPost($i)));
 				if (!isPicture(GetPost($i))){
 					echo"
-						<a href='view_post.php?postID=$i'>Post $i</a>
+						<a href='view_post.php?postID=$i'>".GetPost($i)['title']." by ".GetPost($i)['author']."</a><br><br>
 					";
-				// var_dump($i, $postCount, ($i<=$postCount));
+					$posti++;
 				}
 			}
 
 	echo"
 					</div>
+				<a href='view_post.php?postID=0'>See All</a>
 				</div>
 				<div>
 					<h2>Pictures</h2>
@@ -37,13 +40,14 @@
 				// var_dump(isPicture(GetPost($j)));
 				if (isPicture(GetPost($j))){
 					echo"
-						<a href='view_pic.php?postID=$j'>Picture $picj</a>
+						<a href='view_pic.php?postID=$j'>".GetPost($j)['title']." by ".GetPost($j)['author']."</a><br><br>
 					";
 					$picj++;
 				}
 			}
 	echo"
 					</div>
+				<a href='view_pic.php?postID=0'>See All</a>
 				</div>
 				<div>
 					<h2>Write your own entry</h2>

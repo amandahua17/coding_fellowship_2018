@@ -1,6 +1,11 @@
 <?php
 	include('config/config.php');
 	include('include/db_query.php');
+
+	function home(){
+		echo"<a href='index.php'>back to home</a>";
+	}
+	
 	//POST FUNCTIONS
 	function InsertBlogPost($author, $title, $body){
 		$result = dbQuery("
@@ -9,7 +14,7 @@
 		")->fetch();
 	}
 
-	function GetAllBlogPosts($postID){
+	function GetAllBlogPosts(){
 		$result = dbQuery("
 			SELECT *
 			FROM posts
@@ -32,7 +37,6 @@
 				<div>
 					<p>".$post['body']."</p>
 				</div>
-				<a href='index.php'>back to home</a>
 			</body>
 		</html>
 		";
@@ -49,14 +53,14 @@
 
 
 	//PIC FUNCTIONS
-	function InsertPic($photographer, $title, $link, $flavor){
+	function InsertPic($photographer, $title, $body, $link, $flavor){
 		$result = dbQuery("
-			INSERT INTO posts (author, title, isPic, link, flavor)
-			VALUES('$photographer', '$title', '1','$link', '$flavor')
+			INSERT INTO posts (author, title, body, isPic, link, flavor)
+			VALUES('$photographer', '$title', '$body', '1','$link', '$flavor')
 		")->fetch();
 	}
 
-	function GetAllPics($picID){
+	function GetAllPics(){
 		$result = dbQuery("
 			SELECT *
 			FROM posts
@@ -78,9 +82,11 @@
 				<h3>date: ".$pic['date']."</h3>
 				<div>
 					<img src='".$pic['link']."'alt='".$pic['flavor']."'>
-				</div>
-				<a href='index.php'>back to home</a>
-			</body>
+				</div>";
+				if($pic['body']!=null){
+					echo"<p>".$pic['body']."</p><br>";
+				}
+		echo"</body>
 		</html>
 		";
 	}
