@@ -2,26 +2,10 @@
 	include('config/config.php');
 	include('include/db_query.php');
 	//POST FUNCTIONS
-	function InsertBlogPost($author, $date, $title, $body){
+	function InsertBlogPost($author, $title, $body){
 		$result = dbQuery("
-			INSERT INTO posts (author, date, title, body)
-			VALUES('$author', '$date', '$title', '$body')
-		")->fetch();
-	}
-
-	function GetBlogPost($postID){
-		$result = dbQuery("
-			SELECT *
-			FROM posts
-			WHERE postID = $postID
-		")->fetch();
-		return $result;
-	}
-
-	function DeleteBlogPost($postID){
-		$result = dbQuery("
-			DELETE FROM posts
-			WHERE postID = $postID
+			INSERT INTO posts (author, title, body, isPic)
+			VALUES('$author', '$title', '$body', '0')
 		")->fetch();
 	}
 
@@ -29,6 +13,7 @@
 		$result = dbQuery("
 			SELECT *
 			FROM posts
+			WHERE isPic=0
 		")->fetchAll();
 		return $result;
 	}
@@ -57,39 +42,25 @@
 		$result = dbQuery("
 				SELECT COUNT(postID)
 				FROM posts
+				WHERE isPic=0
 			")->fetch();
-		return $result;
+		return $result['COUNT(postID)'];
 	}
 
 
 	//PIC FUNCTIONS
-	function InsertPic($photographer, $date, $title, $link, $flavor){
+	function InsertPic($photographer, $title, $link, $flavor){
 		$result = dbQuery("
-			INSERT INTO pics (photographer, date, title, link, flavor)
-			VALUES('$photographer', '$date', '$title', '$link', '$flavor')
-		")->fetch();
-	}
-
-	function GetPic($picID){
-		$result = dbQuery("
-			SELECT *
-			FROM pics
-			WHERE picID = $picID
-		")->fetch();
-		return $result;
-	}
-
-	function DeletePic($picID){
-		$result = dbQuery("
-			DELETE FROM pics
-			WHERE postID = $picID
+			INSERT INTO posts (author, title, isPic, link, flavor)
+			VALUES('$photographer', '$title', '1','$link', '$flavor')
 		")->fetch();
 	}
 
 	function GetAllPics($picID){
 		$result = dbQuery("
 			SELECT *
-			FROM pics
+			FROM posts
+			WHERE isPic=1
 		")->fetchAll();
 		return $result;
 	}
@@ -103,7 +74,7 @@
 			</head>
 			<body>
 				<h1>".$pic['title']."</h1>
-				<h2>by ".$pic['photographer']."</h2>
+				<h2>by ".$pic['author']."</h2>
 				<h3>date: ".$pic['date']."</h3>
 				<div>
 					<img src='".$pic['link']."'alt='".$pic['flavor']."'>
@@ -116,8 +87,47 @@
 
 	function getNumberPics(){
 		$result = dbQuery("
-				SELECT COUNT(picID)
-				FROM pics
+				SELECT COUNT(postID)
+				FROM posts
+				WHERE isPic=1
 			")->fetch();
+		return $result['COUNT(postID)'];
+	}
+
+	//BOTH
+
+	function GetPost($postID){
+		$result = dbQuery("
+			SELECT *
+			FROM posts
+			WHERE postID = $postID
+		")->fetch();
 		return $result;
+	}
+
+	function DeletePost($postID){
+		$result = dbQuery("
+			DELETE FROM posts
+			WHERE postID = $postID
+		")->fetch();
+	}
+
+	function isPicture($post){
+		$result = dbQuery("
+				SELECT isPic
+				FROM posts
+				WHERE postID=$post[postID]
+			")->fetch();
+		if($result['isPic']==1){
+			return true;
+		}
+		return false;
+	}
+
+	function getTotalPosts(){
+		$result = dbQuery("
+			SELECT COUNT(postID)
+			FROM posts
+		")->fetch();
+		return $result['COUNT(postID)'];
 	}
