@@ -42,7 +42,7 @@
 				if(!isset($_REQUEST['flavor'])){
 						$_REQUEST['flavor'] = $_REQUEST['photographer'];
 				}
-				insertPic($_REQUEST['photographer'], $_REQUEST['title'], $_REQUEST['body'], $_REQUEST['link'], $_REQUEST['flavor']);
+				insertPic($_REQUEST['photographer'], $_REQUEST['title'], $_REQUEST['body'], $_REQUEST['link'], $_REQUEST['flavor'], $_REQUEST['delKey']);
 				echo"Picture added!<br>";
 			}else if (isset($_REQUEST['photographer'])||isset($_REQUEST['title'])||isset($_REQUEST['link'])){
 				echo"Picture not added, please fill all the required fields!<br>";
@@ -52,7 +52,7 @@
 				if(!isset($_REQUEST['author'])){
 					$_REQUEST['author'] = 'Anonymous';
 				}
-				insertBlogPost($_REQUEST['author'], $_REQUEST['title'], $_REQUEST['body']);
+				insertBlogPost($_REQUEST['author'], $_REQUEST['title'], $_REQUEST['body'], $_REQUEST['delKey']);
 				echo"Post added!<br>";
 			}else if(isset($_REQUEST['title'])||isset($_REQUEST['body'])){
 				echo"Post not added, please fill all the required fields!<br>";

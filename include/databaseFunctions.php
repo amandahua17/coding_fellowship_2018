@@ -1,3 +1,4 @@
+
 <?php
 	include('config/config.php');
 	include('include/db_query.php');
@@ -8,15 +9,36 @@
 
 	function showDelete($postID){
 		echo"
-			<form action='/deleted.php' method='post' id='form1'>
-			 Delete Key: <input type='text' name='delKey'><br>
-			</form>
-			<button type='submit' form='form1' value='Submit'>Delete Post</button><br><br>
+			<button onClick='scriptDelete($_REQUEST[delKey])'>Delete Post</button><br><br>
 		";
-		if(isset($_REQUEST['delKey'])){
-			DeletePost($postID, $_REQUEST['delKey']);
-		}
+		echo"
+			<script>
+				function scriptDelete(delKey){
+					var key = prompt('Please enter delete key.');
+					if(key == delKey){
+						".DeletePost($postID)."
+					}
+				}
+			</script>
+		";
+
+		// if(isset($_REQUEST['delete'])){
+		// 	var_dump(GetPost($postID)['delKey']);
+		// 	echo"
+		// 		<script>
+		// 			alert('fdhldh');
+		// 			var key = prompt('Please enter delete key.');
+		// 			if(key == ".GetPost($postID)['delKey']."){
+		// 				".DeletePost($postID)."
+		// 			}
+		// 			else{
+		// 				alert('Wrong Delete Key! You do not have permission to delete this post.<br>');
+		// 			}
+		// 		</script>
+		// 	";
+		// }
 	}
+
 
 	//POST FUNCTIONS
 	function InsertBlogPost($author, $title, $body, $delKey){
@@ -124,17 +146,12 @@
 		return $result;
 	}
 
-	function DeletePost($postID, $delKey){
-		if($delKey==GetPost($postID)['delKey']){
-			$result = dbQuery("
-				DELETE FROM posts
-				WHERE postID = $postID
-			")->fetch();
-			echo"Post Deleted.<br>";
-		}
-		else{
-			echo"Wrong Delete Key! You do not have permission to delete this post.<br>";
-		}
+	function DeletePost($postID){
+		$result = dbQuery("
+			DELETE FROM posts
+			WHERE postID = $postID
+		")->fetch();
+		echo"Post Deleted.<br>";
 	}
 
 	function isPicture($post){
