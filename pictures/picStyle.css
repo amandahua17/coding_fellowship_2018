@@ -1,0 +1,42 @@
+<style>
+	a:link{
+		color:white;
+	}
+	a:visited{
+		color:white;
+	}
+	a:active{
+		color:white;
+	}
+	a:hover{
+		color: #8597AC;
+	}
+	h1{
+		font-family:courier;
+		text-align: center;
+		color:#aaa;
+	}
+	body{
+		background:linear-gradient(#020202, #f7f6f5);
+		text-align:center;
+	}
+	img{
+		display:block;
+		margin-left:auto;
+		margin-right:auto;
+		max-width: 1500px;
+		max-height: 600px;
+	}
+	.stickU{
+		position:sticky;
+		top:0;
+		text-align: center;
+		/*background-blend-mode: lighten;*/
+	}
+	.stickD{
+		position:sticky;
+		bottom:0;
+		text-align: center;
+		/*background-blend-mode: lighten;*/
+	}
+</style>
