@@ -1,4 +1,36 @@
+
 img{
 	max-height: 800px;
 	max-width: 800px;
+}
+
+body{
+	text-align:center;
+	background: #fff;
+	font-family:monospace;
+}
+
+a:link{
+	color: blue;
+}
+
+a:visited{
+	color: grey;
+}
+
+a:hover{
+	color: lightblue;
+}
+
+a:active{
+	color: purple;
+}
+
+h1{
+	padding: 2em;
+	background: #eee;
+}
+
+h2{
+	text-decoration:underline;
 }
