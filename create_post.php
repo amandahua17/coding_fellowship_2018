@@ -23,11 +23,15 @@
 						 <p class='required'>Title*:</p><input type='text' name='title'><br><br>
 						 Post Body (optional):<br><textarea name='body' rows='5' cols='40'></textarea><br><br>
 						 <p class='required'>Photo Path*:</p><input type='text' name='link'><br><br>
-						 Flavortext:<br><input type='text' name='flavor'><br><br>";
+						 Flavortext:<br><input type='text' name='flavor'><br><br>
+						 <p class='required'>Delete Key*:</p><input type='password' name='delKey'><br>
+						 <a href='delKeyInfo.php'>What is a Delete Key?</a><br><br>";
 				}else{
 					echo"Author:<br><input type='text' name='author'><br><br>
 						 <p class='required'>Title*:</p><input type='text' name='title'><br><br>
-						 <p class='required'>Post Body*:</p><textarea name='body' rows='5' cols='40'></textarea><br><br>";
+						 <p class='required'>Post Body*:</p><textarea name='body' rows='5' cols='40'></textarea><br><br>
+						 <p class='required'>Delete Key*:</p><input type='password' name='delKey'><br><br>
+						 <a href='delKeyInfo.php'>What is a Delete Key?</a><br><br>";
 				}
 
 	echo"

@@ -5,12 +5,24 @@
 	function home(){
 		echo"<a href='index.php'>back to home</a>";
 	}
-	
+
+	function showDelete($postID){
+		echo"
+			<form action='/deleted.php' method='post' id='form1'>
+			 Delete Key: <input type='text' name='delKey'><br>
+			</form>
+			<button type='submit' form='form1' value='Submit'>Delete Post</button><br><br>
+		";
+		if(isset($_REQUEST['delKey'])){
+			DeletePost($postID, $_REQUEST['delKey']);
+		}
+	}
+
 	//POST FUNCTIONS
-	function InsertBlogPost($author, $title, $body){
+	function InsertBlogPost($author, $title, $body, $delKey){
 		$result = dbQuery("
-			INSERT INTO posts (author, title, body, isPic)
-			VALUES('$author', '$title', '$body', '0')
+			INSERT INTO posts (author, title, body, isPic, delKey)
+			VALUES('$author', '$title', '$body', '0', '$delKey')
 		")->fetch();
 	}
 
@@ -35,7 +47,7 @@
 				<h2>by ".$post['author']."</h2>
 				<h3>date: ".$post['date']."</h3>
 				<div>
-					<p>".$post['body']."</p>
+					<p>".$post['body']."</p><br>
 				</div>
 			</body>
 		</html>
@@ -53,10 +65,10 @@
 
 
 	//PIC FUNCTIONS
-	function InsertPic($photographer, $title, $body, $link, $flavor){
+	function InsertPic($photographer, $title, $body, $link, $flavor, $delKey){
 		$result = dbQuery("
-			INSERT INTO posts (author, title, body, isPic, link, flavor)
-			VALUES('$photographer', '$title', '$body', '1','$link', '$flavor')
+			INSERT INTO posts (author, title, body, isPic, link, flavor, delKey)
+			VALUES('$photographer', '$title', '$body', '1','$link', '$flavor', '$delKey')
 		")->fetch();
 	}
 
@@ -86,7 +98,8 @@
 				if($pic['body']!=null){
 					echo"<p>".$pic['body']."</p><br>";
 				}
-		echo"</body>
+		echo"<br>
+			</body>
 		</html>
 		";
 	}
@@ -111,11 +124,17 @@
 		return $result;
 	}
 
-	function DeletePost($postID){
-		$result = dbQuery("
-			DELETE FROM posts
-			WHERE postID = $postID
-		")->fetch();
+	function DeletePost($postID, $delKey){
+		if($delKey==GetPost($postID)['delKey']){
+			$result = dbQuery("
+				DELETE FROM posts
+				WHERE postID = $postID
+			")->fetch();
+			echo"Post Deleted.<br>";
+		}
+		else{
+			echo"Wrong Delete Key! You do not have permission to delete this post.<br>";
+		}
 	}
 
 	function isPicture($post){
