@@ -8,15 +8,17 @@
 	}
 
 	function showDelete($postID){
+		$post = GetPost($postID);
 		echo"
-			<button onClick='scriptDelete($_REQUEST[delKey])'>Delete Post</button><br><br>
+			<button onClick='scriptDelete($post[delKey])'>Delete Post</button><br><br>
 		";
 		echo"
 			<script>
 				function scriptDelete(delKey){
-					var key = prompt('Please enter delete key.');
+					var key = prompt('Please enter delete key.', '');
 					if(key == delKey){
-						".DeletePost($postID)."
+						document.write(key);
+						document.write(delKey);
 					}
 				}
 			</script>
