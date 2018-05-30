@@ -29,10 +29,10 @@
 			//our box element
 			var box = document.getElementById("box");
 			var wspeed = Math.random()*5+1;		//in px/s
-			var hspeed = -Math.random()*5+1;
+			var hspeed = -(Math.random()*5)+1;
 			var speed = getSpeed(wspeed, hspeed);
 			// document.write('setting interval...');
-			var t = setInterval(move, 100/speed);
+			var t = setInterval(move, 50)//speed);
 
 			function getSpeed(wspeed, hspeed){
 				return Math.sqrt(Math.pow(wspeed, 2)+Math.pow(hspeed, 2));
@@ -47,7 +47,7 @@
 			//
 			// 	}
 			//
-				
+
 				if(posw<=0){
 					right=true;
 					wspeed-=1;	//lose momentum with collision
@@ -73,7 +73,7 @@
 				}else{
 					moveul();
 				}
-				// document.write("2: posw = ", posw, "\nposh = ", posh);
+				// document.write("2: posw = ", posw, "\nposh = ", posh, "\nright=", right);
 			}
 			function movedr() {
 				// document.write('movedr\n');
@@ -92,14 +92,14 @@
 			function moveul() {
 				// document.write('moveul\n');
 			    posw -= wspeed;
-				posh -= hspeed;
+				posh += hspeed;
 			    box.style.left = posw+"px";
 				box.style.top = posh+"px";
 			}
 			function moveur() {
 				// document.write('moveur\n');
 			    posw += wspeed;
-				posh -= hspeed;
+				posh += hspeed;
 			    box.style.left = posw+"px";
 				box.style.top = posh+"px";
 			}

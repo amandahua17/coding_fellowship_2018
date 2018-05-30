@@ -1,6 +1,10 @@
 <?php
 	include('include/databaseFunctions.php');
 
+	$errors = array();
+	function submitPost($name, ){
+
+	}
 	$type=$_REQUEST['type'];
 	echo"
 		<html>
@@ -35,29 +39,29 @@
 				}
 
 	echo"
-					<input type='submit'>
+					<input type='submit' name = 'button'>
 				</form>";
-		if($type == 1){
-			if(isset($_REQUEST['photographer'])&&isset($_REQUEST['title'])&&isset($_REQUEST['link'])){
-				if(!isset($_REQUEST['flavor'])){
-						$_REQUEST['flavor'] = $_REQUEST['photographer'];
-				}
-				insertPic($_REQUEST['photographer'], $_REQUEST['title'], $_REQUEST['body'], $_REQUEST['link'], $_REQUEST['flavor'], $_REQUEST['delKey']);
-				echo"Picture added!<br>";
-			}else if (isset($_REQUEST['photographer'])||isset($_REQUEST['title'])||isset($_REQUEST['link'])){
-				echo"Picture not added, please fill all the required fields!<br>";
-			}
-		}else{
-			if(isset($_REQUEST['title'])&&isset($_REQUEST['body'])){
-				if(!isset($_REQUEST['author'])){
-					$_REQUEST['author'] = 'Anonymous';
-				}
-				insertBlogPost($_REQUEST['author'], $_REQUEST['title'], $_REQUEST['body'], $_REQUEST['delKey']);
-				echo"Post added!<br>";
-			}else if(isset($_REQUEST['title'])||isset($_REQUEST['body'])){
-				echo"Post not added, please fill all the required fields!<br>";
-			}
-		}
+		// if($type == 1){
+		// 	if(isset($_REQUEST['photographer'])&&isset($_REQUEST['title'])&&isset($_REQUEST['link'])){
+		// 		if(!isset($_REQUEST['flavor'])){
+		// 				$_REQUEST['flavor'] = $_REQUEST['photographer'];
+		// 		}
+		// 		insertPic($_REQUEST['photographer'], $_REQUEST['title'], $_REQUEST['body'], $_REQUEST['link'], $_REQUEST['flavor'], $_REQUEST['delKey']);
+		// 		echo"Picture added!<br>";
+		// 	}else if (isset($_REQUEST['photographer'])||isset($_REQUEST['title'])||isset($_REQUEST['link'])){
+		// 		echo"Picture not added, please fill all the required fields!<br>";
+		// 	}
+		// }else{
+		// 	if(isset($_REQUEST['title'])&&isset($_REQUEST['body'])){
+		// 		if(!isset($_REQUEST['author'])){
+		// 			$_REQUEST['author'] = 'Anonymous';
+		// 		}
+		// 		insertBlogPost($_REQUEST['author'], $_REQUEST['title'], $_REQUEST['body'], $_REQUEST['delKey']);
+		// 		echo"Post added!<br>";
+		// 	}else if(isset($_REQUEST['title'])||isset($_REQUEST['body'])){
+		// 		echo"Post not added, please fill all the required fields!<br>";
+		// 	}
+		// }
 		home();
 	echo	"</body>
 		</html>
