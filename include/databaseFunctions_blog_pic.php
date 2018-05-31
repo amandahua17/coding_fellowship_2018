@@ -6,17 +6,24 @@
 	}
 
 	function ShowDelete($postID){
-		$post = GetPost($postID);
+		$delKey = GetPost($postID)['delKey'];
+		var_dump($delKey);
 		echo"
-			<button onClick='scriptDelete($post[delKey])'>Delete Post</button><br><br>
+			<button onClick='scriptDelete()'>Delete Post</button><br><br>
 		";
 		echo"
 			<script>
-				function scriptDelete(delKey){
+				var delKey = '".$delKey."';
+
+				alert(delKey);
+				function scriptDelete(){
 					var key = prompt('Please enter delete key.', '');
 					if(key == delKey){
-						document.write(key);
-						document.write(delKey);
+						document.write('Deleted.');
+					}else{
+						document.write('key:', key);
+						document.write('delKey:', delKey);
+						alert('Incorrect Key!')
 					}
 				}
 			</script>
@@ -79,7 +86,9 @@
 				<h3>date: ".$post['date']."</h3>
 				<div>
 					<p>".$post['body']."</p><br>
-				</div>
+				</div>";
+		ShowDelete($post['postID']);
+		echo		"
 			</body>
 		</html>
 		";
@@ -129,7 +138,9 @@
 				if($pic['body']!=null){
 					echo"<p>".$pic['body']."</p><br>";
 				}
-		echo"<br>
+		echo"<br>";
+		ShowDelete($pic['postID']);
+		echo"
 			</body>
 		</html>
 		";

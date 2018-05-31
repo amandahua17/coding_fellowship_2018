@@ -10,6 +10,6 @@
 		$post = GetPost($_REQUEST['postID']);
 		//var_Dump($post);
 		DisplayPost($post);
-		ShowDelete($post['postID']);
+		// ShowDelete($post['postID']);
 	}
 	Home();
