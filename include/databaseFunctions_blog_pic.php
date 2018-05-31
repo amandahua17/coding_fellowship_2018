@@ -1,8 +1,9 @@
 
 <?php
 
+	//RANDOM FUNCTIONS
 	function Home(){
-		echo"<a href='index.php'>back to home</a>";
+		echo"<a class='home' href='index.php'>back to home</a>";
 	}
 
 	function ShowDelete($postID){
@@ -15,7 +16,7 @@
 			<script>
 				var delKey = '".$delKey."';
 
-				alert(delKey);
+				//alert(delKey);
 				function scriptDelete(){
 					var key = prompt('Please enter delete key.', '');
 					if(key == delKey){
@@ -31,6 +32,15 @@
 
 	}
 
+	function ShowLogin(){
+		echo"
+			<a href='login.php'>Log In</a>
+		";
+	}
+
+
+
+	//FORM FUNCTIONS
 	function ValidateTextField($key, $errors){
 		if(!$_REQUEST[$key]){
 			$errors[$key] = "required";
@@ -56,7 +66,61 @@
 		";
 	}
 
-	//POST FUNCTIONS
+	function Login(){
+		$errors = array();
+		if(isset($_REQUEST['button'])){		//NOT PASSING THROUGH IF
+			var_dump($_REQUEST);
+			$errors+=ValidateTextField('username', $errors);
+			$errors+=ValidateTextField('password', $errors);
+			if(GetUser($_REQUEST['username'])['password'] != $_REQUEST['password']){
+				$errors['match'] = 'incorrect password!';
+			}
+			if(sizeof($errors) == 0){
+				$_SESSION['user'] = $_REQUEST['username'];
+			}else{
+				if(isset($errors['username'])){
+					echo"<div class='required'>Please enter your username.</div>";
+				}
+				if(isset($errors['password'])){
+					echo"<div class='required'>Please enter your password.</div>";
+				}
+				if(isset($errors['match'])){
+					echo"<div class='required'>Your username and password do not match.</div>";
+				}
+			}
+		}
+		ShowTextField(true, 'username');
+		ShowTextField(true, 'password');
+		echo"<input type='submit' name = 'button' value='Login'>";
+	}
+
+	//USER DATABASE FUNCTIONS
+	function AddNewUser($username, $pswd){
+		$result = dbQuery("
+			INSERT INTO users (username, pswd, userType)
+			VALUES('$username', '$pswd', 'regUser')
+		")->fetch();
+	}
+
+	// function GetUser($userID){		Takes UserID instead of username, likely not very functional
+	// 	$result = dbQuery("
+	// 		SELECT *
+	// 		FROM users
+	// 		WHERE userID = $userID
+	// 	")->fetch();
+	// 	return $result;
+	// }
+
+	function GetUser($username){
+		$result = dbQuery("
+			SELECT *
+			FROM users
+			WHERE username = $username
+		")->fetch();
+		return $result;
+	}
+
+	//BLOG DATABASE FUNCTIONS
 	function InsertBlogPost($author, $title, $body, $delKey){
 		$result = dbQuery("
 			INSERT INTO posts (author, title, body, postType, delKey)
@@ -104,7 +168,7 @@
 	}
 
 
-	//PIC FUNCTIONS
+	//PIC DATABASE FUNCTIONS
 	function InsertPic($photographer, $title, $body, $link, $flavor, $delKey){
 		$result = dbQuery("
 			INSERT INTO posts (author, title, body, postType, link, flavor, delKey)
@@ -155,7 +219,7 @@
 		return $result['count'];
 	}
 
-	//ALL
+	//GENERIC POST DATABASE FUNCTIONS
 
 	function GetPost($postID){
 		$result = dbQuery("

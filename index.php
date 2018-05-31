@@ -12,7 +12,9 @@
 				<link rel='stylesheet' href='style.css'>
 			</head>
 			<body>
-				<h1>Welcome to my blog!</h1>
+				<h1>Welcome to my blog!</h1>";
+	ShowLogin();
+	echo"
 				<div>
 					<h2>Blog Posts</h2>
 					<div>";

@@ -1,6 +1,9 @@
 <?php
 	date_default_timezone_set('America/Chicago');
-	include('config/config.php');
-	include('include/db_query.php');
+	$root = $_SERVER['DOCUMENT_ROOT'];
 
-	include('databaseFunctions_blog_pic.php');
+
+	include($root.'/config/config.php');
+	include($root.'/include/db_query.php');
+
+	include($root.'/include/databaseFunctions_blog_pic.php');

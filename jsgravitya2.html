@@ -22,7 +22,7 @@
 		<script type = "text/javascript">
 			const grav = 9.8;
 			var box = document.getElementById("box");
-			var t = setInterval(move, 100);
+			var t = setInterval(move, 50);
 
 			// var gvel = 0;
 
@@ -48,7 +48,7 @@
 					yvel=-yvel;
 					yvel = getySpeed();
 					if(xvel>0){
-						xvel-=.01;
+						xvel-=.05;
 					}
 					else{
 						xvel=0;
