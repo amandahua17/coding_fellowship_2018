@@ -1,5 +1,5 @@
 <?php
-	include('include/databaseFunctions.php');
+	include('include/include_all.php');
 	echo"
 		<html>
 			<head>

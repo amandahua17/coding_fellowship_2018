@@ -1,7 +1,5 @@
 
 <?php
-	include('config/config.php');
-	include('include/db_query.php');
 
 	function home(){
 		echo"<a href='index.php'>back to home</a>";
@@ -80,11 +78,11 @@
 
 	function getNumberPosts(){
 		$result = dbQuery("
-				SELECT COUNT(postID)
+				SELECT COUNT(postID) AS count
 				FROM posts
 				WHERE isPic=0
 			")->fetch();
-		return $result['COUNT(postID)'];
+		return $result['count'];
 	}
 
 
@@ -130,11 +128,11 @@
 
 	function getNumberPics(){
 		$result = dbQuery("
-				SELECT COUNT(postID)
+				SELECT COUNT(postID) AS count
 				FROM posts
 				WHERE isPic=1
 			")->fetch();
-		return $result['COUNT(postID)'];
+		return $result['count'];
 	}
 
 	//BOTH
@@ -156,13 +154,8 @@
 		echo"Post Deleted.<br>";
 	}
 
-	function isPicture($post){
-		$result = dbQuery("
-				SELECT isPic
-				FROM posts
-				WHERE postID=$post[postID]
-			")->fetch();
-		if($result['isPic']==1){
+	function isPicture($postID){
+		if(GetPost($postID)['isPic']==1){
 			return true;
 		}
 		return false;
@@ -170,8 +163,8 @@
 
 	function getTotalPosts(){
 		$result = dbQuery("
-			SELECT COUNT(postID)
+			SELECT COUNT(postID) AS count
 			FROM posts
 		")->fetch();
-		return $result['COUNT(postID)'];
+		return $result['count'];
 	}

@@ -1,8 +1,13 @@
 <?php
-	include('include/databaseFunctions.php');
+	include('include/include_all.php');
 
 	$errors = array();
-	function submitPost($name, ){
+
+	function submitPost($name, $title, $body, $delKey){
+
+	}
+
+	function submitPic($name, $title, $link, $flavor, $delKey){
 
 	}
 	$type=$_REQUEST['type'];

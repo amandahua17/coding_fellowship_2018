@@ -1,5 +1,5 @@
 <?php
-	include('include/databaseFunctions.php');
+	include('include/include_all.php');
 
 	if($_REQUEST['postID'] == '0'){
 		foreach(GetAllPics() as $pic){
