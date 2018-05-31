@@ -22,21 +22,6 @@
 			</script>
 		";
 
-		// if(isset($_REQUEST['delete'])){
-		// 	var_dump(GetPost($postID)['delKey']);
-		// 	echo"
-		// 		<script>
-		// 			alert('fdhldh');
-		// 			var key = prompt('Please enter delete key.');
-		// 			if(key == ".GetPost($postID)['delKey']."){
-		// 				".DeletePost($postID)."
-		// 			}
-		// 			else{
-		// 				alert('Wrong Delete Key! You do not have permission to delete this post.<br>');
-		// 			}
-		// 		</script>
-		// 	";
-		// }
 	}
 
 	function ValidateTextField($key, $errors){
@@ -176,6 +161,7 @@
 			WHERE postID = $postID
 		")->fetch();
 		echo"Post Deleted.<br>";
+		ResetAuto(GetTotalPosts());
 	}
 
 	function GetPostType($postID){
@@ -188,4 +174,11 @@
 			FROM posts
 		")->fetch();
 		return $result['count'];
+	}
+
+	function ResetAuto($count){
+		$result = dbQuery("
+			ALTER TABLE posts
+			AUTO_INCREMENT=$count
+		")->fetch();
 	}

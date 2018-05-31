@@ -4,7 +4,7 @@
 	$postCount=GetTotalPosts();
 	// var_dump($postCount);
 	// $picCount=GetNumberPics();
-
+	ResetAuto(GetTotalPosts());
 	echo"
 		<html>
 			<head>
@@ -25,7 +25,6 @@
 					$posti++;
 				}
 			}
-
 	echo"
 					</div>
 				<a href='view_post.php?postID=0'>See All</a>
