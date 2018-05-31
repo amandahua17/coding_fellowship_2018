@@ -1,16 +1,50 @@
+
 <?php
-	include('config/config.php');
-	include('include/db_query.php');
 
 	function home(){
 		echo"<a href='index.php'>back to home</a>";
 	}
-	
+
+	function showDelete($postID){
+		$post = GetPost($postID);
+		echo"
+			<button onClick='scriptDelete($post[delKey])'>Delete Post</button><br><br>
+		";
+		echo"
+			<script>
+				function scriptDelete(delKey){
+					var key = prompt('Please enter delete key.', '');
+					if(key == delKey){
+						document.write(key);
+						document.write(delKey);
+					}
+				}
+			</script>
+		";
+
+		// if(isset($_REQUEST['delete'])){
+		// 	var_dump(GetPost($postID)['delKey']);
+		// 	echo"
+		// 		<script>
+		// 			alert('fdhldh');
+		// 			var key = prompt('Please enter delete key.');
+		// 			if(key == ".GetPost($postID)['delKey']."){
+		// 				".DeletePost($postID)."
+		// 			}
+		// 			else{
+		// 				alert('Wrong Delete Key! You do not have permission to delete this post.<br>');
+		// 			}
+		// 		</script>
+		// 	";
+		// }
+	}
+
+
 	//POST FUNCTIONS
-	function InsertBlogPost($author, $title, $body){
+	function InsertBlogPost($author, $title, $body, $delKey){
 		$result = dbQuery("
-			INSERT INTO posts (author, title, body, isPic)
-			VALUES('$author', '$title', '$body', '0')
+			INSERT INTO posts (author, title, body, isPic, delKey)
+			VALUES('$author', '$title', '$body', '0', '$delKey')
 		")->fetch();
 	}
 
@@ -35,7 +69,7 @@
 				<h2>by ".$post['author']."</h2>
 				<h3>date: ".$post['date']."</h3>
 				<div>
-					<p>".$post['body']."</p>
+					<p>".$post['body']."</p><br>
 				</div>
 			</body>
 		</html>
@@ -44,19 +78,19 @@
 
 	function getNumberPosts(){
 		$result = dbQuery("
-				SELECT COUNT(postID)
+				SELECT COUNT(postID) AS count
 				FROM posts
 				WHERE isPic=0
 			")->fetch();
-		return $result['COUNT(postID)'];
+		return $result['count'];
 	}
 
 
 	//PIC FUNCTIONS
-	function InsertPic($photographer, $title, $body, $link, $flavor){
+	function InsertPic($photographer, $title, $body, $link, $flavor, $delKey){
 		$result = dbQuery("
-			INSERT INTO posts (author, title, body, isPic, link, flavor)
-			VALUES('$photographer', '$title', '$body', '1','$link', '$flavor')
+			INSERT INTO posts (author, title, body, isPic, link, flavor, delKey)
+			VALUES('$photographer', '$title', '$body', '1','$link', '$flavor', '$delKey')
 		")->fetch();
 	}
 
@@ -86,18 +120,19 @@
 				if($pic['body']!=null){
 					echo"<p>".$pic['body']."</p><br>";
 				}
-		echo"</body>
+		echo"<br>
+			</body>
 		</html>
 		";
 	}
 
 	function getNumberPics(){
 		$result = dbQuery("
-				SELECT COUNT(postID)
+				SELECT COUNT(postID) AS count
 				FROM posts
 				WHERE isPic=1
 			")->fetch();
-		return $result['COUNT(postID)'];
+		return $result['count'];
 	}
 
 	//BOTH
@@ -116,15 +151,11 @@
 			DELETE FROM posts
 			WHERE postID = $postID
 		")->fetch();
+		echo"Post Deleted.<br>";
 	}
 
-	function isPicture($post){
-		$result = dbQuery("
-				SELECT isPic
-				FROM posts
-				WHERE postID=$post[postID]
-			")->fetch();
-		if($result['isPic']==1){
+	function isPicture($postID){
+		if(GetPost($postID)['isPic']==1){
 			return true;
 		}
 		return false;
@@ -132,8 +163,8 @@
 
 	function getTotalPosts(){
 		$result = dbQuery("
-			SELECT COUNT(postID)
+			SELECT COUNT(postID) AS count
 			FROM posts
 		")->fetch();
-		return $result['COUNT(postID)'];
+		return $result['count'];
 	}

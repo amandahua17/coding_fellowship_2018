@@ -1,6 +1,15 @@
 <?php
-	include('include/databaseFunctions.php');
+	include('include/include_all.php');
 
+	$errors = array();
+
+	function submitPost($name, $title, $body, $delKey){
+
+	}
+
+	function submitPic($name, $title, $link, $flavor, $delKey){
+
+	}
 	$type=$_REQUEST['type'];
 	echo"
 		<html>
@@ -23,37 +32,41 @@
 						 <p class='required'>Title*:</p><input type='text' name='title'><br><br>
 						 Post Body (optional):<br><textarea name='body' rows='5' cols='40'></textarea><br><br>
 						 <p class='required'>Photo Path*:</p><input type='text' name='link'><br><br>
-						 Flavortext:<br><input type='text' name='flavor'><br><br>";
+						 Flavortext:<br><input type='text' name='flavor'><br><br>
+						 <p class='required'>Delete Key*:</p><input type='password' name='delKey'><br>
+						 <a href='delKeyInfo.php'>What is a Delete Key?</a><br><br>";
 				}else{
 					echo"Author:<br><input type='text' name='author'><br><br>
 						 <p class='required'>Title*:</p><input type='text' name='title'><br><br>
-						 <p class='required'>Post Body*:</p><textarea name='body' rows='5' cols='40'></textarea><br><br>";
+						 <p class='required'>Post Body*:</p><textarea name='body' rows='5' cols='40'></textarea><br><br>
+						 <p class='required'>Delete Key*:</p><input type='password' name='delKey'><br><br>
+						 <a href='delKeyInfo.php'>What is a Delete Key?</a><br><br>";
 				}
 
 	echo"
-					<input type='submit'>
+					<input type='submit' name = 'button'>
 				</form>";
-		if($type == 1){
-			if(isset($_REQUEST['photographer'])&&isset($_REQUEST['title'])&&isset($_REQUEST['link'])){
-				if(!isset($_REQUEST['flavor'])){
-						$_REQUEST['flavor'] = $_REQUEST['photographer'];
-				}
-				insertPic($_REQUEST['photographer'], $_REQUEST['title'], $_REQUEST['body'], $_REQUEST['link'], $_REQUEST['flavor']);
-				echo"Picture added!<br>";
-			}else if (isset($_REQUEST['photographer'])||isset($_REQUEST['title'])||isset($_REQUEST['link'])){
-				echo"Picture not added, please fill all the required fields!<br>";
-			}
-		}else{
-			if(isset($_REQUEST['title'])&&isset($_REQUEST['body'])){
-				if(!isset($_REQUEST['author'])){
-					$_REQUEST['author'] = 'Anonymous';
-				}
-				insertBlogPost($_REQUEST['author'], $_REQUEST['title'], $_REQUEST['body']);
-				echo"Post added!<br>";
-			}else if(isset($_REQUEST['title'])||isset($_REQUEST['body'])){
-				echo"Post not added, please fill all the required fields!<br>";
-			}
-		}
+		// if($type == 1){
+		// 	if(isset($_REQUEST['photographer'])&&isset($_REQUEST['title'])&&isset($_REQUEST['link'])){
+		// 		if(!isset($_REQUEST['flavor'])){
+		// 				$_REQUEST['flavor'] = $_REQUEST['photographer'];
+		// 		}
+		// 		insertPic($_REQUEST['photographer'], $_REQUEST['title'], $_REQUEST['body'], $_REQUEST['link'], $_REQUEST['flavor'], $_REQUEST['delKey']);
+		// 		echo"Picture added!<br>";
+		// 	}else if (isset($_REQUEST['photographer'])||isset($_REQUEST['title'])||isset($_REQUEST['link'])){
+		// 		echo"Picture not added, please fill all the required fields!<br>";
+		// 	}
+		// }else{
+		// 	if(isset($_REQUEST['title'])&&isset($_REQUEST['body'])){
+		// 		if(!isset($_REQUEST['author'])){
+		// 			$_REQUEST['author'] = 'Anonymous';
+		// 		}
+		// 		insertBlogPost($_REQUEST['author'], $_REQUEST['title'], $_REQUEST['body'], $_REQUEST['delKey']);
+		// 		echo"Post added!<br>";
+		// 	}else if(isset($_REQUEST['title'])||isset($_REQUEST['body'])){
+		// 		echo"Post not added, please fill all the required fields!<br>";
+		// 	}
+		// }
 		home();
 	echo	"</body>
 		</html>

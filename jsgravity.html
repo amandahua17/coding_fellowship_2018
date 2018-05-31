@@ -1,0 +1,108 @@
+<html>
+	<head>
+		<style>
+			#container {
+			  width: 200px;
+			  height: 200px;
+			  background: green;
+			  position: relative;
+			}
+			#box {
+			  width: 50px;
+			  height: 50px;
+			  background: red;
+			  position: absolute;
+			}
+		</style>
+	<head>
+	<body>
+		<div id="container">
+		   <div id="box"> </div>
+		</div>
+		<script type = "text/javascript">
+			const grav = -2;
+			var posw = 0;
+			var posh = 0;
+			// var time = 0;		//in seconds
+			var right = true;
+			var down = true;
+			//our box element
+			var box = document.getElementById("box");
+			var wspeed = Math.random()*5+1;		//in px/s
+			var hspeed = -(Math.random()*5)+1;
+			var speed = getSpeed(wspeed, hspeed);
+			// document.write('setting interval...');
+			var t = setInterval(move, 50)//speed);
+
+			function getSpeed(wspeed, hspeed){
+				return Math.sqrt(Math.pow(wspeed, 2)+Math.pow(hspeed, 2));
+			}
+
+			function move(){
+				hspeed+=grav;
+				speed=getSpeed(wspeed, hspeed);
+				// time+=1;
+
+			// 	if((hspeed<=0)&&(wspeed<=0)){
+			//
+			// 	}
+			//
+
+				if(posw<=0){
+					right=true;
+					wspeed-=1;	//lose momentum with collision
+				}else if(posw>=150){
+					right=false;
+					wspeed-=1;
+				}
+				if(posh<=0){
+					down=true;
+					hspeed=-hspeed;
+				}else if(posh>=150){
+					hspeed=-hspeed;
+					down=false;
+				}
+
+				if(right&&down){
+				// document.write('movedr\n');
+					movedr();
+				}else if (right&&!down){
+					moveur();
+				}else if(!right&&down){
+					movedl();
+				}else{
+					moveul();
+				}
+				// document.write("2: posw = ", posw, "\nposh = ", posh, "\nright=", right);
+			}
+			function movedr() {
+				// document.write('movedr\n');
+			    posw += wspeed;
+				posh += hspeed;
+			    box.style.left = posw+"px";
+				box.style.top = posh+"px";
+			}
+			function movedl() {
+				// document.write('movedl\n')
+			    posw -= wspeed;
+				posh += hspeed;
+			    box.style.left = posw+"px";
+				box.style.top = posh+"px";
+			}
+			function moveul() {
+				// document.write('moveul\n');
+			    posw -= wspeed;
+				posh += hspeed;
+			    box.style.left = posw+"px";
+				box.style.top = posh+"px";
+			}
+			function moveur() {
+				// document.write('moveur\n');
+			    posw += wspeed;
+				posh += hspeed;
+			    box.style.left = posw+"px";
+				box.style.top = posh+"px";
+			}
+		</script>
+	</body>
+<html>

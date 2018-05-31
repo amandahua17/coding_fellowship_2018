@@ -1,0 +1,74 @@
+<html>
+	<head>
+		<style>
+			#container {
+			  width: 1600px;
+			  height: 800px;
+			  background: lightblue;
+			  position: relative;
+			}
+			#box {
+			  width: 50px;
+			  height: 50px;
+			  background: black;
+			  position: absolute;
+			}
+		</style>
+	<head>
+	<body>
+		<div id="container">
+		   <div id="box"> </div>
+		</div>
+		<script type = "text/javascript">
+			const grav = 9.8;
+			var box = document.getElementById("box");
+			var t = setInterval(move, 100);
+
+			// var gvel = 0;
+
+			var xpos = 0;
+			var ypos = 0;
+
+			var yvel = Math.random()*5+1;
+			var xvel = Math.random()*5+1;
+
+			function getySpeed(){
+				yvel +=(1*grav);
+				return yvel;
+			}
+
+			function move(){
+				// if((xvel<=.1)&&(yvel <= grav)){
+				// 	clearInterval(t);
+				// }
+				if((xvel == 0)&&(yvel <= grav)){
+					clearInterval(t);
+				}
+				if (ypos>=(750)){
+					yvel=-yvel;
+					yvel = getySpeed();
+					if(xvel>0){
+						xvel-=.01;
+					}
+					else{
+						xvel=0;
+					}
+				}
+				else{
+					yvel = getySpeed();
+				}
+				if((xpos>=(1550))||(xpos<0)){
+					xvel=-xvel;
+				}
+
+				ypos+=yvel;
+				if(ypos>=750){
+					ypos = 750;
+				}
+				xpos+=xvel;
+				box.style.top = ypos + "px";
+				box.style.left = xpos + "px";
+			}
+		</script>
+	</body>
+<html>
