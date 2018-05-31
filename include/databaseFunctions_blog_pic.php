@@ -39,6 +39,30 @@
 		// }
 	}
 
+	function validateTextField($key, $errors){
+		if(!$_REQUEST[$key]){
+			$errors[$key] = "required";
+		}
+		return $errors;
+	}
+
+	function showTextField($isreq, $name){
+		echo"
+			<p";
+		if($isreq){
+			echo" class='required'";
+		}
+		echo">$name";
+		if($isreq){
+			echo"*";
+		}
+		echo":</p><input type='text' name='$name'";
+		if(isset($_REQUEST[$name])){
+			echo"value='$_REQUEST[$name]'";
+		}
+		echo"><br><br>
+		";
+	}
 
 	//POST FUNCTIONS
 	function InsertBlogPost($author, $title, $body, $delKey){

@@ -49,8 +49,8 @@
 				</div>
 				<div>
 					<h2>Write your own entry</h2>
-					<a href='create_post.php?type=1,picCount=".getNumberPics()."'>Picture</a><br><br>
-					<a href='create_post.php?type=2,postCount=".getNumberPosts()."'>Blog Post</a>
+					<a href='create_post.php?type=1'>Picture</a><br><br>
+					<a href='create_post.php?type=2'>Blog Post</a>
 				</div>
 			</body>
 		</html>
