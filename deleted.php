@@ -9,7 +9,7 @@
 			</head>
 			<body>
 				<p>Your post has been deleted.</p>";
-	home();
+	Home();
 	echo	"</body>
 		</html>
 	";

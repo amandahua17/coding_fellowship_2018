@@ -1,11 +1,11 @@
 
 <?php
 
-	function home(){
+	function Home(){
 		echo"<a href='index.php'>back to home</a>";
 	}
 
-	function showDelete($postID){
+	function ShowDelete($postID){
 		$post = GetPost($postID);
 		echo"
 			<button onClick='scriptDelete($post[delKey])'>Delete Post</button><br><br>
@@ -39,14 +39,14 @@
 		// }
 	}
 
-	function validateTextField($key, $errors){
+	function ValidateTextField($key, $errors){
 		if(!$_REQUEST[$key]){
 			$errors[$key] = "required";
 		}
 		return $errors;
 	}
 
-	function showTextField($isreq, $name){
+	function ShowTextField($isreq, $name){
 		echo"
 			<p";
 		if($isreq){
@@ -67,8 +67,8 @@
 	//POST FUNCTIONS
 	function InsertBlogPost($author, $title, $body, $delKey){
 		$result = dbQuery("
-			INSERT INTO posts (author, title, body, isPic, delKey)
-			VALUES('$author', '$title', '$body', '0', '$delKey')
+			INSERT INTO posts (author, title, body, postType, delKey)
+			VALUES('$author', '$title', '$body', 'blog', '$delKey')
 		")->fetch();
 	}
 
@@ -76,7 +76,7 @@
 		$result = dbQuery("
 			SELECT *
 			FROM posts
-			WHERE isPic=0
+			WHERE postType='blog'
 		")->fetchAll();
 		return $result;
 	}
@@ -100,11 +100,11 @@
 		";
 	}
 
-	function getNumberPosts(){
+	function GetNumberPosts(){
 		$result = dbQuery("
 				SELECT COUNT(postID) AS count
 				FROM posts
-				WHERE isPic=0
+				WHERE postType='blog'
 			")->fetch();
 		return $result['count'];
 	}
@@ -113,8 +113,8 @@
 	//PIC FUNCTIONS
 	function InsertPic($photographer, $title, $body, $link, $flavor, $delKey){
 		$result = dbQuery("
-			INSERT INTO posts (author, title, body, isPic, link, flavor, delKey)
-			VALUES('$photographer', '$title', '$body', '1','$link', '$flavor', '$delKey')
+			INSERT INTO posts (author, title, body, postType, link, flavor, delKey)
+			VALUES('$photographer', '$title', '$body', 'pic','$link', '$flavor', '$delKey')
 		")->fetch();
 	}
 
@@ -122,7 +122,7 @@
 		$result = dbQuery("
 			SELECT *
 			FROM posts
-			WHERE isPic=1
+			WHERE postType='pic'
 		")->fetchAll();
 		return $result;
 	}
@@ -150,16 +150,16 @@
 		";
 	}
 
-	function getNumberPics(){
+	function GetNumberPics(){
 		$result = dbQuery("
 				SELECT COUNT(postID) AS count
 				FROM posts
-				WHERE isPic=1
+				WHERE postType='pic'
 			")->fetch();
 		return $result['count'];
 	}
 
-	//BOTH
+	//ALL
 
 	function GetPost($postID){
 		$result = dbQuery("
@@ -178,14 +178,11 @@
 		echo"Post Deleted.<br>";
 	}
 
-	function isPicture($postID){
-		if(GetPost($postID)['isPic']==1){
-			return true;
-		}
-		return false;
+	function GetPostType($postID){
+		return GetPost($postID)['postType'];
 	}
 
-	function getTotalPosts(){
+	function GetTotalPosts(){
 		$result = dbQuery("
 			SELECT COUNT(postID) AS count
 			FROM posts

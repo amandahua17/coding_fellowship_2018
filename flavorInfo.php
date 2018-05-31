@@ -13,7 +13,7 @@
 				<br>but it can add realism, enhance the tone, include extra background information or narrative, or be funny. (Urban Dictionary)
 				<br>In the context of this site, flavor text is essentially the same as as in a game, it's a small snippet that will pop up if
 				<br>the picture doesn't load.</p>";
-	home();
+	Home();
 	echo"
 			</body>
 		</html>

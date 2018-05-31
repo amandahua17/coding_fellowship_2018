@@ -1,9 +1,9 @@
 <?php
 	include('include/include_all.php');
 
-	$postCount=getTotalPosts();
+	$postCount=GetTotalPosts();
 	// var_dump($postCount);
-	// $picCount=getNumberPics();
+	// $picCount=GetNumberPics();
 
 	echo"
 		<html>
@@ -18,8 +18,7 @@
 					<div>";
 				// var_dump($postCount, $picCount);
 			for($i=1, $posti=1;$i<=$postCount;$i++){
-				// var_dump($i, $postCount, ($i<=$postCount), isPicture(GetPost($i)));
-				if (!isPicture($i)){
+				if (GetPostType($i)=='blog'){
 					echo"
 						<a href='view_post.php?postID=$i'>".GetPost($i)['title']." by ".GetPost($i)['author']."</a><br><br>
 					";
@@ -35,8 +34,7 @@
 					<h2>Pictures</h2>
 					<div>";
 			for($j=1, $picj=1;$j<=$postCount;$j++){
-				// var_dump(isPicture(GetPost($j)));
-				if (isPicture($j)){
+				if (GetPostType($j)=='pic'){
 					echo"
 						<a href='view_pic.php?postID=$j'>".GetPost($j)['title']." by ".GetPost($j)['author']."</a><br><br>
 					";
