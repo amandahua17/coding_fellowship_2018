@@ -11,9 +11,14 @@
 				<title>myBlog</title>
 				<link rel='stylesheet' href='style.css'>
 			</head>
-			<body>
+			<body>";
+	if(IsLoggedIn()){
+		PersonalHeading();
+	}
+	echo"
 				<h1>Welcome to my blog!</h1>";
-	ShowLogin();
+	ShowLoginPage();
+	CreateAccountPage();
 	echo"
 				<div>
 					<h2>Blog Posts</h2>

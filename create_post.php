@@ -7,12 +7,11 @@
 	if(isset($_REQUEST['button'])&&($type == 2)){
 		$errors+=ValidateTextField('Title', $errors);
 		$errors+=ValidateTextField('Body', $errors);
-		$errors+=ValidateTextField('DeleteKey', $errors);
 		if(!$_REQUEST['Author']){
 			$_REQUEST['Author'] = 'Anonymous';
 		}
 		if(sizeof($errors)==0){
-			InsertBlogPost($_REQUEST['Author'], $_REQUEST['Title'], $_REQUEST['Body'], $_REQUEST['DeleteKey']);
+			InsertBlogPost($_REQUEST['Author'], $_REQUEST['Title'], $_REQUEST['Body']);
 			header('Location: success.php');
 		}
 	}
@@ -21,10 +20,9 @@
 		$errors+=ValidateTextField('Photographer', $errors);
 		$errors+=ValidateTextField('Title', $errors);
 		$errors+=ValidateTextField('Link', $errors);
-		$errors+=ValidateTextField('DeleteKey', $errors);
 		// var_dump($errors);
 		if(sizeof($errors) == 0){
-			InsertPic($_REQUEST['Photographer'], $_REQUEST['Title'], $_REQUEST['Body'], $_REQUEST['Link'], $_REQUEST['Flavortext'], $_REQUEST['DeleteKey']);
+			InsertPic($_REQUEST['Photographer'], $_REQUEST['Title'], $_REQUEST['Body'], $_REQUEST['Link'], $_REQUEST['Flavortext']);
 			header('Location: success.php');
 		}
 	}
@@ -35,7 +33,11 @@
 				<title>Create Your Own Post</title>
 				<link rel='stylesheet' href='style.css'>
 			</head>
-			<body>
+			<body>";
+	if(IsLoggedIn()){
+		PersonalHeading();
+	}
+	echo"
 				<h1>Create Your Own";
 	if($type == 1){		//HERE
 		echo" Picture ";
@@ -57,8 +59,6 @@
 					ShowTextField(true, 'Link');
 					ShowTextField(false, 'Flavortext');
 					echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
-					ShowTextField(true, 'DeleteKey');
-					echo"<a href='delKeyInfo.php'>What is a Delete Key?</a><br><br>";
 					// echo"<p class='required'>Photographer*:</p><input type='text' name='photographer' value='$_REQUEST[photographer]'><br><br>
 					// 	 <p class='required'>Title*:</p><input type='text' name='title' value='$_REQUEST[title]'><br><br>
 					// 	 Post Body (optional):<br><textarea name='body' rows='5' cols='40' value='$_REQUEST[body]'></textarea><br><br>
@@ -71,8 +71,6 @@
 					ShowTextField(false, 'Author');
 					ShowTextField(true, 'Title');
 					ShowTextField(true, 'Body');
-					ShowTextField(true, 'DeleteKey');
-					echo"<a href='delKeyInfo.php'>What is a Delete Key?</a><br><br>";
 					// echo"Author:<br><input type='text' name='author'><br><br>
 					// 	 <p class='required'>Title*:</p><input type='text' name='title' value='$_REQUEST[title]'><br><br>
 					// 	 <p class='required'>Post Body*:</p><textarea name='body' rows='5' cols='40' value='$_REQUEST[body]'></textarea><br><br>

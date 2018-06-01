@@ -1,6 +1,9 @@
 <?php
 	include('include/include_all.php');
-
+	
+	if(IsLoggedIn()){
+		PersonalHeading();
+	}
 	if($_REQUEST['postID'] == '0'){
 		foreach(GetAllPics() as $pic){
 			DisplayPic($pic);

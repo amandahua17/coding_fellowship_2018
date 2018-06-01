@@ -5,15 +5,15 @@
 	echo"
 		<html>
 			<head>
-				<title>Login</title>
+				<title>Create an account</title>
 				<link rel='stylesheet' href='style.css'>
 			</head>
 			<body>
-				<h1>Log In</h1>
+				<h1>Create a new account</h1>
 				<div>";
 	if(!IsLoggedIn()){
-		Login();
-		CreateAccountPage();
+		CreateAccount();
+		ShowLoginPage();
 	}else{
 		echo"You are already logged in!";
 	}

@@ -6,4 +6,6 @@
 	include($root.'/config/config.php');
 	include($root.'/include/db_query.php');
 
+	session_start();
+
 	include($root.'/include/databaseFunctions_blog_pic.php');
