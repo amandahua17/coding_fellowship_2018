@@ -74,6 +74,14 @@
 		";
 	}
 
+	function ShowTagField(){
+		echo"
+			<p >tags:</p><input type='text' name='tags'>
+			<input type='submit' name='tagsub' value='add tag'>
+			<br><br>
+		";
+	}
+
 	//USER FUNCTIONS
 	function CreateAccount(){
 		$errors = array();
@@ -204,6 +212,82 @@
 		return false;
 	}
 
+	//TAG DATABASE FUNCTIONS
+	function NewTag($name){
+		dbQuery("
+			INSERT INTO tags (tagname)
+			VALUES('$name')
+		")->fetch();
+	}
+
+	function AttachTags($postID, $tagnamearray){
+		echo"attachtags called";
+		foreach($tagnamearray as $key=>$tagname){
+		echo"forloop";
+			if(!TagExists($tagname)){
+				echo"<br>CREATING A NEW TAG<br>";
+				NewTag($tagname);
+			}
+			$tagID=GetTag($tagname)['tagID'];
+			dbQuery("
+				INSERT INTO posttags (postID, tagID)
+				VALUES('$postID', '$tagID')
+			")->fetchAll();
+		}
+		die("attachtags done");
+	}
+
+	function GetTag($name){
+		$result=dbQuery("
+			SELECT *
+			FROM tags
+			WHERE tagname = '$tagID'
+		")->fetch();
+		return $result;
+	}
+
+	function GetAllTags($postID){		//CONFIRM SYNTAX OF DBQUERY
+		$result=dbQuery("
+			SELECT tagname
+			FROM tags
+			WHERE tagID =
+			(SELECT tagID FROM posttags WHERE postID = '$postID')
+		")->fetchAll();
+		return $result;
+	}
+
+	function HasTags($postID){
+		$result = dbQuery("
+			SELECT *
+			FROM posttags
+			WHERE EXISTS
+			(SELECT 1 FROM posttags
+			WHERE postID = '$postID')
+		")->fetch();
+		return $result;
+	}
+
+	function TagExists($name){		//NOT GETTING CALLED
+	echo"tagexists called";
+		$result = dbQuery("
+			SELECT *
+			FROM tags
+			WHERE EXISTS
+			(SELECT 1 FROM tags
+			WHERE tagname = '$name')
+		")->fetch();
+		return $result;
+	}
+
+	function ShowTags($postID){
+		if(HasTags($postID)){
+			echo"Tags: ";
+			foreach(GetAllTags($postID) as $key=>$tagname){
+				echo"#$tagname";
+			}
+		}
+	}
+
 	//USER DATABASE FUNCTIONS
 	function AddNewUser($username, $password, $email){
 		$result = dbQuery("
@@ -233,11 +317,13 @@
 	}
 
 	//BLOG DATABASE FUNCTIONS
-	function InsertBlogPost($author, $title, $body){
+	function InsertBlogPost($author, $title, $body, $tagarray){
 		$result = dbQuery("
 			INSERT INTO posts (author, title, body, postType, username)
 			VALUES('$author', '$title', '$body', 'blog', '$_SESSION[username]')
 		")->fetch();
+		var_dump($tagarray);
+		AttachTags(GetRecentPost()['postID'], $tagarray);
 	}
 
 	function GetAllBlogPosts(){
@@ -263,6 +349,7 @@
 				<div>
 					<p>".$post['body']."</p><br>
 				</div>";
+		ShowTags($post['postID']);
 		if(ValidDelete($post['postID'])){
 			ShowDelete($post['postID']);
 		}
@@ -283,11 +370,13 @@
 
 
 	//PIC DATABASE FUNCTIONS
-	function InsertPic($photographer, $title, $body, $link, $flavor){
+	function InsertPic($photographer, $title, $body, $link, $flavor, $tagarray){
 		$result = dbQuery("
 			INSERT INTO posts (author, title, body, postType, link, flavor, username)
 			VALUES('$photographer', '$title', '$body', 'pic','$link', '$flavor', '$_SESSION[username]')
 		")->fetch();
+		var_dump($tagarray);
+		AttachTags(GetRecentPost()['postID'], $tagarray);
 	}
 
 	function GetAllPics(){
@@ -317,6 +406,7 @@
 					echo"<p>".$pic['body']."</p><br>";
 				}
 		echo"<br>";
+		ShowTags($pic['postID']);
 		if(ValidDelete($pic['postID'])){
 			ShowDelete($pic['postID']);
 		}
@@ -372,4 +462,13 @@
 			ALTER TABLE posts
 			AUTO_INCREMENT=$count
 		")->fetch();
+	}
+
+	function GetRecentPost(){
+		$result = dbQuery("
+			SELECT *, MAX(postID)
+			AS recentpost
+			FROM posts
+		")->fetch();
+		return $result['recentpost'];
 	}
