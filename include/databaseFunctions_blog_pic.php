@@ -83,9 +83,8 @@
 	}
 
 	function ShowHiddenField($name, $value){
-		$Jval = json_encode($value);
 		echo"
-		<input type='hidden' name='$name' value=$Jval><br>
+		<input type='hidden' name='$name' value=$value><br>
 		";
 	}
 
@@ -448,8 +447,8 @@
 	function DeletePost($postID){
 		$result = dbQuery("
 			DELETE FROM posts
-			WHERE postID = $postID
-		")->fetch();
+			WHERE postID = :postID
+		", array('postID'=>$postID))->fetch();
 		$result = dbQuery("
 			DELETE FROM posttags
 			WHERE postID = $postID
