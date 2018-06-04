@@ -53,47 +53,47 @@
 			<body>";
 	if(IsLoggedIn()){
 		PersonalHeading();
-		echo"
-					<h1>Create Your Own";
-		if($type == 1){
-			echo" Picture ";
-		}else if ($type == 2){
-			echo" Blog ";
-		}
-		echo							"Post</h1>";
-
-		foreach($errors as $key=>$val){
-			echo"<span style='color: red'>$key is a required field!<br></span>";
-		}
-
-		echo"
-					<br><form method='post' name='form'>";
-					if($type== 1){
-						ShowTextField(true, 'Photographer');
-						ShowTextField(true, 'Title');
-						ShowTextField(false, 'Body');
-						ShowTextField(true, 'Link');
-						ShowTextField(false, 'Flavortext');
-						echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
-
-
-					}else if($type==2){
-						ShowTextField(false, 'Author');
-						ShowTextField(true, 'Title');
-						ShowTextField(true, 'Body');
-					}
-					ShowTagField();
-					ShowHiddenField('tagString', @$_REQUEST['tagString']);
-					// var_dump(@$_REQUEST['tagString']);
-
-
-		echo"
-						<input type='submit' name = 'button'>
-					</form>";
-
 	}else{
-		echo"Please log in to create a post!";
+		echo"<div class='required'>note: if you aren't logged in, anyone can delete your posts! To make it so that only you or an admin can delete your posts, log in or create an account.</div>";
 	}
+	echo"
+				<h1>Create Your Own";
+	if($type == 1){
+		echo" Picture ";
+	}else if ($type == 2){
+		echo" Blog ";
+	}
+	echo							"Post</h1>";
+
+	foreach($errors as $key=>$val){
+		echo"<span style='color: red'>$key is a required field!<br></span>";
+	}
+
+	echo"
+				<br><form method='post' name='form'>";
+				if($type== 1){
+					ShowTextField(true, 'Photographer');
+					ShowTextField(true, 'Title');
+					ShowTextField(false, 'Body');
+					ShowTextField(true, 'Link');
+					ShowTextField(false, 'Flavortext');
+					echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
+
+
+				}else if($type==2){
+					ShowTextField(false, 'Author');
+					ShowTextField(true, 'Title');
+					ShowTextField(true, 'Body');
+				}
+				ShowTagField();
+				ShowHiddenField('tagString', @$_REQUEST['tagString']);
+				// var_dump(@$_REQUEST['tagString']);
+
+
+	echo"
+					<input type='submit' name = 'button'>
+				</form>";
+
 	Home();
 	echo	"</body>
 		</html>

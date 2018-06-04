@@ -207,11 +207,14 @@
 	}
 
 	function ValidDelete($postID){
-		if(isset($_SESSION['username'])){
-			if($_SESSION['username'] == GetPost($postID)['username']){
+		if(isset($_SESSION['userID'])){
+			if($_SESSION['userID'] == GetPost($postID)['userID']){
 				return true;
 			}
 			if(GetUser($_SESSION['username'])['userType'] == 'admin'){
+				return true;
+			}
+			if(GetPost($postID)['username'] == 'null'){
 				return true;
 			}
 		}
@@ -227,10 +230,10 @@
 	}
 
 	function AttachTags($postID, $tagarray){
-		echo"attachtags called";
+		// echo"attachtags called";
 		for($i=0;$i<sizeof($tagarray);$i++){
 			// die("forloop");
-			if($tagarray[$i] == 'null'){
+			if(($tagarray[$i] == 'null')||($tagarray[$i] == '')){
 				continue;
 			}
 			if(!TagExists($tagarray[$i])){
@@ -258,8 +261,10 @@
 		$result=dbQuery("
 			SELECT tagname
 			FROM tags
-			INNER JOIN posttags ON tags.tagID=posttags.tagID
+			INNER JOIN posttags ON tags.tagID = posttags.tagID
+			WHERE posttags.postID = $postID
 		")->fetchAll();
+		// var_dump($result);
 		return $result;
 	}
 
@@ -359,6 +364,7 @@
 				</div>";
 		ShowTags($post['postID']);
 		if(ValidDelete($post['postID'])){
+			// echo"valid delete";
 			ShowDelete($post['postID']);
 		}
 		echo		"
