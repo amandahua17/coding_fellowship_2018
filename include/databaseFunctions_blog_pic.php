@@ -13,6 +13,7 @@
 			if(ValidDelete($postID)){
 				DeletePost($postID);
 				header("Location: index.php");
+				exit();
 			}else{
 				echo"You do not have permission to delete this post.";
 			}
@@ -31,17 +32,29 @@
 		";
 	}
 
-	function CreateAccountPage(){
+	function ShowCreateAccountPage(){
 		echo"
 			<a href='createAccount.php'>Create an account</a><br>
 		";
 	}
 
+	function GetTypeInfo($type){
+
+	}
 
 	//FORM FUNCTIONS
 	function ValidateTextField($key, $errors){
 		if(!$_REQUEST[$key]){
 			$errors[$key] = "required";
+		}
+		return $errors;
+	}
+
+	function ValidatePasswordConfirmation($pswdname, $confirmname, $errors){
+		if((isset($errors['$pswdname']))&&(isset($errors['$confirmname']))){
+			if($_REQUEST['$pswdname'] != $_REQUEST['$confirmname']){
+				$errors['match'] = 'error';
+			}
 		}
 		return $errors;
 	}
@@ -74,38 +87,69 @@
 		";
 	}
 
+	function DisplayError($errorname, $error){
+		// var_dump($errorname, $error);
+		if(!$error){
+			return;
+		}
+		if($error == 'required'){
+			echo"<div class='required'>Please enter $errorname.</div>";
+		}else if($errorname == 'match'){
+			echo"<div class='required'>Does not match.</div>";
+		}else if($errorname == 'DNE'){
+			echo"<div class='required'>There is no account associated with that username.</div>";
+		}else if($errorname == 'taken'){
+			echo"<div class='required'>$error</div>";
+		}else{
+			echo"undefined error";
+		}
+	}
+
+	function ValidateUserTaken($username, $email){
+		$errors = array();
+		if(UserExists($username)){
+			$errors['taken'] = 'Username taken!';
+		}
+		if(UserEmailExists($email)){
+			$errors['taken'] = 'Email taken!';
+		}
+		return $errors;
+	}
+
 	//USER FUNCTIONS
-	function CreateAccount(){
+	function CreateAccountForm(){
 		$errors = array();
 		if(isset($_REQUEST['create'])){
 			$errors+=ValidateTextField('username', $errors);
 			$errors+=ValidateTextField('password', $errors);
 			$errors+=ValidateTextField('confirm', $errors);
 			$errors+=ValidateTextField('email', $errors);
-			if((!isset($errors['password']))&&(!isset($errors['confirm']))){
-				if($_REQUEST['password'] != $_REQUEST['confirm']){
-					$errors['match'] = 'error';
-				}
-			}
+			$errors+=ValidatePasswordConfirmation('password', 'confirm', $errors);
+			$errors+=ValidateUserTaken($_REQUEST['username'], $_REQUEST['email']);
+
 			if(sizeof($errors) == 0){
 				AddNewUser($_REQUEST['username'], $_REQUEST['password'], $_REQUEST['email']);
 				header("Location: login.php");
+				exit();
 			}else{
-				if(isset($errors['username'])){
-					echo"<div class='required'>Please enter your username.</div>";
+				foreach($errors as $name=>$error){
+					DisplayError($name, $error);
 				}
-				if(isset($errors['password'])){
-					echo"<div class='required'>Please enter your password.</div>";
-				}
-				if(isset($errors['confirm'])){
-					echo"<div class='required'>Please confirm your password.</div>";
-				}
-				if(isset($errors['password'])){
-					echo"<div class='required'>Please enter your email.</div>";
-				}
-				if(isset($errors['match'])){
-					echo"<div class='required'>Your passwords do not match.</div>";
-				}
+				// if(isset($errors['username'])){
+				// 	echo"<div class='required'>Please enter your username.</div>";
+				// }
+				// if(isset($errors['password'])){
+				// 	echo"<div class='required'>Please enter your password.</div>";
+				// }
+				// if(isset($errors['confirm'])){
+				// 	echo"<div class='required'>Please confirm your password.</div>";
+				// }
+				// if(isset($errors['password'])){
+				// 	echo"<div class='required'>Please enter your email.</div>";
+				// }
+				// if(isset($errors['match'])){
+				// 	echo"<div class='required'>Your passwords do not match.</div>";
+				// }
 			}
 		}
 
@@ -121,38 +165,44 @@
 
 	}
 
-	function Login(){
+	function LoginForm(){
 		$errors = array();
 		// var_dump($_REQUEST);
 		if(isset($_REQUEST['login'])){		//NOT PASSING THROUGH IF
 			// var_dump($_REQUEST);
 			$errors+=ValidateTextField('username', $errors);
 			$errors+=ValidateTextField('password', $errors);
-			if(sizeof($errors) == 0){
-				if(UserExists($_REQUEST['username'])){
-					if(GetUser($_REQUEST['username'])['password'] != $_REQUEST['password']){
-						$errors['match'] = 'incorrect password!';
-					}
-				}else{
-					$errors['DNE'] = 'user does not exist!';
+
+			if(UserExists($_REQUEST['username'])){
+				if(GetUser($_REQUEST['username'])['password'] != $_REQUEST['password']){
+					$errors['match'] = 'incorrect password!';
 				}
+			}else{
+				$errors['DNE'] = 'user does not exist!';
 			}
+
 			if(sizeof($errors) == 0){
 				$_SESSION['username'] = $_REQUEST['username'];
+				$_SESSION['userID'] = GetUser($_REQUEST['username'])['UserID'];
 				header("Location: index.php");
+				exit();
 			}else{
-				if(isset($errors['username'])){
-					echo"<div class='required'>Please enter your username.</div>";
+				// var_dump($errors);
+				foreach($errors as $key=>$error){
+					DisplayError($key, $error);
 				}
-				if(isset($errors['password'])){
-					echo"<div class='required'>Please enter your password.</div>";
-				}
-				if(isset($errors['match'])){
-					echo"<div class='required'>Your username and password do not match.</div>";
-				}
-				if(isset($errors['DNE'])){
-					echo"<div class='required'>There is no account associated with that username.</div>";
-				}
+				// if(isset($errors['username'])){
+				// 	echo"<div class='required'>Please enter your username.</div>";
+				// }
+				// if(isset($errors['password'])){
+				// 	echo"<div class='required'>Please enter your password.</div>";
+				// }
+				// if(isset($errors['match'])){
+				// 	echo"<div class='required'>Your username and password do not match.</div>";
+				// }
+				// if(isset($errors['DNE'])){
+				// 	echo"<div class='required'>There is no account associated with that username.</div>";
+				// }
 			}
 		}
 		echo"<form method='post'>";
@@ -184,6 +234,7 @@
 			// ";
 			session_destroy();
 			header("Location: index.php");
+			exit();
 		}
 		echo"
 			<form>
@@ -216,11 +267,24 @@
 		$result = dbQuery("
 			SELECT *
 			FROM users
-			WHERE EXISTS
-			(SELECT 1 FROM users
-			WHERE username = '$username')
+			WHERE username = '$username'
 		")->fetch();
-		return $result;
+		if(!$result){
+			return false;
+		}
+		return true;
+	}
+
+	function UserEmailExists($email){
+		$result = dbQuery("
+			SELECT *
+			FROM users
+			WHERE email = '$email'
+		")->fetch();
+		if(!$result){
+			return false;
+		}
+		return true;
 	}
 
 	function GetUser($username){
@@ -234,6 +298,9 @@
 
 	//BLOG DATABASE FUNCTIONS
 	function InsertBlogPost($author, $title, $body){
+		if(!$author){
+			$author = 'Anonymous';
+		}
 		$result = dbQuery("
 			INSERT INTO posts (author, title, body, postType, username)
 			VALUES('$author', '$title', '$body', 'blog', '$_SESSION[username]')

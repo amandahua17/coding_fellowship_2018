@@ -12,10 +12,10 @@
 				<h1>Create a new account</h1>
 				<div>";
 	if(!IsLoggedIn()){
-		CreateAccount();
+		CreateAccountForm();
 		ShowLoginPage();
 	}else{
-		echo"You are already logged in!";
+		header("Location: index.php");
 	}
 	echo"
 				</div>

@@ -7,12 +7,10 @@
 	if(isset($_REQUEST['button'])&&($type == 2)){
 		$errors+=ValidateTextField('Title', $errors);
 		$errors+=ValidateTextField('Body', $errors);
-		if(!$_REQUEST['Author']){
-			$_REQUEST['Author'] = 'Anonymous';
-		}
 		if(sizeof($errors)==0){
 			InsertBlogPost($_REQUEST['Author'], $_REQUEST['Title'], $_REQUEST['Body']);
-			header('Location: success.php');
+			header('Location: index.php');
+			exit();
 		}
 	}
 
@@ -23,7 +21,8 @@
 		// var_dump($errors);
 		if(sizeof($errors) == 0){
 			InsertPic($_REQUEST['Photographer'], $_REQUEST['Title'], $_REQUEST['Body'], $_REQUEST['Link'], $_REQUEST['Flavortext']);
-			header('Location: success.php');
+			header('Location: index.php');
+			exit();
 		}
 	}
 
@@ -36,6 +35,10 @@
 			<body>";
 	if(IsLoggedIn()){
 		PersonalHeading();
+	}else{
+		echo"note: if you are not logged in, anyone can edit or delete your post. To make it so that only you or an administrator can edit or delete your post, log in or create an account.<br>";
+		ShowLoginPage();
+		ShowCreateAccountPage();
 	}
 	echo"
 				<h1>Create Your Own";
