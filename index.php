@@ -18,7 +18,7 @@
 	echo"
 				<h1>Welcome to my blog!</h1>";
 	ShowLoginPage();
-	CreateAccountPage();
+	ShowCreateAccountPage();
 	echo"
 				<div>
 					<h2>Blog Posts</h2>
