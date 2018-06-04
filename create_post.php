@@ -3,12 +3,21 @@
 
 	$type=$_REQUEST['type'];		//type 1 is picture, type 2 is post
 	$errors = array();
-	$tagarray = array();
+
+	// $tagarray=array();
+	// var_dump($_REQUEST);
 
 	if(isset($_REQUEST['tagsub'])){
-		array_push($tagarray, $_REQUEST['tags']);		//not adding extra tags
-		var_dump($tagarray);
+		$_REQUEST['tagString'].=",";
+		$_REQUEST['tagString'].=$_REQUEST['tags'];
+		// var_dump($_REQUEST, $tagarray);
 		echo"tag added!";
+	}
+
+	if(isset($_REQUEST['tagString'])){
+		$tagarray = explode(',', $_REQUEST['tagString']);
+	}else{
+		$tagarray = array();
 	}
 
 	if(isset($_REQUEST['button'])&&($type == 2)){
@@ -18,9 +27,9 @@
 			$_REQUEST['Author'] = 'Anonymous';
 		}
 		if(sizeof($errors)==0){
-			var_dump($tagarray);
+			// var_dump($tagarray);
 			InsertBlogPost($_REQUEST['Author'], $_REQUEST['Title'], $_REQUEST['Body'], $tagarray);
-			header('Location: success.php');
+			header('Location: index.php');
 		}
 	}
 
@@ -29,9 +38,9 @@
 		$errors+=ValidateTextField('Title', $errors);
 		$errors+=ValidateTextField('Link', $errors);
 		if(sizeof($errors) == 0){
-			var_dump($tagarray);
+			// var_dump($tagarray);
 			InsertPic($_REQUEST['Photographer'], $_REQUEST['Title'], $_REQUEST['Body'], $_REQUEST['Link'], $_REQUEST['Flavortext'], $tagarray);
-			header('Location: success.php');
+			header('Location: index.php');
 		}
 	}
 
@@ -66,14 +75,17 @@
 						ShowTextField(true, 'Link');
 						ShowTextField(false, 'Flavortext');
 						echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
-						ShowTagField();
+
 
 					}else if($type==2){
 						ShowTextField(false, 'Author');
 						ShowTextField(true, 'Title');
 						ShowTextField(true, 'Body');
-						ShowTagField();
 					}
+					ShowTagField();
+					ShowHiddenField('tagString', @$_REQUEST['tagString']);
+					// var_dump(@$_REQUEST['tagString']);
+
 
 		echo"
 						<input type='submit' name = 'button'>

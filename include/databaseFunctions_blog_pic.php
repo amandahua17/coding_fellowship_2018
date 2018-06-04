@@ -82,6 +82,13 @@
 		";
 	}
 
+	function ShowHiddenField($name, $value){
+		$Jval = json_encode($value);
+		echo"
+		<input type='hidden' name='$name' value=$Jval><br>
+		";
+	}
+
 	//USER FUNCTIONS
 	function CreateAccount(){
 		$errors = array();
@@ -220,28 +227,30 @@
 		")->fetch();
 	}
 
-	function AttachTags($postID, $tagnamearray){
+	function AttachTags($postID, $tagarray){
 		echo"attachtags called";
-		foreach($tagnamearray as $key=>$tagname){
-		echo"forloop";
-			if(!TagExists($tagname)){
-				echo"<br>CREATING A NEW TAG<br>";
-				NewTag($tagname);
+		for($i=0;$i<sizeof($tagarray);$i++){
+			// die("forloop");
+			if($tagarray[$i] == 'null'){
+				continue;
 			}
-			$tagID=GetTag($tagname)['tagID'];
+			if(!TagExists($tagarray[$i])){
+				echo"<br>CREATING A NEW TAG<br>";
+				NewTag($tagarray[$i]);
+			}
+			$tagID=GetTag($tagarray[$i])['tagID'];
 			dbQuery("
 				INSERT INTO posttags (postID, tagID)
 				VALUES('$postID', '$tagID')
 			")->fetchAll();
 		}
-		die("attachtags done");
 	}
 
 	function GetTag($name){
 		$result=dbQuery("
 			SELECT *
 			FROM tags
-			WHERE tagname = '$tagID'
+			WHERE tagname = '$name'
 		")->fetch();
 		return $result;
 	}
@@ -250,8 +259,7 @@
 		$result=dbQuery("
 			SELECT tagname
 			FROM tags
-			WHERE tagID =
-			(SELECT tagID FROM posttags WHERE postID = '$postID')
+			INNER JOIN posttags ON tags.tagID=posttags.tagID
 		")->fetchAll();
 		return $result;
 	}
@@ -268,7 +276,7 @@
 	}
 
 	function TagExists($name){		//NOT GETTING CALLED
-	echo"tagexists called";
+		echo"tagexists called";
 		$result = dbQuery("
 			SELECT *
 			FROM tags
@@ -281,9 +289,11 @@
 
 	function ShowTags($postID){
 		if(HasTags($postID)){
+			$tagarray = GetAllTags($postID);
+			// var_dump($tagarray);
 			echo"Tags: ";
-			foreach(GetAllTags($postID) as $key=>$tagname){
-				echo"#$tagname";
+			for($i=0;$i<sizeof($tagarray);$i++){
+				echo"#".$tagarray[$i]['tagname']."\t";
 			}
 		}
 	}
@@ -322,8 +332,7 @@
 			INSERT INTO posts (author, title, body, postType, username)
 			VALUES('$author', '$title', '$body', 'blog', '$_SESSION[username]')
 		")->fetch();
-		var_dump($tagarray);
-		AttachTags(GetRecentPost()['postID'], $tagarray);
+		AttachTags(GetTotalPosts(), $tagarray);
 	}
 
 	function GetAllBlogPosts(){
@@ -376,7 +385,7 @@
 			VALUES('$photographer', '$title', '$body', 'pic','$link', '$flavor', '$_SESSION[username]')
 		")->fetch();
 		var_dump($tagarray);
-		AttachTags(GetRecentPost()['postID'], $tagarray);
+		AttachTags(GetTotalPosts(), $tagarray);
 	}
 
 	function GetAllPics(){
@@ -441,6 +450,10 @@
 			DELETE FROM posts
 			WHERE postID = $postID
 		")->fetch();
+		$result = dbQuery("
+			DELETE FROM posttags
+			WHERE postID = $postID
+		")->fetch();
 		echo"Post Deleted.<br>";
 		ResetAuto(GetTotalPosts());
 	}
@@ -470,5 +483,6 @@
 			AS recentpost
 			FROM posts
 		")->fetch();
+		var_dump($result);
 		return $result['recentpost'];
 	}
