@@ -38,6 +38,26 @@
 		";
 	}
 
+	function ShowEdit($postID){
+		// echo"ShowEdit called";
+		if(isset($_REQUEST['edit'])){
+			// echo"edit button pushed";
+			// die();
+			if(ValidEdit($postID)){
+				// echo"Go to Edit!";
+				// die();
+				header("Location: /editpost.php?postID=".$postID);
+			}else{
+				echo"You do not have permission to edit this post!";
+			}
+		}
+		echo"
+			<form method='post'>
+				<input type='submit' name='edit' value='Edit Post'><br><br>
+			</form>
+		";
+	}
+
 	//FORM FUNCTIONS
 	function ValidateTextField($key, $errors){
 		if(!$_REQUEST[$key]){
@@ -55,7 +75,7 @@
 		return $errors;
 	}
 
-	function ShowTextField($isreq, $name){
+	function ShowTextField($isreq, $name, $value){
 		echo"
 			<p";
 		if($isreq){
@@ -66,8 +86,12 @@
 			echo"*";
 		}
 		echo":</p><input type='text' name='$name'";
-		if(isset($_REQUEST[$name])){
-			echo"value='$_REQUEST[$name]'";
+		if(($value == '')||($value == NULL)){
+			if(isset($_REQUEST[$name])){
+				echo"value='$_REQUEST[$name]'";
+			}
+		}else{
+			echo"value='$value'";
 		}
 		echo"><br><br>
 		";
@@ -124,6 +148,91 @@
 		echo"
 		<input type='hidden' name='$name' value=$value><br>
 		";
+	}
+
+	function EditPostForm($postID){
+		$post = GetPost($postID);
+		$type = $post['postType'];
+		$errors = array();
+
+
+		if(isset($_REQUEST['tagsub'])){
+			$_REQUEST['tagString'].=",";
+			$_REQUEST['tagString'].=$_REQUEST['tags'];
+			// var_dump($_REQUEST, $tagarray);
+			echo"tag added!";
+		}
+
+		if(isset($_REQUEST['tagString'])){
+			$tagarray = explode(',', $_REQUEST['tagString']);
+		}else{
+			$tagarray = array();
+		}
+
+		if(isset($_REQUEST['apply'])){
+			if($type == 'pic'){
+				$errors+=ValidateTextField('Photographer', $errors);
+				$errors+=ValidateTextField('Title', $errors);
+				$errors+=ValidateTextField('Link', $errors);
+			}else if($type == 'blog'){
+				$errors+=ValidateTextField('Title', $errors);
+				$errors+=ValidateTextField('Body', $errors);
+			}
+			if(sizeof($errors) == 0){
+				foreach($post as $key=>$val){
+					$edits[$key] = $_REQUEST[$key];
+				}
+				EditPost($postID, $edits);
+				header("Location: /view_post.php?postID=".$postID);
+				exit();
+			}
+		}
+
+
+		//Form
+		echo"
+			<html>
+				<header>
+					<title>Edit Your Post</title>
+					<link rel='stylesheet' href='/style/mainstyle.css'>
+				</header>
+				<body><br>";
+		echo"
+					<h1>Edit Your";
+		if($type == 'pic'){
+			echo" Picture ";
+		}else if ($type == 'blog'){
+			echo" Blog ";
+		}
+		echo							"Post</h1>";
+
+
+				foreach($errors as $key=>$val){
+					echo"<span style='color: red'>$key is a required field!<br></span>";
+				}
+		echo"		<form method='post' name='form'>";
+					if($type== 'pic'){
+						ShowTextField(true, 'Photographer', $post['author']);
+						ShowTextField(true, 'Title', $post['title']);
+						ShowTextField(false, 'Body', $post['body']);
+						ShowTextField(true, 'Link', $post['link']);
+						ShowTextField(false, 'Flavortext', $post['flavor']);
+						echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
+
+
+					}else if($type=='blog'){
+						ShowTextField(false, 'Author', $post['author']);
+						ShowTextField(true, 'Title', $post['title']);
+						ShowTextField(true, 'Body', $post['body']);
+					}
+					ShowTagField();
+					ShowHiddenField('tagString', @$_REQUEST['tagString']);
+		echo"			<input type='submit' name='apply' value='Apply Edits'>
+					</form>
+				</body>
+			</html>
+		";
+
 	}
 
 	//USER FUNCTIONS
@@ -267,9 +376,24 @@
 				return true;
 			}
 		}
-		if(GetPostCreator($postID) == NULL){
-			return true;
+		// if(GetPostCreator($postID) == NULL){
+		// 	return true;
+		// }
+		return false;
+	}
+
+	function ValidEdit($postID){
+		if(isset($_SESSION['userID'])){
+			if($_SESSION['userID'] == GetPostCreator($postID)){
+				return true;
+			}
+			if(GetUser($_SESSION['username'])['userType'] == 'admin'){
+				return true;
+			}
 		}
+		// if(GetPostCreator($postID) == NULL){
+		// 	return true;
+		// }
 		return false;
 	}
 
@@ -431,13 +555,16 @@
 			$_SESSION['userID'] = NULL;
 		}
 		var_dump($author, $title, $body, $_SESSION);
-		$result = dbQuery("
+		dbQuery("
 			INSERT INTO posts (author, title, body, postType, userID)
 			VALUES(:author, :title, :body, 'blog', '$_SESSION[userID]')
 		", array('author'=>$author, 'title'=>$title, 'body'=>$body))->fetch();
-		// var_dump($result);
+		$result = dbQuery("
+			SELECT LAST_INSERT_ID() as postID;
+		")->fetch();
+		var_dump($result);
 		// die("Blog Post should be inserted by now");
-		AttachTags(GetTotalPosts(), $tagarray);
+		AttachTags($result['postID'], $tagarray);
 	}
 
 	function GetAllBlogPosts(){
@@ -464,6 +591,9 @@
 					<p>".$post['body']."</p><br>
 				</div>";
 		ShowTags($post['postID']);
+		if(ValidEdit($post['postID'])){
+			ShowEdit($post['postID']);
+		}
 		if(ValidDelete($post['postID'])){
 			// echo"valid delete";
 			ShowDelete($post['postID']);
@@ -474,8 +604,6 @@
 		";
 	}
 
-
-
 	//PIC DATABASE FUNCTIONS
 	function InsertPic($photographer, $title, $body, $link, $flavor, $tagarray){
 		if(!$_SESSION['userID']){
@@ -485,9 +613,10 @@
 		INSERT INTO posts (author, title, body, postType, link, flavor, userID)
 		VALUES(:photographer, :title, :body, 'pic',:link, :flavor, '$_SESSION[userID]')
 		", array('photographer'=>$photographer, 'title'=>$title, 'body'=>$body, 'link'=>$link, 'flavor'=>$flavor))->fetch();
-
-		// var_dump($tagarray);
-		AttachTags(GetTotalPosts(), $tagarray);
+		$result = dbQuery("
+			SELECT LAST_INSERT_ID() as postID;
+		")->fetch();
+		AttachTags($result['postID'], $tagarray);
 	}
 
 	function GetAllPics(){
@@ -518,6 +647,9 @@
 				}
 		echo"<br>";
 		ShowTags($pic['postID']);
+		if(ValidEdit($pic['postID'])){
+			ShowEdit($pic['postID']);
+		}
 		if(ValidDelete($pic['postID'])){
 			ShowDelete($pic['postID']);
 		}
@@ -526,8 +658,6 @@
 		</html>
 		";
 	}
-
-
 
 	//GENERIC POST DATABASE FUNCTIONS
 
@@ -565,6 +695,15 @@
 		")->fetch();
 		var_dump($result);
 		return $result['recentpost'];
+	}
+
+	function EditPost($postID, $changes){
+		foreach($changes as $column->$change){
+			$result = dbQuery("
+				UPDATE posts
+				SET :column = :change
+			", array('column'=>$column, 'change'=>$change))->fetch();
+		}
 	}
 
 	//REMOVED FUNCTIONS

@@ -51,7 +51,7 @@
 		PersonalHeading();
 	}else{
 
-		echo"note: if you are not logged in, anyone can edit or delete your post. To make it so that only you or an administrator can edit or delete your post, log in or create an account.<br>";
+		echo"note: if you are not logged in, only an admin can edit or delete your post. To make it so that you can edit or delete your post, log in or create an account.<br>";
 		ShowLoginPage();
 		ShowCreateAccountPage();
 	}
@@ -72,18 +72,18 @@
 	echo"
 				<br><form method='post' name='form'>";
 				if($type== 'pic'){
-					ShowTextField(true, 'Photographer');
-					ShowTextField(true, 'Title');
-					ShowTextField(false, 'Body');
-					ShowTextField(true, 'Link');
-					ShowTextField(false, 'Flavortext');
+					ShowTextField(true, 'Photographer', '');
+					ShowTextField(true, 'Title', '');
+					ShowTextField(false, 'Body', '');
+					ShowTextField(true, 'Link', '');
+					ShowTextField(false, 'Flavortext', '');
 					echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
 
 
 				}else if($type=='blog'){
-					ShowTextField(false, 'Author');
-					ShowTextField(true, 'Title');
-					ShowTextField(true, 'Body');
+					ShowTextField(false, 'Author', '');
+					ShowTextField(true, 'Title', '');
+					ShowTextField(true, 'Body', '');
 				}
 				ShowTagField();
 				ShowHiddenField('tagString', @$_REQUEST['tagString']);
