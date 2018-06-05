@@ -87,6 +87,11 @@
 				}
 				ShowTagField();
 				ShowHiddenField('tagString', @$_REQUEST['tagString']);
+				echo"Tags: ";
+				foreach($tagarray as $tag){
+					if(($tag!=NULL)&&($tag!=''))
+					echo" #".$tag;
+				}
 				// var_dump(@$_REQUEST['tagString']);
 
 

@@ -151,6 +151,8 @@
 	}
 
 	function EditPostForm($postID){
+
+
 		$post = GetPost($postID);
 		$type = $post['postType'];
 		$attributes = GetPostAttributeArray($postID);
@@ -158,6 +160,15 @@
 		$edits = array();
 		$tagString = '';
 
+		if(isset($_REQUEST['cancel'])){
+			if($type == 'pic'){
+				header("Location: /view_pic.php?postID=".$postID);
+				exit();
+			}else if($type == 'blog'){
+				header("Location: /view_post.php?postID=".$postID);
+				exit();
+			}
+		}
 
 		if(isset($_REQUEST['tagsub'])){
 			$_REQUEST['tagString'].=",";
@@ -256,7 +267,13 @@
 						// var_dump($tagString);
 						ShowHiddenField('tagString', @$tagString);
 					}
-		echo"			<input type='submit' name='apply' value='Apply Edits'>
+					echo"Tags: ";
+					foreach($tagarray as $tag){
+						if(($tag!=NULL)&&($tag!=''))
+						echo" #".$tag;
+					}
+		echo"			<br><input type='submit' name='apply' value='Apply Edits'>
+						<br><input type='submit' name='cancel' value='Cancel'>
 					</form>
 				</body>
 			</html>
@@ -533,16 +550,16 @@
 		return $result;
 	}
 
-	function ShowTags($postID){
+	function ShowTags($tagarray){
 		// echo"ShowTags called";
-		if(HasTags($postID)){
-			$tagarray = GetAllTags($postID);
+		// if(HasTags($postID)){
+			// $tagarray = GetAllTags($postID);
 			// var_dump($tagarray);
-			echo"Tags: ";
-			for($i=0;$i<sizeof($tagarray);$i++){
-				echo"#".$tagarray[$i]['tagname']."\t";
-			}
+		echo"Tags: ";
+		for($i=0;$i<sizeof($tagarray);$i++){
+			echo"#".$tagarray[$i]['tagname']."\t";
 		}
+		// }
 	}
 
 	//USER DATABASE FUNCTIONS
@@ -634,7 +651,9 @@
 				<div>
 					<p>".$post['body']."</p><br>
 				</div>";
-		ShowTags($post['postID']);
+		if(HasTags($post['postID'])){
+			ShowTags(GetAllTags($post['postID']));
+		}
 		if(ValidEdit($post['postID'])){
 			ShowEdit($post['postID']);
 		}
@@ -690,7 +709,9 @@
 					echo"<p>".$pic['body']."</p><br>";
 				}
 		echo"<br>";
-		ShowTags($pic['postID']);
+		if(HasTags($pic['postID'])){
+			ShowTags(GetAllTags($pic['postID']));
+		}
 		if(ValidEdit($pic['postID'])){
 			ShowEdit($pic['postID']);
 		}
