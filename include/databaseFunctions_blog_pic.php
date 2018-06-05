@@ -114,6 +114,8 @@
 			$errors['taken'] = 'Email taken!';
 		}
 		return $errors;
+	}
+
 	function ShowTagField(){
 		echo"
 			<p >tags:</p><input type='text' name='tags'>
@@ -257,6 +259,7 @@
 
 	function ValidDelete($postID){
 		if(isset($_SESSION['userID'])){
+			var_dump($_SESSION, GetPost($postID));
 			if($_SESSION['userID'] == GetPost($postID)['userID']){
 				return true;
 			}
@@ -446,7 +449,6 @@
 			")->fetch();
 		return $result['count'];
 	}
-
 
 	//PIC DATABASE FUNCTIONS
 	function InsertPic($photographer, $title, $body, $link, $flavor, $tagarray){
