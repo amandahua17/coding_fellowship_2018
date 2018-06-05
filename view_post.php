@@ -1,6 +1,9 @@
 <?php
 	include('include/include_all.php');
 
+	if(IsLoggedIn()){
+		PersonalHeading();
+	}
 	if($_REQUEST['postID']=='0'){
 		foreach(GetAllBlogPosts() as $post){
 			DisplayPost($post);
@@ -10,6 +13,6 @@
 		$post = GetPost($_REQUEST['postID']);
 		//var_Dump($post);
 		DisplayPost($post);
-		showDelete($post['postID']);
+		// ShowDelete($post['postID']);
 	}
-	home();
+	Home();
