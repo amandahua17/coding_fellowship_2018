@@ -196,8 +196,10 @@
 			}
 
 			if(sizeof($errors) == 0){
+				// var_dump($_REQUEST, GetUser($_REQUEST['username'])['userID']);
+				// die();
 				$_SESSION['username'] = $_REQUEST['username'];
-				$_SESSION['userID'] = GetUser($_REQUEST['username'])['UserID'];
+				$_SESSION['userID'] = GetUser($_REQUEST['username'])['userID'];
 				header("Location: index.php");
 				exit();
 			}else{
@@ -227,7 +229,8 @@
 	}
 
 	function IsLoggedIn(){
-		if(isset($_SESSION['username'])){
+		echo"";
+		if(isset($_SESSION['userID'])){
 			return true;
 		}
 		return false;
@@ -258,15 +261,16 @@
 	}
 
 	function ValidDelete($postID){
+		// echo"validdelete called";
+		// var_dump($_SESSION);
 		if(isset($_SESSION['userID'])){
-			var_dump($_SESSION, GetPost($postID));
-			if($_SESSION['userID'] == GetPost($postID)['userID']){
+			if($_SESSION['userID'] == GetPostCreator($postID)){
 				return true;
 			}
 			if(GetUser($_SESSION['username'])['userType'] == 'admin'){
 				return true;
 			}
-			if(GetPost($postID)['username'] == 'null'){
+			if(GetPostCreator($postID) == 'null'){
 				return true;
 			}
 		}
@@ -395,14 +399,18 @@
 		return $result;
 	}
 
+	function GetPostCreator($postID){
+		return GetPost($postID)['userID'];
+	}
+
 	//BLOG DATABASE FUNCTIONS
 	function InsertBlogPost($author, $title, $body){
 		if(!$author){
 			$author = 'Anonymous';
 		}
 		$result = dbQuery("
-			INSERT INTO posts (author, title, body, postType, username)
-			VALUES('$author', '$title', '$body', 'blog', '$_SESSION[username]')
+			INSERT INTO posts (author, title, body, postType, userID)
+			VALUES('$author', '$title', '$body', 'blog', '$_SESSION[userID]')
 		")->fetch();
 		AttachTags(GetTotalPosts(), $tagarray);
 	}
@@ -453,8 +461,8 @@
 	//PIC DATABASE FUNCTIONS
 	function InsertPic($photographer, $title, $body, $link, $flavor, $tagarray){
 		$result = dbQuery("
-			INSERT INTO posts (author, title, body, postType, link, flavor, username)
-			VALUES('$photographer', '$title', '$body', 'pic','$link', '$flavor', '$_SESSION[username]')
+			INSERT INTO posts (author, title, body, postType, link, flavor, userID)
+			VALUES('$photographer', '$title', '$body', 'pic','$link', '$flavor', '$_SESSION[userID]')
 		")->fetch();
 		var_dump($tagarray);
 		AttachTags(GetTotalPosts(), $tagarray);
@@ -512,7 +520,7 @@
 		$result = dbQuery("
 			SELECT *
 			FROM posts
-			WHERE postID = $postID
+			WHERE postID = '$postID'
 		")->fetch();
 		return $result;
 	}
