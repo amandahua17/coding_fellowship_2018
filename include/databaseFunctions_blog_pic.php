@@ -270,9 +270,9 @@
 			if(GetUser($_SESSION['username'])['userType'] == 'admin'){
 				return true;
 			}
-			if(GetPostCreator($postID) == 'null'){
-				return true;
-			}
+		}
+		if(GetPostCreator($postID) == NULL){
+			return true;
 		}
 		return false;
 	}
@@ -281,12 +281,13 @@
 	function NewTag($name){
 		dbQuery("
 			INSERT INTO tags (tagname)
-			VALUES('$name')
-		")->fetch();
+			VALUES(:name)
+		", array('name'=>$name))->fetch();
 	}
 
 	function AttachTags($postID, $tagarray){
-		// echo"attachtags called";
+		// echo"attachtags called, postID: ";
+		// var_dump($postID);
 		for($i=0;$i<sizeof($tagarray);$i++){
 			// die("forloop");
 			if(($tagarray[$i] == 'null')||($tagarray[$i] == '')){
@@ -299,17 +300,18 @@
 			$tagID=GetTag($tagarray[$i])['tagID'];
 			dbQuery("
 				INSERT INTO posttags (postID, tagID)
-				VALUES('$postID', '$tagID')
-			")->fetchAll();
+				VALUES(:postID, :tagID)
+			", array('postID'=>$postID, 'tagID'=>$tagID))->fetchAll();
 		}
+		 // die();
 	}
 
 	function GetTag($name){
 		$result=dbQuery("
 			SELECT *
 			FROM tags
-			WHERE tagname = '$name'
-		")->fetch();
+			WHERE tagname = :name
+		", array('name'=>$name))->fetch();
 		return $result;
 	}
 
@@ -318,20 +320,22 @@
 			SELECT tagname
 			FROM tags
 			INNER JOIN posttags ON tags.tagID = posttags.tagID
-			WHERE posttags.postID = $postID
-		")->fetchAll();
+			WHERE posttags.postID = :postID
+		", array('postID'=>$postID))->fetchAll();
 		// var_dump($result);
 		return $result;
 	}
 
 	function HasTags($postID){
+		// echo"HasTags called";
 		$result = dbQuery("
 			SELECT *
 			FROM posttags
 			WHERE EXISTS
 			(SELECT 1 FROM posttags
-			WHERE postID = '$postID')
-		")->fetch();
+			WHERE postID = :postID)
+		", array('postID'=>$postID))->fetch();
+		// var_dump($result);
 		return $result;
 	}
 
@@ -342,12 +346,13 @@
 			FROM tags
 			WHERE EXISTS
 			(SELECT 1 FROM tags
-			WHERE tagname = '$name')
-		")->fetch();
+			WHERE tagname = :name)
+		", array('name'=>$name))->fetch();
 		return $result;
 	}
 
 	function ShowTags($postID){
+		// echo"ShowTags called";
 		if(HasTags($postID)){
 			$tagarray = GetAllTags($postID);
 			// var_dump($tagarray);
@@ -362,16 +367,16 @@
 	function AddNewUser($username, $password, $email){
 		$result = dbQuery("
 			INSERT INTO users (username, password, userType, email)
-			VALUES('$username', '$password', 'regUser', '$email')
-		")->fetch();
+			VALUES(:username, :password, 'regUser', :email)
+		", array('username'=>$username, 'password'=>$password, 'email'=>$email))->fetch();
 	}
 
 	function UserExists($username){
 		$result = dbQuery("
 			SELECT *
 			FROM users
-			WHERE username = '$username'
-		")->fetch();
+			WHERE username = :username
+		", array('username'=>$username))->fetch();
 		if(!$result){
 			return false;
 		}
@@ -382,8 +387,8 @@
 		$result = dbQuery("
 			SELECT *
 			FROM users
-			WHERE email = '$email'
-		")->fetch();
+			WHERE email = :email
+		", array('email'=>$email))->fetch();
 		if(!$result){
 			return false;
 		}
@@ -394,8 +399,8 @@
 		$result = dbQuery("
 			SELECT *
 			FROM users
-			WHERE username = '$username'
-		")->fetch();
+			WHERE username = :username
+		", array('username'=>$username))->fetch();
 		return $result;
 	}
 
@@ -404,14 +409,20 @@
 	}
 
 	//BLOG DATABASE FUNCTIONS
-	function InsertBlogPost($author, $title, $body){
+	function InsertBlogPost($author, $title, $body, $tagarray){
 		if(!$author){
 			$author = 'Anonymous';
 		}
+		if(!$_SESSION['userID']){
+			$_SESSION['userID'] = NULL;
+		}
+		var_dump($author, $title, $body, $_SESSION);
 		$result = dbQuery("
 			INSERT INTO posts (author, title, body, postType, userID)
-			VALUES('$author', '$title', '$body', 'blog', '$_SESSION[userID]')
-		")->fetch();
+			VALUES(:author, :title, :body, 'blog', '$_SESSION[userID]')
+		", array('author'=>$author, 'title'=>$title, 'body'=>$body))->fetch();
+		// var_dump($result);
+		// die("Blog Post should be inserted by now");
 		AttachTags(GetTotalPosts(), $tagarray);
 	}
 
@@ -460,11 +471,15 @@
 
 	//PIC DATABASE FUNCTIONS
 	function InsertPic($photographer, $title, $body, $link, $flavor, $tagarray){
+		if(!$_SESSION['userID']){
+			$_SESSION['userID'] = NULL;
+		}
 		$result = dbQuery("
-			INSERT INTO posts (author, title, body, postType, link, flavor, userID)
-			VALUES('$photographer', '$title', '$body', 'pic','$link', '$flavor', '$_SESSION[userID]')
-		")->fetch();
-		var_dump($tagarray);
+		INSERT INTO posts (author, title, body, postType, link, flavor, userID)
+		VALUES(:photographer, :title, :body, 'pic',:link, :flavor, '$_SESSION[userID]')
+		", array('photographer'=>$photographer, 'title'=>$title, 'body'=>$body, 'link'=>$link, 'flavor'=>$flavor))->fetch();
+
+		// var_dump($tagarray);
 		AttachTags(GetTotalPosts(), $tagarray);
 	}
 
@@ -520,8 +535,8 @@
 		$result = dbQuery("
 			SELECT *
 			FROM posts
-			WHERE postID = '$postID'
-		")->fetch();
+			WHERE postID = :postID
+		", array('postID'=>$postID))->fetch();
 		return $result;
 	}
 
@@ -532,10 +547,10 @@
 		", array('postID'=>$postID))->fetch();
 		$result = dbQuery("
 			DELETE FROM posttags
-			WHERE postID = $postID
-		")->fetch();
+			WHERE postID = :postID
+		", array('postID'=>$postID))->fetch();
 		echo"Post Deleted.<br>";
-		ResetAuto(GetTotalPosts());
+		// ResetAuto(GetTotalPosts());
 	}
 
 	function GetPostType($postID){
@@ -550,12 +565,12 @@
 		return $result['count'];
 	}
 
-	function ResetAuto($count){
-		$result = dbQuery("
-			ALTER TABLE posts
-			AUTO_INCREMENT=$count
-		")->fetch();
-	}
+	// function ResetAuto($count){
+	// 	$result = dbQuery("
+	// 		ALTER TABLE posts
+	// 		AUTO_INCREMENT=:count
+	// 	", array('count'=>$count))->fetch();
+	// }
 
 	function GetRecentPost(){
 		$result = dbQuery("

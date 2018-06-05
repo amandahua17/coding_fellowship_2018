@@ -4,7 +4,7 @@
 	$postCount=GetTotalPosts();
 	// var_dump($postCount);
 	// $picCount=GetNumberPics();
-	ResetAuto(GetTotalPosts());
+	// ResetAuto(GetTotalPosts());
 	echo"
 		<html>
 			<head>
@@ -24,13 +24,14 @@
 					<h2>Blog Posts</h2>
 					<div>";
 				// var_dump($postCount, $picCount);
-			for($i=1, $posti=1;$i<=$postCount;$i++){
-				if (GetPostType($i)=='blog'){
+			// for($i=1, $posti=1;$i<=$postCount;$i++){
+			$blogposts = GetAllBlogPosts();
+			foreach($blogposts as $post){
+				// if (GetPostType($post['postID'])=='blog'){
 					echo"
-						<a href='view_post.php?postID=$i'>".GetPost($i)['title']." by ".GetPost($i)['author']."</a><br><br>
+						<a href='view_post.php?postID=".$post['postID']."'>".$post['title']." by ".$post['author']."</a><br><br>
 					";
-					$posti++;
-				}
+				// }
 			}
 	echo"
 					</div>
@@ -39,13 +40,13 @@
 				<div>
 					<h2>Pictures</h2>
 					<div>";
-			for($j=1, $picj=1;$j<=$postCount;$j++){
-				if (GetPostType($j)=='pic'){
+				$picposts = GetAllPics();
+			foreach($picposts as $post){
+				// if (GetPostType($j)=='pic'){
 					echo"
-						<a href='view_pic.php?postID=$j'>".GetPost($j)['title']." by ".GetPost($j)['author']."</a><br><br>
+						<a href='view_pic.php?postID=".$post['postID']."'>".$post['title']." by ".$post['author']."</a><br><br>
 					";
-					$picj++;
-				}
+				// }
 			}
 	echo"
 					</div>

@@ -24,7 +24,7 @@
 		$errors+=ValidateTextField('Title', $errors);
 		$errors+=ValidateTextField('Body', $errors);
 		if(sizeof($errors)==0){
-			InsertBlogPost($_REQUEST['Author'], $_REQUEST['Title'], $_REQUEST['Body']);
+			InsertBlogPost($_REQUEST['Author'], $_REQUEST['Title'], $_REQUEST['Body'], $tagarray);
 			header('Location: index.php');
 			exit();
 		}
@@ -35,7 +35,7 @@
 		$errors+=ValidateTextField('Title', $errors);
 		$errors+=ValidateTextField('Link', $errors);
 		if(sizeof($errors) == 0){
-			InsertPic($_REQUEST['Photographer'], $_REQUEST['Title'], $_REQUEST['Body'], $_REQUEST['Link'], $_REQUEST['Flavortext']);
+			InsertPic($_REQUEST['Photographer'], $_REQUEST['Title'], $_REQUEST['Body'], $_REQUEST['Link'], $_REQUEST['Flavortext'], $tagarray);
 			header('Location: index.php');
 			exit();
 		}
@@ -51,8 +51,10 @@
 	if(IsLoggedIn()){
 		PersonalHeading();
 	}else{
-<<<<<<< HEAD
-		echo"<div class='required'>note: if you aren't logged in, anyone can delete your posts! To make it so that only you or an admin can delete your posts, log in or create an account.</div>";
+
+		echo"note: if you are not logged in, anyone can edit or delete your post. To make it so that only you or an administrator can edit or delete your post, log in or create an account.<br>";
+		ShowLoginPage();
+		ShowCreateAccountPage();
 	}
 	echo"
 				<h1>Create Your Own";
@@ -62,21 +64,7 @@
 		echo" Blog ";
 	}
 	echo							"Post</h1>";
-=======
-		echo"note: if you are not logged in, anyone can edit or delete your post. To make it so that only you or an administrator can edit or delete your post, log in or create an account.<br>";
-		ShowLoginPage();
-		ShowCreateAccountPage();
-	}
-	echo"
-				<h1>Create Your Own";
-	if($type == 1){		//HERE
-		echo" Picture ";
-	}else if ($type == 2){		//HERE
-		echo" Blog ";
-	}
-	echo							"Post</h1>";
 
->>>>>>> ba95f61e315eeb278375f75028a2b1a472d6f63c
 
 	foreach($errors as $key=>$val){
 		echo"<span style='color: red'>$key is a required field!<br></span>";
