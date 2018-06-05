@@ -45,7 +45,7 @@
 		<html>
 			<head>
 				<title>Create Your Own Post</title>
-				<link rel='stylesheet' href='style.css'>
+				<link rel='stylesheet' href='/style/mainstyle.css'>
 			</head>
 			<body>";
 	if(IsLoggedIn()){

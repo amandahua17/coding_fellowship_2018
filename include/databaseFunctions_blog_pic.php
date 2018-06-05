@@ -454,7 +454,7 @@
 		<html>
 			<head>
 				<title>".$post['title']."</title>
-				<link rel='stylesheet' href='style.css'>
+				<link rel='stylesheet' href='/style/mainstyle.css'>
 			</head>
 			<body>
 				<h1>".$post['title']."</h1>
@@ -511,7 +511,7 @@
 		<html>
 			<head>
 				<title>".$pic['title']."</title>
-				<link rel='stylesheet' href='style.css'>
+				<link rel='stylesheet' href='/style/mainstyle.css'>
 			</head>
 			<body>
 				<h1>".$pic['title']."</h1>

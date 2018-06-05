@@ -6,7 +6,7 @@
 		<html>
 			<head>
 				<title>Login</title>
-				<link rel='stylesheet' href='/style.css'>
+				<link rel='stylesheet' href='/style/mainstyle.css'>
 			</head>
 			<body>
 				<h1>Log In</h1>

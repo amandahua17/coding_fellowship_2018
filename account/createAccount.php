@@ -6,7 +6,7 @@
 		<html>
 			<head>
 				<title>Create an account</title>
-				<link rel='stylesheet' href='/style.css'>
+				<link rel='stylesheet' href='/style/mainstyle.css'>
 			</head>
 			<body>
 				<h1>Create a new account</h1>

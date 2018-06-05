@@ -9,7 +9,7 @@
 		<html>
 			<head>
 				<title>myBlog</title>
-				<link rel='stylesheet' href='style.css'>
+				<link rel='stylesheet' href='/style/mainstyle.css'>
 			</head>
 			<body>";
 	if(IsLoggedIn()){
