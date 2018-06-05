@@ -278,6 +278,24 @@
 	}
 
 	//TAG DATABASE FUNCTIONS
+	function DeleteTagFromPost($tagname, $postID){		//CHECK DBQUERY SYNTAX
+		$result = dbQuery("
+			DELETE FROM posttags
+			WHERE (SELECT tagname
+				FROM tags
+				INNER JOIN posttags ON
+				tags.tagID = posttags.tagID) = :tagname
+			AND postID = :postID
+		", array('tagname'=>$tagname, 'postID'=>$postID))->fetch();
+	}
+
+	function DeleteTagOverall($name){
+		$result = dbQuery("
+			DELETE FROM tags
+			WHERE tagname = :name
+		", array('name'=>$name))->fetch();
+	}
+
 	function NewTag($name){
 		dbQuery("
 			INSERT INTO tags (tagname)
@@ -565,13 +583,6 @@
 		return $result['count'];
 	}
 
-	// function ResetAuto($count){
-	// 	$result = dbQuery("
-	// 		ALTER TABLE posts
-	// 		AUTO_INCREMENT=:count
-	// 	", array('count'=>$count))->fetch();
-	// }
-
 	function GetRecentPost(){
 		$result = dbQuery("
 			SELECT *, MAX(postID)
@@ -581,3 +592,12 @@
 		var_dump($result);
 		return $result['recentpost'];
 	}
+
+	//REMOVED FUNCTIONS
+
+	// function ResetAuto($count){
+	// 	$result = dbQuery("
+	// 		ALTER TABLE posts
+	// 		AUTO_INCREMENT=:count
+	// 	", array('count'=>$count))->fetch();
+	// }
