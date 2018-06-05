@@ -19,25 +19,24 @@
 	}else{
 		$tagarray = array();
 	}
-
-	if(isset($_REQUEST['button'])&&($type == 'blog')){
-		$errors+=ValidateTextField('Title', $errors);
-		$errors+=ValidateTextField('Body', $errors);
-		if(sizeof($errors)==0){
-			InsertBlogPost($_REQUEST['Author'], $_REQUEST['Title'], $_REQUEST['Body'], $tagarray);
-			header('Location: index.php');
-			exit();
-		}
-	}
-
-	if(isset($_REQUEST['button'])&&($type == 'pic')){
-		$errors+=ValidateTextField('Photographer', $errors);
-		$errors+=ValidateTextField('Title', $errors);
-		$errors+=ValidateTextField('Link', $errors);
-		if(sizeof($errors) == 0){
-			InsertPic($_REQUEST['Photographer'], $_REQUEST['Title'], $_REQUEST['Body'], $_REQUEST['Link'], $_REQUEST['Flavortext'], $tagarray);
-			header('Location: index.php');
-			exit();
+	if(isset($_REQUEST['button'])){
+		if($type == 'blog'){
+			$errors+=ValidateTextField('Title', $errors);
+			$errors+=ValidateTextField('Body', $errors);
+			if(sizeof($errors)==0){
+				InsertBlogPost($_REQUEST['Author'], $_REQUEST['Title'], $_REQUEST['Body'], $tagarray);
+				header('Location: index.php');
+				exit();
+			}
+		}else if($type == 'pic'){
+			$errors+=ValidateTextField('Photographer', $errors);
+			$errors+=ValidateTextField('Title', $errors);
+			$errors+=ValidateTextField('Link', $errors);
+			if(sizeof($errors) == 0){
+				InsertPic($_REQUEST['Photographer'], $_REQUEST['Title'], $_REQUEST['Body'], $_REQUEST['Link'], $_REQUEST['Flavortext'], $tagarray);
+				header('Location: index.php');
+				exit();
+			}
 		}
 	}
 

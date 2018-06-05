@@ -1,7 +1,7 @@
 <?php
 	include('include/include_all.php');
 
-	$postCount=GetTotalPosts();
+	//$postCount=GetTotalPosts();
 	// var_dump($postCount);
 	// $picCount=GetNumberPics();
 	// ResetAuto(GetTotalPosts());
@@ -17,8 +17,10 @@
 	}
 	echo"
 				<h1>Welcome to my blog!</h1>";
-	ShowLoginPage();
-	ShowCreateAccountPage();
+	if(!IsLoggedIn()){
+		ShowLoginPage();
+		ShowCreateAccountPage();
+	}
 	echo"
 				<div>
 					<h2>Blog Posts</h2>

@@ -1,5 +1,4 @@
 <?php
-	$root = $_SERVER['DOCUMENT_ROOT'];
 	include('/include/include_all.php');
 
 	echo"

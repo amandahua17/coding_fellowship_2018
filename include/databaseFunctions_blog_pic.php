@@ -139,7 +139,7 @@
 
 			if(sizeof($errors) == 0){
 				AddNewUser($_REQUEST['username'], $_REQUEST['password'], $_REQUEST['email']);
-				header("Location: login.php");
+				header("Location: /login.php");
 				exit();
 			}else{
 				foreach($errors as $name=>$error){
@@ -196,7 +196,7 @@
 				// die();
 				$_SESSION['username'] = $_REQUEST['username'];
 				$_SESSION['userID'] = GetUser($_REQUEST['username'])['userID'];
-				header("Location: index.php");
+				header("Location: /index.php");
 				exit();
 			}else{
 				// var_dump($errors);
@@ -246,7 +246,7 @@
 			// 	</script>
 			// ";
 			session_destroy();
-			header("Location: index.php");
+			header("Location: /index.php");
 			exit();
 		}
 		echo"
@@ -389,7 +389,7 @@
 		$result = dbQuery("
 			SELECT *
 			FROM users
-			WHERE username = :username
+			WHERE LOWER(username) = LOWER(:username)
 		", array('username'=>$username))->fetch();
 		if(!$result){
 			return false;
@@ -401,7 +401,7 @@
 		$result = dbQuery("
 			SELECT *
 			FROM users
-			WHERE email = :email
+			WHERE LOWER(email) = LOWER(:email)
 		", array('email'=>$email))->fetch();
 		if(!$result){
 			return false;
@@ -474,14 +474,7 @@
 		";
 	}
 
-	function GetNumberPosts(){
-		$result = dbQuery("
-				SELECT COUNT(postID) AS count
-				FROM posts
-				WHERE postType='blog'
-			")->fetch();
-		return $result['count'];
-	}
+
 
 	//PIC DATABASE FUNCTIONS
 	function InsertPic($photographer, $title, $body, $link, $flavor, $tagarray){
@@ -534,14 +527,7 @@
 		";
 	}
 
-	function GetNumberPics(){
-		$result = dbQuery("
-				SELECT COUNT(postID) AS count
-				FROM posts
-				WHERE postType='pic'
-			")->fetch();
-		return $result['count'];
-	}
+
 
 	//GENERIC POST DATABASE FUNCTIONS
 
@@ -571,14 +557,6 @@
 		return GetPost($postID)['postType'];
 	}
 
-	function GetTotalPosts(){
-		$result = dbQuery("
-			SELECT MAX(postID) AS count
-			FROM posts
-		")->fetch();
-		return $result['count'];
-	}
-
 	function GetRecentPost(){
 		$result = dbQuery("
 			SELECT *, MAX(postID)
@@ -596,4 +574,30 @@
 	// 		ALTER TABLE posts
 	// 		AUTO_INCREMENT=:count
 	// 	", array('count'=>$count))->fetch();
+	// }
+
+	// function GetNumberPosts(){
+	// 	$result = dbQuery("
+	// 			SELECT COUNT(postID) AS count
+	// 			FROM posts
+	// 			WHERE postType='blog'
+	// 		")->fetch();
+	// 	return $result['count'];
+	// }
+
+	// function GetNumberPics(){
+	// 	$result = dbQuery("
+	// 			SELECT COUNT(postID) AS count
+	// 			FROM posts
+	// 			WHERE postType='pic'
+	// 		")->fetch();
+	// 	return $result['count'];
+	// }
+
+	// function GetTotalPosts(){			IF YOU REVIVE THIS FUNCTION, MAX(postID) is NOT NECESSARILY THE COUNT!!!
+	// 	$result = dbQuery("
+	// 		SELECT MAX(postID) AS count
+	// 		FROM posts
+	// 	")->fetch();
+	// 	return $result['count'];
 	// }
