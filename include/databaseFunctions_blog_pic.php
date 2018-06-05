@@ -146,14 +146,17 @@
 
 	function ShowHiddenField($name, $value){
 		echo"
-		<input type='hidden' name='$name' value=$value><br>
+		<input type='hidden' name='$name' value='$value'><br>
 		";
 	}
 
 	function EditPostForm($postID){
 		$post = GetPost($postID);
 		$type = $post['postType'];
+		$attributes = GetPostAttributeArray($postID);
 		$errors = array();
+		$edits = array();
+		$tagString = '';
 
 
 		if(isset($_REQUEST['tagsub'])){
@@ -166,7 +169,12 @@
 		if(isset($_REQUEST['tagString'])){
 			$tagarray = explode(',', $_REQUEST['tagString']);
 		}else{
-			$tagarray = array();
+			// $tagString = implode(',', GetAllTags($postID)['Array']);
+			foreach(GetAllTags($postID) as $key=>$val){
+				$tagString.=",";
+				$tagString.=$val['tagname'];
+			}
+			$tagarray = explode(',', $tagString);
 		}
 
 		if(isset($_REQUEST['apply'])){
@@ -179,12 +187,27 @@
 				$errors+=ValidateTextField('Body', $errors);
 			}
 			if(sizeof($errors) == 0){
-				foreach($post as $key=>$val){
-					$edits[$key] = $_REQUEST[$key];
+				// var_dump($attributes, $_REQUEST);
+				foreach($attributes as $key=>$attribute){
+					// var_dump($edits, $_REQUEST);
+					if($type == 'pic'){
+						if($attribute == 'Author'){		//must add exceptions
+							$edits['author'] = $_REQUEST['Photographer'];
+						}else if($attribute == 'Flavortext'){
+							$edits['flavor'] = $_REQUEST['Flavortext'];
+						}
+					}else{
+						$edits[$attribute] = $_REQUEST[$attribute];
+					}
 				}
-				EditPost($postID, $edits);
-				header("Location: /view_post.php?postID=".$postID);
-				exit();
+				EditPost($postID, $edits, $tagarray);
+				if($type == 'pic'){
+					header("Location: /view_pic.php?postID=".$postID);
+					exit();
+				}else if($type == 'blog'){
+					header("Location: /view_post.php?postID=".$postID);
+					exit();
+				}
 			}
 		}
 
@@ -226,7 +249,13 @@
 						ShowTextField(true, 'Body', $post['body']);
 					}
 					ShowTagField();
-					ShowHiddenField('tagString', @$_REQUEST['tagString']);
+					if(isset($_REQUEST['tagString'])){
+						// var_dump($_REQUEST['tagString']);
+						ShowHiddenField('tagString', @$_REQUEST['tagString']);
+					}else{
+						// var_dump($tagString);
+						ShowHiddenField('tagString', @$tagString);
+					}
 		echo"			<input type='submit' name='apply' value='Apply Edits'>
 					</form>
 				</body>
@@ -275,10 +304,10 @@
 		echo"
 			<form method='post'>
 		";
-		ShowTextField(true, 'username');
+		ShowTextField(true, 'username', '');
 		ShowPasswordField('password', 'password');
 		ShowPasswordField('confirm', 'confirm password');
-		ShowTextField(true, 'email');
+		ShowTextField(true, 'email', '');
 		echo"<input type='submit' name = 'create' value='Create Account'>
 			</form>";
 
@@ -327,7 +356,7 @@
 			}
 		}
 		echo"<form method='post'>";
-		ShowTextField(true, 'username');
+		ShowTextField(true, 'username', '');
 		ShowPasswordField('password', 'password');
 		echo"<input type='submit' name = 'login' value='Login'>
 			</form>";
@@ -423,6 +452,19 @@
 		", array('name'=>$name))->fetch();
 	}
 
+	function TagDuplicate($postID, $tagID){
+		$result = dbQuery("
+			SELECT *
+			FROM posttags
+			WHERE postID = :postID
+			AND tagID = :tagID
+		", array('postID'=>$postID, 'tagID'=>$tagID))->fetchAll();
+		if(!$result){
+			return false;
+		}
+		return true;
+	}
+
 	function AttachTags($postID, $tagarray){
 		// echo"attachtags called, postID: ";
 		// var_dump($postID);
@@ -436,10 +478,12 @@
 				NewTag($tagarray[$i]);
 			}
 			$tagID=GetTag($tagarray[$i])['tagID'];
-			dbQuery("
-				INSERT INTO posttags (postID, tagID)
-				VALUES(:postID, :tagID)
-			", array('postID'=>$postID, 'tagID'=>$tagID))->fetchAll();
+			if(!TagDuplicate($postID, $tagID)){
+				dbQuery("
+					INSERT INTO posttags (postID, tagID)
+					VALUES(:postID, :tagID)
+				", array('postID'=>$postID, 'tagID'=>$tagID))->fetchAll();
+			}
 		}
 		 // die();
 	}
@@ -697,13 +741,37 @@
 		return $result['recentpost'];
 	}
 
-	function EditPost($postID, $changes){
-		foreach($changes as $column->$change){
+	function EditPost($postID, $changes, $tagarray){
+		// echo"EditPost Called!";
+		var_dump($changes);
+		foreach($changes as $column=>$change){
+			var_dump($column, $change);
 			$result = dbQuery("
 				UPDATE posts
-				SET :column = :change
-			", array('column'=>$column, 'change'=>$change))->fetch();
+				SET $column = :change
+				WHERE postID = :postID
+			", array('change'=>$change, 'postID'=>$postID))->fetch();
 		}
+		AttachTags($postID, $tagarray);
+	}
+
+	function GetPostAttributeArray($postID){
+		$result = array();
+		$type = GetPost($postID)['postType'];
+		$placeholder = dbQuery("
+			SELECT *
+			FROM typeattributes
+			INNER JOIN posttypes ON typeattributes.typeID = posttypes.typeID
+			WHERE posttypes.postType = :type
+		", array('type'=>$type))->fetch();
+		foreach($placeholder as $key=>$val){
+			if($val != NULL){
+				if(($key != 'typeID')&&($key != 'postType'))
+				$result[$key] = $placeholder[$key];
+			}
+		}
+		// var_dump($result);
+		return $result;
 	}
 
 	//REMOVED FUNCTIONS
