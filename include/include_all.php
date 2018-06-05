@@ -9,3 +9,5 @@
 	session_start();
 
 	include($root.'/include/databaseFunctions_blog_pic.php');
+
+	

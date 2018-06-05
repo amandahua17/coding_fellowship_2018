@@ -54,8 +54,8 @@
 				</div>
 				<div>
 					<h2>Write your own entry</h2>
-					<a href='create_post.php?type=1'>Picture</a><br><br>
-					<a href='create_post.php?type=2'>Blog Post</a>
+					<a href='create_post.php?type=pic'>Picture</a><br><br>
+					<a href='create_post.php?type=blog'>Blog Post</a>
 				</div>
 			</body>
 		</html>

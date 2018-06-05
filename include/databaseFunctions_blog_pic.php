@@ -4,7 +4,7 @@
 	//RANDOM FUNCTIONS
 	function Home(){
 		echo"
-			<a class='home' href='index.php'>back to home</a>
+			<a class='home' href='/index.php'>back to home</a>
 			";
 	}
 
@@ -12,7 +12,7 @@
 		if(isset($_REQUEST['delete'])){
 			if(ValidDelete($postID)){
 				DeletePost($postID);
-				header("Location: index.php");
+				header("Location: /index.php");
 				exit();
 			}else{
 				echo"You do not have permission to delete this post.";
@@ -28,18 +28,14 @@
 
 	function ShowLoginPage(){
 		echo"
-			<a href='login.php'>Log In</a><br>
+			<a href='/account/login.php'>Log In</a><br>
 		";
 	}
 
 	function ShowCreateAccountPage(){
 		echo"
-			<a href='createAccount.php'>Create an account</a><br>
+			<a href='/account/createAccount.php'>Create an account</a><br>
 		";
-	}
-
-	function GetTypeInfo($type){
-
 	}
 
 	//FORM FUNCTIONS

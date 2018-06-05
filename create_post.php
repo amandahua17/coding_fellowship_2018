@@ -1,7 +1,7 @@
 <?php
 	include('include/include_all.php');
 
-	$type=$_REQUEST['type'];		//type 1 is picture, type 2 is post
+	$type=$_REQUEST['type'];
 	$errors = array();
 
 	// $tagarray=array();
@@ -20,7 +20,7 @@
 		$tagarray = array();
 	}
 
-	if(isset($_REQUEST['button'])&&($type == 2)){
+	if(isset($_REQUEST['button'])&&($type == 'blog')){
 		$errors+=ValidateTextField('Title', $errors);
 		$errors+=ValidateTextField('Body', $errors);
 		if(sizeof($errors)==0){
@@ -30,7 +30,7 @@
 		}
 	}
 
-	if(isset($_REQUEST['button'])&&($type == 1)){
+	if(isset($_REQUEST['button'])&&($type == 'pic')){
 		$errors+=ValidateTextField('Photographer', $errors);
 		$errors+=ValidateTextField('Title', $errors);
 		$errors+=ValidateTextField('Link', $errors);
@@ -58,9 +58,9 @@
 	}
 	echo"
 				<h1>Create Your Own";
-	if($type == 1){
+	if($type == 'pic'){
 		echo" Picture ";
-	}else if ($type == 2){
+	}else if ($type == 'blog'){
 		echo" Blog ";
 	}
 	echo							"Post</h1>";
@@ -72,7 +72,7 @@
 
 	echo"
 				<br><form method='post' name='form'>";
-				if($type== 1){
+				if($type== 'pic'){
 					ShowTextField(true, 'Photographer');
 					ShowTextField(true, 'Title');
 					ShowTextField(false, 'Body');
@@ -81,7 +81,7 @@
 					echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
 
 
-				}else if($type==2){
+				}else if($type=='blog'){
 					ShowTextField(false, 'Author');
 					ShowTextField(true, 'Title');
 					ShowTextField(true, 'Body');
