@@ -291,13 +291,14 @@
 						ShowHiddenField('tagString', @$tagString);
 					}
 					echo"<p>Tags: </p>";
-
-					foreach($tagarray as $tag, $i=0){
+					global $j;
+					$j=0;
+					foreach($tagarray as $tag){
 						if(($tag!='')&&($tag!= NULL)){
 							echo"<span id='tag'>#".$tag."</a>
-							<button onclick=closeTag() class='close' name='$i'>x</button></span>\t";
+							<button onclick=closeTag() class='close' name='$j'>x</button></span>\t";
 						}
-						$i++;
+						$j++;
 					}
 		echo"			<br><br><input type='submit' name='apply' value='Apply Edits'><br>
 						<br><input type='submit' name='cancel' value='Cancel'>
@@ -600,6 +601,7 @@
 		", array('tagID'=>$tagID))->fetchAll();
 		return $result;
 	}
+
 	//USER DATABASE FUNCTIONS
 	function AddNewUser($username, $password, $email){
 		$result = dbQuery("
@@ -763,7 +765,6 @@
 	}
 
 	//GENERIC POST DATABASE FUNCTIONS
-
 	function GetPost($postID){
 		$result = dbQuery("
 			SELECT *
