@@ -4,7 +4,7 @@
 		<html>
 			<head>
 				<title>Flavor Text Info</title>
-				<link rel='stylesheet' href='style.css'>
+				<link rel='stylesheet' href='/style/mainstyle.css'>
 			</head>
 			<body>
 				<h1>What is Flavor Text?</h1>

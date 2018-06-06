@@ -4,7 +4,7 @@
 	//RANDOM FUNCTIONS
 	function Home(){
 		echo"
-			<a class='home' href='index.php'>back to home</a>
+			<a class='home' href='/index.php'>back to home</a>
 			";
 	}
 
@@ -12,7 +12,7 @@
 		if(isset($_REQUEST['delete'])){
 			if(ValidDelete($postID)){
 				DeletePost($postID);
-				header("Location: index.php");
+				header("Location: /index.php");
 				exit();
 			}else{
 				echo"You do not have permission to delete this post.";
@@ -28,18 +28,14 @@
 
 	function ShowLoginPage(){
 		echo"
-			<a href='login.php'>Log In</a><br>
+			<a href='/account/login.php'>Log In</a><br>
 		";
 	}
 
 	function ShowCreateAccountPage(){
 		echo"
-			<a href='createAccount.php'>Create an account</a><br>
+			<a href='/account/createAccount.php'>Create an account</a><br>
 		";
-	}
-
-	function GetTypeInfo($type){
-
 	}
 
 	//FORM FUNCTIONS
@@ -114,6 +110,8 @@
 			$errors['taken'] = 'Email taken!';
 		}
 		return $errors;
+	}
+
 	function ShowTagField(){
 		echo"
 			<p >tags:</p><input type='text' name='tags'>
@@ -123,9 +121,8 @@
 	}
 
 	function ShowHiddenField($name, $value){
-		$Jval = json_encode($value);
 		echo"
-		<input type='hidden' name='$name' value=$Jval><br>
+		<input type='hidden' name='$name' value=$value><br>
 		";
 	}
 
@@ -142,7 +139,7 @@
 
 			if(sizeof($errors) == 0){
 				AddNewUser($_REQUEST['username'], $_REQUEST['password'], $_REQUEST['email']);
-				header("Location: login.php");
+				header("Location: /login.php");
 				exit();
 			}else{
 				foreach($errors as $name=>$error){
@@ -195,9 +192,11 @@
 			}
 
 			if(sizeof($errors) == 0){
+				// var_dump($_REQUEST, GetUser($_REQUEST['username'])['userID']);
+				// die();
 				$_SESSION['username'] = $_REQUEST['username'];
-				$_SESSION['userID'] = GetUser($_REQUEST['username'])['UserID'];
-				header("Location: index.php");
+				$_SESSION['userID'] = GetUser($_REQUEST['username'])['userID'];
+				header("Location: /index.php");
 				exit();
 			}else{
 				// var_dump($errors);
@@ -226,7 +225,8 @@
 	}
 
 	function IsLoggedIn(){
-		if(isset($_SESSION['username'])){
+		echo"";
+		if(isset($_SESSION['userID'])){
 			return true;
 		}
 		return false;
@@ -246,7 +246,7 @@
 			// 	</script>
 			// ";
 			session_destroy();
-			header("Location: index.php");
+			header("Location: /index.php");
 			exit();
 		}
 		echo"
@@ -257,50 +257,72 @@
 	}
 
 	function ValidDelete($postID){
-		if(isset($_SESSION['username'])){
-			if($_SESSION['username'] == GetPost($postID)['username']){
+		// echo"validdelete called";
+		// var_dump($_SESSION);
+		if(isset($_SESSION['userID'])){
+			if($_SESSION['userID'] == GetPostCreator($postID)){
 				return true;
 			}
 			if(GetUser($_SESSION['username'])['userType'] == 'admin'){
 				return true;
 			}
 		}
+		if(GetPostCreator($postID) == NULL){
+			return true;
+		}
 		return false;
 	}
 
 	//TAG DATABASE FUNCTIONS
+	function DeleteTagFromPost($tagID, $postID){		//CHECK DBQUERY SYNTAX
+		$result = dbQuery("
+			DELETE FROM posttags
+			WHERE tagID = :tagID
+			AND postID = :postID
+		", array('tagID'=>$tagID, 'postID'=>$postID))->fetch();
+	}
+
+	function DeleteTagOverall($name){
+		$result = dbQuery("
+			DELETE FROM tags
+			WHERE tagname = :name
+		", array('name'=>$name))->fetch();
+	}
+
 	function NewTag($name){
 		dbQuery("
 			INSERT INTO tags (tagname)
-			VALUES('$name')
-		")->fetch();
+			VALUES(:name)
+		", array('name'=>$name))->fetch();
 	}
 
 	function AttachTags($postID, $tagarray){
-		echo"attachtags called";
+		// echo"attachtags called, postID: ";
+		// var_dump($postID);
 		for($i=0;$i<sizeof($tagarray);$i++){
 			// die("forloop");
-			if($tagarray[$i] == 'null'){
+			if(($tagarray[$i] == 'null')||($tagarray[$i] == '')){
 				continue;
 			}
 			if(!TagExists($tagarray[$i])){
-				echo"<br>CREATING A NEW TAG<br>";
+				// echo"<br>CREATING A NEW TAG<br>";
 				NewTag($tagarray[$i]);
 			}
 			$tagID=GetTag($tagarray[$i])['tagID'];
 			dbQuery("
 				INSERT INTO posttags (postID, tagID)
-				VALUES('$postID', '$tagID')
-			")->fetchAll();
+				VALUES(:postID, :tagID)
+			", array('postID'=>$postID, 'tagID'=>$tagID))->fetchAll();
 		}
+		 // die();
 	}
 
 	function GetTag($name){
 		$result=dbQuery("
 			SELECT *
 			FROM tags
-			WHERE tagname = '$name'
-		")->fetch();
+			WHERE tagname = :name
+		", array('name'=>$name))->fetch();
 		return $result;
 	}
 
@@ -308,20 +330,25 @@
 		$result=dbQuery("
 			SELECT tagname
 			FROM tags
-			INNER JOIN posttags ON tags.tagID=posttags.tagID
-		")->fetchAll();
+			INNER JOIN posttags ON tags.tagID = posttags.tagID
+			WHERE posttags.postID = :postID
+		", array('postID'=>$postID))->fetchAll();
+		// var_dump($result);
 		return $result;
 	}
 
 	function HasTags($postID){
+		// echo"HasTags called";
 		$result = dbQuery("
 			SELECT *
 			FROM posttags
-			WHERE EXISTS
-			(SELECT 1 FROM posttags
-			WHERE postID = '$postID')
-		")->fetch();
-		return $result;
+			WHERE postID = :postID
+		", array('postID'=>$postID))->fetchAll();
+		// var_dump($result);
+		if(!$result){
+			return false;
+		}
+		return true;
 	}
 
 	function TagExists($name){		//NOT GETTING CALLED
@@ -329,14 +356,16 @@
 		$result = dbQuery("
 			SELECT *
 			FROM tags
-			WHERE EXISTS
-			(SELECT 1 FROM tags
-			WHERE tagname = '$name')
-		")->fetch();
-		return $result;
+			WHERE tagname = :name
+		", array('name'=>$name))->fetchAll();
+		if(!$result){
+			return false;
+		}
+		return true;
 	}
 
 	function ShowTags($postID){
+		// echo"ShowTags called";
 		if(HasTags($postID)){
 			$tagarray = GetAllTags($postID);
 			// var_dump($tagarray);
@@ -351,16 +380,16 @@
 	function AddNewUser($username, $password, $email){
 		$result = dbQuery("
 			INSERT INTO users (username, password, userType, email)
-			VALUES('$username', '$password', 'regUser', '$email')
-		")->fetch();
+			VALUES(:username, :password, 'regUser', :email)
+		", array('username'=>$username, 'password'=>$password, 'email'=>$email))->fetch();
 	}
 
 	function UserExists($username){
 		$result = dbQuery("
 			SELECT *
 			FROM users
-			WHERE username = '$username'
-		")->fetch();
+			WHERE LOWER(username) = LOWER(:username)
+		", array('username'=>$username))->fetch();
 		if(!$result){
 			return false;
 		}
@@ -371,8 +400,8 @@
 		$result = dbQuery("
 			SELECT *
 			FROM users
-			WHERE email = '$email'
-		")->fetch();
+			WHERE LOWER(email) = LOWER(:email)
+		", array('email'=>$email))->fetch();
 		if(!$result){
 			return false;
 		}
@@ -383,20 +412,30 @@
 		$result = dbQuery("
 			SELECT *
 			FROM users
-			WHERE username = '$username'
-		")->fetch();
+			WHERE username = :username
+		", array('username'=>$username))->fetch();
 		return $result;
 	}
 
+	function GetPostCreator($postID){
+		return GetPost($postID)['userID'];
+	}
+
 	//BLOG DATABASE FUNCTIONS
-	function InsertBlogPost($author, $title, $body){
+	function InsertBlogPost($author, $title, $body, $tagarray){
 		if(!$author){
 			$author = 'Anonymous';
 		}
+		if(!$_SESSION['userID']){
+			$_SESSION['userID'] = NULL;
+		}
+		var_dump($author, $title, $body, $_SESSION);
 		$result = dbQuery("
-			INSERT INTO posts (author, title, body, postType, username)
-			VALUES('$author', '$title', '$body', 'blog', '$_SESSION[username]')
-		")->fetch();
+			INSERT INTO posts (author, title, body, postType, userID)
+			VALUES(:author, :title, :body, 'blog', '$_SESSION[userID]')
+		", array('author'=>$author, 'title'=>$title, 'body'=>$body))->fetch();
+		// var_dump($result);
+		// die("Blog Post should be inserted by now");
 		AttachTags(GetTotalPosts(), $tagarray);
 	}
 
@@ -414,7 +453,7 @@
 		<html>
 			<head>
 				<title>".$post['title']."</title>
-				<link rel='stylesheet' href='style.css'>
+				<link rel='stylesheet' href='/style/mainstyle.css'>
 			</head>
 			<body>
 				<h1>".$post['title']."</h1>
@@ -425,6 +464,7 @@
 				</div>";
 		ShowTags($post['postID']);
 		if(ValidDelete($post['postID'])){
+			// echo"valid delete";
 			ShowDelete($post['postID']);
 		}
 		echo		"
@@ -433,23 +473,19 @@
 		";
 	}
 
-	function GetNumberPosts(){
-		$result = dbQuery("
-				SELECT COUNT(postID) AS count
-				FROM posts
-				WHERE postType='blog'
-			")->fetch();
-		return $result['count'];
-	}
 
 
 	//PIC DATABASE FUNCTIONS
 	function InsertPic($photographer, $title, $body, $link, $flavor, $tagarray){
+		if(!$_SESSION['userID']){
+			$_SESSION['userID'] = NULL;
+		}
 		$result = dbQuery("
-			INSERT INTO posts (author, title, body, postType, link, flavor, username)
-			VALUES('$photographer', '$title', '$body', 'pic','$link', '$flavor', '$_SESSION[username]')
-		")->fetch();
-		var_dump($tagarray);
+		INSERT INTO posts (author, title, body, postType, link, flavor, userID)
+		VALUES(:photographer, :title, :body, 'pic',:link, :flavor, '$_SESSION[userID]')
+		", array('photographer'=>$photographer, 'title'=>$title, 'body'=>$body, 'link'=>$link, 'flavor'=>$flavor))->fetch();
+
+		// var_dump($tagarray);
 		AttachTags(GetTotalPosts(), $tagarray);
 	}
 
@@ -467,7 +503,7 @@
 		<html>
 			<head>
 				<title>".$pic['title']."</title>
-				<link rel='stylesheet' href='style.css'>
+				<link rel='stylesheet' href='/style/mainstyle.css'>
 			</head>
 			<body>
 				<h1>".$pic['title']."</h1>
@@ -490,14 +526,7 @@
 		";
 	}
 
-	function GetNumberPics(){
-		$result = dbQuery("
-				SELECT COUNT(postID) AS count
-				FROM posts
-				WHERE postType='pic'
-			")->fetch();
-		return $result['count'];
-	}
+
 
 	//GENERIC POST DATABASE FUNCTIONS
 
@@ -505,41 +534,26 @@
 		$result = dbQuery("
 			SELECT *
 			FROM posts
-			WHERE postID = $postID
-		")->fetch();
+			WHERE postID = :postID
+		", array('postID'=>$postID))->fetch();
 		return $result;
 	}
 
 	function DeletePost($postID){
 		$result = dbQuery("
 			DELETE FROM posts
-			WHERE postID = $postID
-		")->fetch();
+			WHERE postID = :postID
+		", array('postID'=>$postID))->fetch();
 		$result = dbQuery("
 			DELETE FROM posttags
-			WHERE postID = $postID
-		")->fetch();
+			WHERE postID = :postID
+		", array('postID'=>$postID))->fetch();
 		echo"Post Deleted.<br>";
-		ResetAuto(GetTotalPosts());
+		// ResetAuto(GetTotalPosts());
 	}
 
 	function GetPostType($postID){
 		return GetPost($postID)['postType'];
-	}
-
-	function GetTotalPosts(){
-		$result = dbQuery("
-			SELECT MAX(postID) AS count
-			FROM posts
-		")->fetch();
-		return $result['count'];
-	}
-
-	function ResetAuto($count){
-		$result = dbQuery("
-			ALTER TABLE posts
-			AUTO_INCREMENT=$count
-		")->fetch();
 	}
 
 	function GetRecentPost(){
@@ -551,3 +565,38 @@
 		var_dump($result);
 		return $result['recentpost'];
 	}
+
+	//REMOVED FUNCTIONS
+
+	// function ResetAuto($count){
+	// 	$result = dbQuery("
+	// 		ALTER TABLE posts
+	// 		AUTO_INCREMENT=:count
+	// 	", array('count'=>$count))->fetch();
+	// }
+
+	// function GetNumberPosts(){
+	// 	$result = dbQuery("
+	// 			SELECT COUNT(postID) AS count
+	// 			FROM posts
+	// 			WHERE postType='blog'
+	// 		")->fetch();
+	// 	return $result['count'];
+	// }
+
+	// function GetNumberPics(){
+	// 	$result = dbQuery("
+	// 			SELECT COUNT(postID) AS count
+	// 			FROM posts
+	// 			WHERE postType='pic'
+	// 		")->fetch();
+	// 	return $result['count'];
+	// }
+
+	// function GetTotalPosts(){			IF YOU REVIVE THIS FUNCTION, MAX(postID) is NOT NECESSARILY THE COUNT!!!
+	// 	$result = dbQuery("
+	// 		SELECT MAX(postID) AS count
+	// 		FROM posts
+	// 	")->fetch();
+	// 	return $result['count'];
+	// }

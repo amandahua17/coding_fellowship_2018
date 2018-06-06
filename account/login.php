@@ -1,12 +1,11 @@
 <?php
-	$root = $_SERVER['DOCUMENT_ROOT'];
-	include('include/include_all.php');
+	include('/include/include_all.php');
 
 	echo"
 		<html>
 			<head>
 				<title>Login</title>
-				<link rel='stylesheet' href='style.css'>
+				<link rel='stylesheet' href='/style/mainstyle.css'>
 			</head>
 			<body>
 				<h1>Log In</h1>
@@ -15,7 +14,7 @@
 		LoginForm();
 		ShowCreateAccountPage();
 	}else{
-		header("Location: index.php");
+		header("Location: /index.php");
 		exit();
 	}
 	echo"
