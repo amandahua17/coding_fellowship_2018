@@ -274,15 +274,12 @@
 	}
 
 	//TAG DATABASE FUNCTIONS
-	function DeleteTagFromPost($tagname, $postID){		//CHECK DBQUERY SYNTAX
+	function DeleteTagFromPost($tagID, $postID){		//CHECK DBQUERY SYNTAX
 		$result = dbQuery("
 			DELETE FROM posttags
-			WHERE (SELECT tagname
-				FROM tags
-				INNER JOIN posttags ON
-				tags.tagID = posttags.tagID) = :tagname
+			WHERE tagID = :tagID
 			AND postID = :postID
-		", array('tagname'=>$tagname, 'postID'=>$postID))->fetch();
+		", array('tagID'=>$tagID, 'postID'=>$postID))->fetch();
 	}
 
 	function DeleteTagOverall($name){
@@ -308,7 +305,7 @@
 				continue;
 			}
 			if(!TagExists($tagarray[$i])){
-				echo"<br>CREATING A NEW TAG<br>";
+				// echo"<br>CREATING A NEW TAG<br>";
 				NewTag($tagarray[$i]);
 			}
 			$tagID=GetTag($tagarray[$i])['tagID'];
@@ -345,12 +342,13 @@
 		$result = dbQuery("
 			SELECT *
 			FROM posttags
-			WHERE EXISTS
-			(SELECT 1 FROM posttags
-			WHERE postID = :postID)
-		", array('postID'=>$postID))->fetch();
+			WHERE postID = :postID
+		", array('postID'=>$postID))->fetchAll();
 		// var_dump($result);
-		return $result;
+		if(!$result){
+			return false;
+		}
+		return true;
 	}
 
 	function TagExists($name){		//NOT GETTING CALLED
@@ -358,11 +356,12 @@
 		$result = dbQuery("
 			SELECT *
 			FROM tags
-			WHERE EXISTS
-			(SELECT 1 FROM tags
-			WHERE tagname = :name)
-		", array('name'=>$name))->fetch();
-		return $result;
+			WHERE tagname = :name
+		", array('name'=>$name))->fetchAll();
+		if(!$result){
+			return false;
+		}
+		return true;
 	}
 
 	function ShowTags($postID){
