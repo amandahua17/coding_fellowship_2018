@@ -71,7 +71,7 @@
 			if(ValidEdit($postID)){
 				// echo"Go to Edit!";
 				// die();
-				header("Location: /editpost.php?postID=".$postID);
+				header("Location: /edit_post.php?postID=".$postID);
 			}else{
 				echo"You do not have permission to edit this post!";
 			}
@@ -251,7 +251,11 @@
 				}
 			}
 		}
-
+		for($i=0;sizeof($tagarray);$i++){
+			if(isset($_REQUEST[$i])){
+				DeleteTagFromPost($postID, GetTag($tagname));
+			}
+		}
 
 		//Form
 
@@ -286,11 +290,14 @@
 						// var_dump($tagString);
 						ShowHiddenField('tagString', @$tagString);
 					}
-					echo"Tags: ";
-					foreach($tagarray as $tag){
-						if(($tag!=NULL)&&($tag!='')){
-							echo" #".$tag."</a>";
+					echo"<p>Tags: </p>";
+
+					foreach($tagarray as $tag, $i=0){
+						if(($tag!='')&&($tag!= NULL)){
+							echo"<span id='tag'>#".$tag."</a>
+							<button onclick=closeTag() class='close' name='$i'>x</button></span>\t";
 						}
+						$i++;
 					}
 		echo"			<br><br><input type='submit' name='apply' value='Apply Edits'><br>
 						<br><input type='submit' name='cancel' value='Cancel'>
@@ -464,7 +471,7 @@
 	}
 
 	//TAG DATABASE FUNCTIONS
-	function DeleteTagFromPost($tagID, $postID){		//CHECK DBQUERY SYNTAX
+	function DeleteTagFromPost($tagID, $postID){
 		$result = dbQuery("
 			DELETE FROM posttags
 			WHERE tagID = :tagID
@@ -531,7 +538,7 @@
 		return $result;
 	}
 
-	function GetAllTags($postID){		//CONFIRM SYNTAX OF DBQUERY
+	function GetAllTags($postID){
 		$result=dbQuery("
 			SELECT tagname
 			FROM tags
@@ -572,14 +579,14 @@
 	function ShowTags($tagarray){
 
 		echo"<p>Tags: </p>";
-
-
-		for($i=0;$i<sizeof($tagarray);$i++){
-			echo"<a id='tag' href='/view_tag.php?tagID=".GetTag($tagarray[$i]['tagname'])['tagID']."'>#".$tagarray[$i]['tagname']."</a>\t";
+		foreach($tagarray as $tag){
+			$tagID = GetTag($tag['tagname'])['tagID'];
+			echo"<span id='tag'><a class='tag' href='/view_tag.php?tagID=".$tagID."'>#".$tag['tagname']."</a></span>
+			\t";
 		}
-		echo"<form><input onclick='textColor()' type='button' value='Change Text Color'></form>
+		echo"<br><br><form><input onclick='textColor()' type='button' value='Change Text Color'></form>
 
-			<script src='/include/jsFunctions.js'> </script><br>
+			<script src='/include/jsFunctions.js'> </script>
 		";
 	}
 

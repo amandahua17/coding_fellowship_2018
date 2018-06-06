@@ -22,3 +22,7 @@ function textColor(){
 		}
 	}
 }
+
+function closeTag(){
+
+}

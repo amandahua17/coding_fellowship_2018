@@ -45,6 +45,20 @@ h2{
 	position:fixed;
 }
 
-.personal{
-	
+#tag{
+	padding: 2px;
+	border-style:solid;
+	border-width: 1px;
+	border-color: #00f;
+	background: #5d90e0;
+	color: white;
+}
+
+a.tag{
+	color: white;
+}
+
+.close{
+	color: white;
+	text-decoration:none;
 }
