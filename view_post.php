@@ -1,9 +1,7 @@
 <?php
 	include('include/include_all.php');
 
-	if(IsLoggedIn()){
-		PersonalHeading();
-	}
+	Heading("View Post", "");
 	if($_REQUEST['postID']=='0'){
 		foreach(GetAllBlogPosts() as $post){
 			DisplayPost($post);

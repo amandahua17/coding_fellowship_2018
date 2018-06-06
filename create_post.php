@@ -40,21 +40,11 @@
 		}
 	}
 
-	echo"
-		<html>
-			<head>
-				<title>Create Your Own Post</title>
-				<link rel='stylesheet' href='/style/mainstyle.css'>
-			</head>
-			<body>";
-	if(IsLoggedIn()){
-		PersonalHeading();
-	}else{
+	Heading("Create Post", "");
 
-		echo"note: if you are not logged in, only an admin can edit or delete your post. To make it so that you can edit or delete your post, log in or create an account.<br>";
-		ShowLoginPage();
-		ShowCreateAccountPage();
-	}
+
+	// ShowLoginPage();
+	// ShowCreateAccountPage();
 	echo"
 				<h1>Create Your Own";
 	if($type == 'pic'){
@@ -96,7 +86,7 @@
 
 
 	echo"
-					<input type='submit' name = 'button'>
+					<br><input type='submit' name = 'button'>
 				</form>";
 
 	Home();

@@ -9,4 +9,3 @@
 	session_start();
 
 	include('/include/phpFunctions.php');
-	include('/include/jsFunctions.js');

@@ -2,10 +2,35 @@
 <?php
 
 	//RANDOM FUNCTIONS
+	function Heading($title, $h1){
+		echo"
+			<html>
+				<header>
+					<title>$title</title>
+					<link rel='stylesheet' href='/style/mainstyle.css'>
+				</header>
+				<body>";
+		if(IsLoggedIn()){
+			PersonalHeading();
+		}
+		if(!IsLoggedIn()){
+			ShowLoginPage();
+			ShowCreateAccountPage();
+			if($title == 'Create Post'){
+				echo"note: if you are not logged in, only an admin can edit or delete your post. To make it so that you can edit or delete your post, log in or create an account.<br>";
+			}
+		}
+		if($h1 != ""){
+			echo"
+						<h1>".$h1."</h1>";
+		}
+
+	}
+
 	function Home(){
 		echo"
 			<a class='home' href='/index.php'>back to home</a>
-			";
+		</html>";
 	}
 
 	function ShowDelete($postID){
@@ -229,23 +254,12 @@
 
 
 		//Form
-		echo"
-			<html>
-				<header>
-					<title>Edit Your Post</title>
-					<link rel='stylesheet' href='/style/mainstyle.css'>
-				</header>
-				<body><br>";
-		echo"
-					<h1>Edit Your";
+
 		if($type == 'pic'){
-			echo" Picture ";
+			Heading("Edit Your Post", "Edit Your Picture Post");
 		}else if ($type == 'blog'){
-			echo" Blog ";
+			Heading("Edit Your Post", "Edit Your Blog Post");
 		}
-		echo							"Post</h1>";
-
-
 				foreach($errors as $key=>$val){
 					echo"<span style='color: red'>$key is a required field!<br></span>";
 				}
@@ -278,7 +292,7 @@
 							echo" #".$tag."</a>";
 						}
 					}
-		echo"			<br><input type='submit' name='apply' value='Apply Edits'>
+		echo"			<br><br><input type='submit' name='apply' value='Apply Edits'><br>
 						<br><input type='submit' name='cancel' value='Cancel'>
 					</form>
 				</body>
@@ -563,9 +577,9 @@
 		for($i=0;$i<sizeof($tagarray);$i++){
 			echo"<a id='tag' href='/view_tag.php?tagID=".GetTag($tagarray[$i]['tagname'])['tagID']."'>#".$tagarray[$i]['tagname']."</a>\t";
 		}
-		echo"<form><input onclick='tagColor()' type='button' value='Change Tag Color'></form>
+		echo"<form><input onclick='textColor()' type='button' value='Change Text Color'></form>
 
-			<script src='/include/jsFunctions.js'> </script>
+			<script src='/include/jsFunctions.js'> </script><br>
 		";
 	}
 

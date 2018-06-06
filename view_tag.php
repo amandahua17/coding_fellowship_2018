@@ -1,9 +1,7 @@
 <?php
 	include('include/include_all.php');
 
-	if(IsLoggedIn()){
-		PersonalHeading();
-	}
+	Heading("View Tag","");
 	if($_REQUEST['tagID']=='0'){
 		foreach(GetAllBlogPosts() as $post){
 			if(HasTags($post)){
