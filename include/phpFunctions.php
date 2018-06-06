@@ -542,7 +542,7 @@
 		return true;
 	}
 
-	function TagExists($name){		//NOT GETTING CALLED
+	function TagExists($name){
 		echo"tagexists called";
 		$result = dbQuery("
 			SELECT *
@@ -556,15 +556,17 @@
 	}
 
 	function ShowTags($tagarray){
-		// echo"ShowTags called";
-		// if(HasTags($postID)){
-			// $tagarray = GetAllTags($postID);
-			// var_dump($tagarray);
-		echo"Tags: ";
+
+		echo"<p>Tags: </p>";
+
+
 		for($i=0;$i<sizeof($tagarray);$i++){
-			echo"<a href='/view_tag.php?tagID=".GetTag($tagarray[$i]['tagname'])['tagID']."'>#".$tagarray[$i]['tagname']."</a>\t";
+			echo"<a id='tag' href='/view_tag.php?tagID=".GetTag($tagarray[$i]['tagname'])['tagID']."'>#".$tagarray[$i]['tagname']."</a>\t";
 		}
-		// }
+		echo"<form><input onclick='tagColor()' type='button' value='Change Tag Color'></form>
+
+			<script src='/include/jsFunctions.js'> </script>
+		";
 	}
 
 	function GetPostsWithTag($tagID){		//CONFIRM SYNTAX OF DBQUERY
