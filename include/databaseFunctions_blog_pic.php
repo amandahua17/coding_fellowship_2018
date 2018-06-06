@@ -177,6 +177,11 @@
 			echo"tag added!";
 		}
 
+		if(isset($_REQUEST['deleteTag'])){
+			var_dump($_REQUEST);
+			DeleteTagFromPost(GetTag($_REQUEST['deleteTag'])['tagID'], $postID);
+		}
+
 		if(isset($_REQUEST['tagString'])){
 			$tagarray = explode(',', $_REQUEST['tagString']);
 		}else{
@@ -269,8 +274,9 @@
 					}
 					echo"Tags: ";
 					foreach($tagarray as $tag){
-						if(($tag!=NULL)&&($tag!=''))
-						echo" #".$tag;
+						if(($tag!=NULL)&&($tag!='')){
+							echo" #".$tag."</a>";
+						}
 					}
 		echo"			<br><input type='submit' name='apply' value='Apply Edits'>
 						<br><input type='submit' name='cancel' value='Cancel'>
@@ -444,15 +450,12 @@
 	}
 
 	//TAG DATABASE FUNCTIONS
-	function DeleteTagFromPost($tagname, $postID){		//CHECK DBQUERY SYNTAX
+	function DeleteTagFromPost($tagID, $postID){		//CHECK DBQUERY SYNTAX
 		$result = dbQuery("
 			DELETE FROM posttags
-			WHERE (SELECT tagname
-				FROM tags
-				INNER JOIN posttags ON
-				tags.tagID = posttags.tagID) = :tagname
+			WHERE tagID = :tagID
 			AND postID = :postID
-		", array('tagname'=>$tagname, 'postID'=>$postID))->fetch();
+		", array('tagID'=>$tagID, 'postID'=>$postID))->fetch();
 	}
 
 	function DeleteTagOverall($name){
@@ -557,7 +560,7 @@
 			// var_dump($tagarray);
 		echo"Tags: ";
 		for($i=0;$i<sizeof($tagarray);$i++){
-			echo"<a href=/view_tag.php?tagID=".GetTag($tagarray[$i]['tagname'])['tagID'].">#".$tagarray[$i]['tagname']."</a>\t";
+			echo"<a href='/view_tag.php?tagID=".GetTag($tagarray[$i]['tagname'])['tagID']."'>#".$tagarray[$i]['tagname']."</a>\t";
 		}
 		// }
 	}
