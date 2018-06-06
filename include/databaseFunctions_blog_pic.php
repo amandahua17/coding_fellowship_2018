@@ -557,11 +557,21 @@
 			// var_dump($tagarray);
 		echo"Tags: ";
 		for($i=0;$i<sizeof($tagarray);$i++){
-			echo"#".$tagarray[$i]['tagname']."\t";
+			echo"<a href=/view_tag.php?tagID=".GetTag($tagarray[$i]['tagname'])['tagID'].">#".$tagarray[$i]['tagname']."</a>\t";
 		}
 		// }
 	}
 
+	function GetPostsWithTag($tagID){		//CONFIRM SYNTAX OF DBQUERY
+		$result = dbQuery("
+			SELECT *
+			FROM posts
+			INNER JOIN posttags
+			ON posts.postID = posttags.postID
+			WHERE posttags.tagID = :tagID
+		", array('tagID'=>$tagID))->fetchAll();
+		return $result;
+	}
 	//USER DATABASE FUNCTIONS
 	function AddNewUser($username, $password, $email){
 		$result = dbQuery("
