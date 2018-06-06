@@ -494,7 +494,7 @@
 				continue;
 			}
 			if(!TagExists($tagarray[$i])){
-				echo"<br>CREATING A NEW TAG<br>";
+				// echo"<br>CREATING A NEW TAG<br>";
 				NewTag($tagarray[$i]);
 			}
 			$tagID=GetTag($tagarray[$i])['tagID'];
@@ -533,12 +533,13 @@
 		$result = dbQuery("
 			SELECT *
 			FROM posttags
-			WHERE EXISTS
-			(SELECT 1 FROM posttags
-			WHERE postID = :postID)
-		", array('postID'=>$postID))->fetch();
+			WHERE postID = :postID
+		", array('postID'=>$postID))->fetchAll();
 		// var_dump($result);
-		return $result;
+		if(!$result){
+			return false;
+		}
+		return true;
 	}
 
 	function TagExists($name){		//NOT GETTING CALLED
@@ -546,11 +547,12 @@
 		$result = dbQuery("
 			SELECT *
 			FROM tags
-			WHERE EXISTS
-			(SELECT 1 FROM tags
-			WHERE tagname = :name)
-		", array('name'=>$name))->fetch();
-		return $result;
+			WHERE tagname = :name
+		", array('name'=>$name))->fetchAll();
+		if(!$result){
+			return false;
+		}
+		return true;
 	}
 
 	function ShowTags($tagarray){
