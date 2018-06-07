@@ -65,7 +65,8 @@
 
 	function ShowEdit($postID){
 		// echo"ShowEdit called";
-		if(isset($_REQUEST['edit'])){
+		// var_dump($postID);
+		if(isset($_REQUEST['edit'.$postID])){
 			// echo"edit button pushed";
 			// die();
 			if(ValidEdit($postID)){
@@ -78,7 +79,7 @@
 		}
 		echo"
 			<form method='post'>
-				<input type='submit' name='edit' value='Edit Post'><br><br>
+				<input type='submit' name='edit".$postID."' value='Edit Post'><br><br>
 			</form>
 		";
 	}
@@ -176,8 +177,6 @@
 	}
 
 	function EditPostForm($postID){
-
-
 		$post = GetPost($postID);
 		$type = $post['postType'];
 		$attributes = GetPostAttributeArray($postID);
@@ -251,14 +250,13 @@
 				}
 			}
 		}
-		for($i=0;sizeof($tagarray);$i++){
-			if(isset($_REQUEST[$i])){
-				DeleteTagFromPost($postID, GetTag($tagname));
-			}
+
+		if(isset($_REQUEST['tagID'])){
+			DeleteTagFromPost($_REQUEST['tagID'], $postID);
+			header("Location: /edit_post.php?postID=".$postID);
 		}
 
 		//Form
-
 		if($type == 'pic'){
 			Heading("Edit Your Post", "Edit Your Picture Post");
 		}else if ($type == 'blog'){
@@ -291,14 +289,15 @@
 						ShowHiddenField('tagString', @$tagString);
 					}
 					echo"<p>Tags: </p>";
-					global $j;
-					$j=0;
+					// global $j;
+					// $j=0;
 					foreach($tagarray as $tag){
 						if(($tag!='')&&($tag!= NULL)){
-							echo"<span id='tag'>#".$tag."</a>
-							<button onclick=closeTag() class='close' name='$j'>x</button></span>\t";
+							echo"<span id='tag'>#".$tag;
+							echo" <a class='close' href='/edit_post.php?postID=".$postID."&tagID=".GetTag($tag)['tagID']."'>x</a></span>";
+							// echo"<button onclick=closeTag() class='close' name='$j'>x</button></span>\t";
 						}
-						$j++;
+						// $j++;
 					}
 		echo"			<br><br><input type='submit' name='apply' value='Apply Edits'><br>
 						<br><input type='submit' name='cancel' value='Cancel'>
@@ -328,21 +327,6 @@
 				foreach($errors as $name=>$error){
 					DisplayError($name, $error);
 				}
-				// if(isset($errors['username'])){
-				// 	echo"<div class='required'>Please enter your username.</div>";
-				// }
-				// if(isset($errors['password'])){
-				// 	echo"<div class='required'>Please enter your password.</div>";
-				// }
-				// if(isset($errors['confirm'])){
-				// 	echo"<div class='required'>Please confirm your password.</div>";
-				// }
-				// if(isset($errors['password'])){
-				// 	echo"<div class='required'>Please enter your email.</div>";
-				// }
-				// if(isset($errors['match'])){
-				// 	echo"<div class='required'>Your passwords do not match.</div>";
-				// }
 			}
 		}
 
@@ -698,7 +682,6 @@
 			ShowEdit($post['postID']);
 		}
 		if(ValidDelete($post['postID'])){
-			// echo"valid delete";
 			ShowDelete($post['postID']);
 		}
 		echo		"
@@ -754,6 +737,7 @@
 		}
 		if(ValidEdit($pic['postID'])){
 			ShowEdit($pic['postID']);
+			// var_dump($pic['postID']);
 		}
 		if(ValidDelete($pic['postID'])){
 			ShowDelete($pic['postID']);
