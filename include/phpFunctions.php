@@ -1,6 +1,10 @@
 
 <?php
 
+	//NOTES:
+		//"Show" shows a field, button, or link (home, form, etc.)
+		//"Display" shows an element (tag, comment, etc.)
+
 	//RANDOM FUNCTIONS
 	function Heading($title, $h1){
 		echo"
@@ -86,6 +90,7 @@
 
 	//FORM FUNCTIONS
 	function ValidateTextField($key, $errors){
+		// var_dump($_REQUEST);
 		if(!$_REQUEST[$key]){
 			$errors[$key] = "required";
 		}
@@ -111,7 +116,7 @@
 		if($isreq){
 			echo"*";
 		}
-		echo":</p><input type='text' name='$name'";
+		echo":</p><input type='text' name=$name";
 		if(($value == '')||($value == NULL)){
 			if(isset($_REQUEST[$name])){
 				echo"value='$_REQUEST[$name]'";
@@ -174,6 +179,11 @@
 		echo"
 		<input type='hidden' name='$name' value='$value'><br>
 		";
+	}
+
+	//ACTUAL FORMS
+	function CreatePostForm(){
+
 	}
 
 	function EditPostForm($postID){
@@ -308,7 +318,6 @@
 
 	}
 
-	//USER FUNCTIONS
 	function CreateAccountForm(){
 		$errors = array();
 		if(isset($_REQUEST['create'])){
@@ -345,12 +354,12 @@
 	function LoginForm(){
 		$errors = array();
 		// var_dump($_REQUEST);
-		if(isset($_REQUEST['login'])){		//NOT PASSING THROUGH IF
+		if(isset($_REQUEST['login'])){
 			// var_dump($_REQUEST);
 			$errors+=ValidateTextField('username', $errors);
 			$errors+=ValidateTextField('password', $errors);
 
-			if(UserExists($_REQUEST['username'])){
+			if(!$errors['username']&&UserExists($_REQUEST['username'])){
 				if(GetUser($_REQUEST['username'])['password'] != $_REQUEST['password']){
 					$errors['match'] = 'incorrect password!';
 				}
@@ -391,6 +400,28 @@
 			</form>";
 	}
 
+	function ShowAddCommentForm($postID){
+		$errors = array();
+
+		if(isset($_REQUEST['commentsub'.$postID])){
+			$errors+=ValidateTextField('Comment', $errors);
+			if(sizeof($errors)==0){
+				AddNewComment($_REQUEST['Comment'], $postID);
+			}else{
+				DisplayError('Comment', $errors['Comment']);
+			}
+		}
+
+		echo"
+			<form method='post'>";
+			ShowTextField(false,'Comment','');
+		echo"
+				<input type='submit' name='commentsub".$postID."' value='comment'>
+			</form>
+		";
+	}
+
+	//USER FUNCTIONS
 	function IsLoggedIn(){
 		echo"";
 		if(isset($_SESSION['userID'])){
@@ -401,7 +432,7 @@
 
 	function PersonalHeading(){
 		echo"
-			<p class='personal'>hi ".$_SESSION['username']."</p>
+			<p class='personal'>hi <a href='/view_user?userID=".$_SESSION['userID']."'>".$_SESSION['username']."</a></p>
 		";
 		Logout();
 	}
@@ -445,14 +476,119 @@
 			if($_SESSION['userID'] == GetPostCreator($postID)){
 				return true;
 			}
-			if(GetUser($_SESSION['username'])['userType'] == 'admin'){
-				return true;
-			}
 		}
 		// if(GetPostCreator($postID) == NULL){
 		// 	return true;
 		// }
 		return false;
+	}
+
+	function ValidComment(){
+		if(isset($_SESSION['userID'])){
+			return true;
+		}
+		return false;
+	}
+
+	function ValidEditComment($commentID){
+		if(isset($_SESSION['userID'])){
+			if($_SESSION['userID']==GetComment($commentID)['userID']){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	//COMMENT DATABASE FUNCTIONS
+	function AddNewComment($comment, $postID){
+		$result=dbQuery("
+			INSERT INTO comments (postID, userID, body)
+			VALUES (:postID, $_SESSION[userID], :comment)
+		", array('postID'=>$postID, 'comment'=>$comment))->fetch();
+	}
+
+	function DisplayComments($postID){
+		if(isset($_REQUEST['DCommentID'])){
+			DeleteComment($_REQUEST['DCommentID']);
+		}
+		if(isset($_REQUEST['ECommentID'])){
+			if(isset($_REQUEST['editcom'.$_REQUEST['ECommentID']])){
+				// var_dump($_REQUEST);
+				EditComment($_REQUEST['ECommentID'], $_REQUEST['Edit']);
+			}else{
+				ShowEditComment($_REQUEST['ECommentID']);
+			}
+		}
+		$comments = GetComments($postID);
+		$type = GetPostType($postID);
+		if($type == 'pic'){
+			$url = '/view_pic.php?postID='.$postID;
+		}else if ($type == 'blog'){
+			$url = '/view_post.php?postID='.$postID;
+		}
+		echo"Comments: <br><br>";
+		foreach($comments as $comment){
+			// var_dump(GetUserWithID($comment['userID'])['username']);
+			echo"\t<span style='padding:4px;
+			background-color:#eee;'class='comment'>
+			<a style='padding:2px;
+			font-weight:bold;
+			background-color:#ddd;
+			color:#fff;'class='userbadge' href='/view_user.php?userID=".$comment['userID']."'>".GetUserWithID($comment['userID'])['username']."</a>
+			".$comment['body'];
+			if(ValidEditComment($comment['commentID'])){
+				echo"\t<a style='color: grey' href='".$url."&DCommentID=".$comment['commentID']."'>delete comment</a>";
+				echo"\t<a style='color: grey' href='".$url."&ECommentID=".$comment['commentID']."'>edit comment</a>";
+				//PLACE EDIT COMMENT HERE
+			}
+			echo"</span><br><br>";
+		}
+		echo"<br><br>";
+	}
+
+	function ShowEditComment($commentID){
+		echo"
+			<form method='post'>";
+			ShowTextField(false, 'Edit Comment', GetComment($commentID)['body']);
+		echo"
+				<input type='submit' name='editcom".$commentID."'>
+			</form>
+		";
+	}
+
+	function GetComments($postID){
+		$result=dbQuery("
+			SELECT *
+			FROM comments
+			WHERE postID = :postID
+		", array('postID'=>$postID))->fetchAll();
+		// var_dump($result);
+		return $result;
+	}
+
+	function GetComment($commentID){
+		$result=dbQuery("
+			SELECT *
+			FROM comments
+			WHERE commentID = :commentID
+		", array('commentID'=>$commentID))->fetch();
+		// var_dump($result);
+		return $result;
+	}
+
+	function DeleteComment($commentID){
+		$result=dbQuery("
+			DELETE FROM comments
+			WHERE commentID = :commentID
+		", array('commentID'=>$commentID))->fetch();
+	}
+
+	function EditComment($commentID, $body){
+		$result = dbQuery("
+			UPDATE comments
+			SET body = :body
+			WHERE commentID = :commentID
+		", array('body'=>$body, 'commentID'=>$commentID))->fetch();
 	}
 
 	//TAG DATABASE FUNCTIONS
@@ -561,7 +697,7 @@
 		return true;
 	}
 
-	function ShowTags($tagarray){
+	function DisplayTags($tagarray){
 
 		echo"<p>Tags: </p>";
 		foreach($tagarray as $tag){
@@ -575,7 +711,7 @@
 		";
 	}
 
-	function GetPostsWithTag($tagID){		//CONFIRM SYNTAX OF DBQUERY
+	function GetPostsWithTag($tagID){
 		$result = dbQuery("
 			SELECT *
 			FROM posts
@@ -627,8 +763,26 @@
 		return $result;
 	}
 
+	function GetUserWithID($userID){
+		$result = dbQuery("
+			SELECT *
+			FROM users
+			WHERE userID = :userID
+		", array('userID'=>$userID))->fetch();
+		return $result;
+	}
+
 	function GetPostCreator($postID){
 		return GetPost($postID)['userID'];
+	}
+
+	function GetPostsWithUser($userID){
+		$result = dbQuery("
+			SELECT *
+			FROM posts
+			WHERE userID = :userID
+		", array('userID'=>$userID))->fetchAll();
+		return $result;
 	}
 
 	//BLOG DATABASE FUNCTIONS
@@ -676,7 +830,7 @@
 					<p>".$post['body']."</p><br>
 				</div>";
 		if(HasTags($post['postID'])){
-			ShowTags(GetAllTags($post['postID']));
+			DisplayTags(GetAllTags($post['postID']));
 		}
 		if(ValidEdit($post['postID'])){
 			ShowEdit($post['postID']);
@@ -684,6 +838,10 @@
 		if(ValidDelete($post['postID'])){
 			ShowDelete($post['postID']);
 		}
+		if(ValidComment()){
+			ShowAddCommentForm($post['postID']);
+		}
+		DisplayComments($post['postID']);
 		echo		"
 			</body>
 		</html>
@@ -733,7 +891,7 @@
 				}
 		echo"<br>";
 		if(HasTags($pic['postID'])){
-			ShowTags(GetAllTags($pic['postID']));
+			DisplayTags(GetAllTags($pic['postID']));
 		}
 		if(ValidEdit($pic['postID'])){
 			ShowEdit($pic['postID']);
@@ -742,6 +900,10 @@
 		if(ValidDelete($pic['postID'])){
 			ShowDelete($pic['postID']);
 		}
+		if(ValidComment()){
+			ShowAddCommentForm($pic['postID']);
+		}
+		DisplayComments($pic['postID']);
 		echo"
 			</body>
 		</html>
