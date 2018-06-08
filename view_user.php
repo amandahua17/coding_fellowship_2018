@@ -2,7 +2,12 @@
 	include('include/include_all.php');
 	// var_dump(GetUser($_REQUEST['userID'])['username']);
 	$username = GetUserWithID($_REQUEST['userID'])['username'];
-	Heading("View User","View ".$username."'s posts");
+	if(isset($_SESSION['nickname'])){
+		Heading("View User","View ".$_SESSION['nickname']."'s posts");
+	}else{
+		Heading("View User","View ".$username."'s posts");
+	}
+
 	if($_REQUEST['userID']=='0'){
 		foreach(GetAllBlogPosts() as $post){
 				DisplayPost($post);
@@ -23,4 +28,4 @@
 		}
 		// ShowDelete($post['postID']);
 	}
-	Home();
+	Footer();

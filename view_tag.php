@@ -21,4 +21,4 @@
 		}
 		// ShowDelete($post['postID']);
 	}
-	Home();
+	Footer();

@@ -44,6 +44,5 @@
 					<a href='create_post.php?type=pic'>Picture</a><br><br>
 					<a href='create_post.php?type=blog'>Blog Post</a>
 				</div>
-			</body>
-		</html>
 	";
+	Footer();

@@ -5,8 +5,4 @@
 	}
 	Heading("Login", "Login");
 	LoginForm();
-	echo"
-			</body>
-		</html>
-	";
-Home();
+	Footer();

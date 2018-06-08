@@ -31,6 +31,14 @@
 
 	}
 
+	function Footer(){
+		echo"
+			</body>
+		</html>
+		";
+		Home();
+	}
+
 	function Home(){
 		echo"
 			<a class='home' href='/index.php'>back to home</a>
@@ -88,10 +96,14 @@
 		";
 	}
 
+	function ShowSettings(){
+		echo"<a href='/user_settings.php'>User Settings</a><br>";
+	}
+
 	//FORM FUNCTIONS
 	function ValidateTextField($key, $errors){
 		// var_dump($_REQUEST);
-		if(!$_REQUEST[$key]){
+		if(!isset($_REQUEST[$key])){
 			$errors[$key] = "required";
 		}
 		return $errors;
@@ -149,11 +161,14 @@
 			echo"<div class='required'>Does not match.</div>";
 		}else if($errorname == 'DNE'){
 			echo"<div class='required'>There is no account associated with that username.</div>";
-		}else if($errorname == 'taken'){
+		}else{ //if($errorname == 'taken'){
 			echo"<div class='required'>$error</div>";
-		}else{
-			echo"undefined error";
 		}
+		// }else if($errorname == 'old'){
+		// 	echo"<div class='required'>$error</div>";
+		// }else{
+		// 	echo"<div class='required'>undefined error</div>";
+		// }
 	}
 
 	function ValidateUserTaken($username, $email){
@@ -179,6 +194,13 @@
 		echo"
 		<input type='hidden' name='$name' value='$value'><br>
 		";
+	}
+
+	function ValidateActive($username, $errors){
+		if(!GetUser($username)['active']){
+			$errors['active'] = 'Account Not Active!';
+		}
+		return $errors;
 	}
 
 	//ACTUAL FORMS
@@ -398,8 +420,6 @@
 		echo"			<br><br><input type='submit' name='apply' value='Apply Edits'><br>
 						<br><input type='submit' name='cancel' value='Cancel'>
 					</form>
-				</body>
-			</html>
 		";
 
 	}
@@ -416,7 +436,7 @@
 
 			if(sizeof($errors) == 0){
 				AddNewUser($_REQUEST['username'], $_REQUEST['password'], $_REQUEST['email']);
-				header("Location: /login.php");
+				header("Location: /account/login.php");
 				exit();
 			}else{
 				foreach($errors as $name=>$error){
@@ -442,13 +462,13 @@
 		// var_dump($_REQUEST);
 		if(isset($_REQUEST['login'])){
 			// var_dump($_REQUEST);
-			$errors+=ValidateTextField('username', $errors);
 			$errors+=ValidateTextField('password', $errors);
-
-			if(!$errors['username']&&UserExists($_REQUEST['username'])){
+			$errors+=ValidateTextField('username', $errors);
+			if(!isset($errors['username'])&&UserExists($_REQUEST['username'])){
 				if(GetUser($_REQUEST['username'])['password'] != $_REQUEST['password']){
 					$errors['match'] = 'incorrect password!';
 				}
+				$errors+=ValidateActive($_REQUEST['username'], $errors);
 			}else{
 				$errors['DNE'] = 'user does not exist!';
 			}
@@ -458,6 +478,9 @@
 				// die();
 				$_SESSION['username'] = $_REQUEST['username'];
 				$_SESSION['userID'] = GetUser($_REQUEST['username'])['userID'];
+				if(HasNickname($_SESSION['userID'])){
+					$_SESSION['nickname'] = GetUser($_REQUEST['username'])['nickname'];
+				}
 				header("Location: /index.php");
 				exit();
 			}else{
@@ -465,7 +488,7 @@
 				foreach($errors as $key=>$error){
 					DisplayError($key, $error);
 				}
-				// if(isset($errors['username'])){
+				// if(isset($errors)){
 				// 	echo"<div class='required'>Please enter your username.</div>";
 				// }
 				// if(isset($errors['password'])){
@@ -507,6 +530,174 @@
 		";
 	}
 
+	function SettingsForm(){
+		$val = '';
+		if(isset($_REQUEST['option'])){
+			$val = $_REQUEST['option'];
+		}
+		echo"
+			<form method='post'>
+				<select name='setting'>";
+		echo"		<option value='0'";
+		if($val == 0){
+			echo" selected";
+		}
+		echo">-</option>
+					<option value='1'";
+		if($val == 1){
+			echo" selected";
+		}
+		echo">Change Username</option>
+					<option value='2'";
+		if($val == 2){
+			echo" selected";
+		}
+		echo">Change Password</option>
+					<option value='3'";
+		if($val == 3){
+			echo" selected";
+		}
+		echo">Add/Change Nickname</option>
+					<option value='4'";
+		if($val == 4){
+			echo" selected";
+		}
+		echo">Deactivate Account</option>
+				</select><br><br>
+				<input type='submit' value='Go' name='sub'>
+			</form>
+
+		";
+	}
+
+	function ChangeUsernameForm(){
+		$errors = array();
+
+		if(isset($_REQUEST['change'])){
+			$errors += ValidateTextField('New', $errors);
+			$errors += ValidateTextField('password', $errors);
+			$errors += ValidateUserTaken($_REQUEST['New'], '');
+			if($_REQUEST['password']!=GetUser($_SESSION['username'])['password']){
+				$errors['match']='Incorrect Password!';
+			}
+			if(sizeof($errors) == 0){
+				ChangeUsername($_SESSION['userID'], $_REQUEST['New']);
+				header("Location: /user_settings.php?option=6");
+				exit();
+			}else{
+				foreach($errors as $name=>$error){
+					DisplayError($name, $error);
+				}
+			}
+		}
+
+		echo"
+			<form method='post'>
+				";
+				ShowTextField(true, 'New Username', '');
+				ShowPasswordField('password', 'Password');
+		echo"
+				<input type='submit' name='change'>
+			</form>
+		";
+	}
+
+	function ChangePasswordForm(){
+		$errors = array();
+
+		if(isset($_REQUEST['change'])){
+			$errors += ValidateTextField('newpswd', $errors);
+			$errors += ValidateTextField('confirm', $errors);
+			$errors += ValidateTextField('oldpswd', $errors);
+			$errors += ValidatePasswordConfirmation('newpswd', 'confirm', $errors);
+			if($_REQUEST['oldpswd']!=GetUser($_SESSION['username'])['password']){
+				$errors['old']='Incorrect Password!';
+			}
+			if(sizeof($errors) == 0){
+				ChangePassword($_SESSION['userID'], $_REQUEST['newpswd']);
+				header("Location: /user_settings.php?option=6");
+				exit();
+			}else{
+				foreach($errors as $name=>$error){
+					DisplayError($name, $error);
+				}
+			}
+		}
+
+		echo"
+			<form method='post'>
+				";
+				ShowPasswordField('newpswd', 'New Password');
+				ShowPasswordField('confirm', 'Confirm New Password');
+				ShowPasswordField('oldpswd', 'Old Password');
+		echo"
+				<input type='submit' name='change'>
+			</form>
+		";
+	}
+
+	function NicknameForm(){
+		$errors = array();
+
+		if(isset($_REQUEST['change'])){
+			$errors += ValidateTextField('Nickname', $errors);
+			$errors += ValidateTextField('password', $errors);
+			if($_REQUEST['password']!=GetUser($_SESSION['username'])['password']){
+				$errors['match']='Incorrect Password!';
+			}
+			if(sizeof($errors) == 0){
+				SetNickname($_SESSION['userID'], $_REQUEST['Nickname']);
+				$_SESSION['nickname'] = $_REQUEST['Nickname'];
+				header("Location: /user_settings.php?option=6");
+				exit();
+			}else{
+				foreach($errors as $name=>$error){
+					DisplayError($name, $error);
+				}
+			}
+		}else{
+
+		}
+
+		echo"
+			<form method='post'>
+				";
+				ShowTextField(true, 'Nickname', '');
+				ShowPasswordField('password', 'Password');
+		echo"
+				<input type='submit' name='change'>
+			</form>
+		";
+	}
+
+	function DeactivateAccountForm(){
+		$errors = array();
+
+		if(isset($_REQUEST['delete'])){
+			$errors += ValidateTextField('password', $errors);
+			if($_REQUEST['password']!=GetUser($_SESSION['username'])['password']){
+				$errors['match']='Incorrect Password!';
+			}
+			if(sizeof($errors) == 0){
+				DeactivateUser($_SESSION['userID']);
+				header("Location: /user_settings.php?option=5");
+				exit();
+			}else{
+				foreach($errors as $name=>$error){
+					DisplayError($name, $error);
+				}
+			}
+		}
+
+		echo"
+			<form method='post'>";
+				ShowPasswordField('password', 'Password');
+		echo"
+				<input type='submit' name='delete' value='Deactivate Account'>
+			</form>
+		";
+	}
+
 	//USER FUNCTIONS
 	function IsLoggedIn(){
 		echo"";
@@ -517,9 +708,16 @@
 	}
 
 	function PersonalHeading(){
-		echo"
-			<p class='personal'>hi <a href='/view_user?userID=".$_SESSION['userID']."'>".$_SESSION['username']."</a></p>
-		";
+		if(isset($_SESSION['nickname'])){
+			echo"
+				<p class='personal'>hi <a href='/view_user?userID=".$_SESSION['userID']."'>".($_SESSION['nickname'])."</a></p>
+			";
+		}else{
+			echo"
+				<p class='personal'>hi <a href='/view_user?userID=".$_SESSION['userID']."'>".$_SESSION['username']."</a></p>
+			";
+		}
+		ShowSettings();
 		Logout();
 	}
 
@@ -585,6 +783,62 @@
 		return false;
 	}
 
+	//USER SETTINGS FUNCTIONS
+	function ChangeUsername($userID, $newname){
+		// var_dump($userID, $newname);
+		$result=dbQuery("
+			UPDATE users
+			SET username = :newname
+			WHERE userID = :userID
+		", array('userID'=>$userID, 'newname'=>$newname))->fetch();
+		$_SESSION['username'] = $newname;
+	}
+
+	function ChangePassword($userID, $newpswd){
+		$result=dbQuery("
+			UPDATE users
+			SET password = :newpswd
+			WHERE userID = :userID
+		", array('userID'=>$userID, 'newpswd'=>$newpswd))->fetch();
+	}
+
+	function SetNickname($userID, $name){
+		$result=dbQuery("
+			UPDATE users
+			SET nickname = :name
+			WHERE userID = :userID
+		", array('userID'=>$userID, 'name'=>$name))->fetch();
+	}
+
+	function HasNickname($userID){
+		$result=dbQuery("
+			SELECT nickname
+			FROM users
+			WHERE userID = :userID
+		", array('userID'=>$userID))->fetch();
+		// var_dump($result, $userID);
+		if((!$result)||($result['nickname'] == null)){
+			return false;
+		}
+		return true;
+	}
+
+	function DeactivateUser($userID){
+		session_destroy();
+		$result=dbQuery("
+			UPDATE users
+			SET active = 0
+			WHERE userID = :userID
+		", array('userID'=>$userID))->fetch();
+	}
+
+	function ReactivateUser($userID){
+		$result=dbQuery("
+			UPDATE users
+			SET active = 1
+			WHERE userID = :userID
+		", array('userID'=>$userID))->fetch();
+	}
 	//COMMENT DATABASE FUNCTIONS
 	function AddNewComment($comment, $postID){
 		$result=dbQuery("
@@ -813,8 +1067,8 @@
 	//USER DATABASE FUNCTIONS
 	function AddNewUser($username, $password, $email){
 		$result = dbQuery("
-			INSERT INTO users (username, password, userType, email)
-			VALUES(:username, :password, 'regUser', :email)
+			INSERT INTO users (username, password, userType, email, active)
+			VALUES(:username, :password, 'regUser', :email, 1)
 		", array('username'=>$username, 'password'=>$password, 'email'=>$email))->fetch();
 	}
 

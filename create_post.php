@@ -3,7 +3,4 @@
 
 	CreatePostForm();
 
-	Home();
-	echo	"</body>
-		</html>
-	";
+	Footer();

@@ -5,8 +5,4 @@
 	}
 	Heading("Create Account", "Create An Account");
 	CreateAccountForm();
-	echo"
-			</body>
-		</html>
-	";
-Home();
+	Footer();
