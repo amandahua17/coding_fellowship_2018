@@ -1,8 +1,11 @@
 var body = document.querySelector('body');
 var key;
-body.onkeypressed = function move(event) {
-    key = event.keyCode;
-
+	// console.log('marker');
+body.addEventListener("keypress", move());
+function move(event) {
+	// console.log('hi');
+    key = event.keyCode || event.which;
+	console.log(key);
 	if(key == 37){
 		moveleft();
 	}
