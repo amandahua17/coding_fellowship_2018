@@ -103,7 +103,7 @@
 	//FORM FUNCTIONS
 	function ValidateTextField($key, $errors){
 		// var_dump($_REQUEST);
-		if(!isset($_REQUEST[$key])){
+		if(!isset($_REQUEST[$key])||($_REQUEST[$key]) == ''){
 			$errors[$key] = "required";
 		}
 		return $errors;
@@ -574,14 +574,16 @@
 		$errors = array();
 
 		if(isset($_REQUEST['change'])){
-			$errors += ValidateTextField('New', $errors);
+			$errors += ValidateTextField('NewUsername', $errors);
 			$errors += ValidateTextField('password', $errors);
-			$errors += ValidateUserTaken($_REQUEST['New'], '');
+			if(!isset($errors['NewUsername'])){
+				$errors += ValidateUserTaken($_REQUEST['NewUsername'], '');
+			}
 			if($_REQUEST['password']!=GetUser($_SESSION['username'])['password']){
 				$errors['match']='Incorrect Password!';
 			}
 			if(sizeof($errors) == 0){
-				ChangeUsername($_SESSION['userID'], $_REQUEST['New']);
+				ChangeUsername($_SESSION['userID'], $_REQUEST['NewUsername']);
 				header("Location: /user_settings.php?option=6");
 				exit();
 			}else{
@@ -594,7 +596,7 @@
 		echo"
 			<form method='post'>
 				";
-				ShowTextField(true, 'New Username', '');
+				ShowTextField(true, 'NewUsername', '');
 				ShowPasswordField('password', 'Password');
 		echo"
 				<input type='submit' name='change'>
