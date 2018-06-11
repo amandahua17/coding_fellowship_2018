@@ -13,4 +13,4 @@
 		DisplayPost($post);
 		// ShowDelete($post['postID']);
 	}
-	Home();
+	Footer();

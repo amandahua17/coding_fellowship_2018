@@ -62,3 +62,16 @@ a.tag{
 	color: white;
 	text-decoration:none;
 }
+
+.comment{
+	padding:1em;
+	background-color:#eee;
+
+}
+
+.userbadge{
+	padding:2px;
+	font-weight:bold;
+	background-color:#ddd;
+	color:#fff;
+}

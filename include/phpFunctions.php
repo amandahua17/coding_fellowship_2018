@@ -1,6 +1,10 @@
 
 <?php
 
+	//NOTES:
+		//"Show" shows a field, button, or link (home, form, etc.)
+		//"Display" shows an element (tag, comment, etc.)
+
 	//RANDOM FUNCTIONS
 	function Heading($title, $h1){
 		echo"
@@ -26,6 +30,14 @@
 						<h1>".$h1."</h1>";
 		}
 
+	}
+
+	function Footer(){
+		echo"
+			</body>
+		</html>
+		";
+		Home();
 	}
 
 	function Home(){
@@ -85,9 +97,14 @@
 		";
 	}
 
+	function ShowSettings(){
+		echo"<a href='/user_settings.php'>User Settings</a><br>";
+	}
+
 	//FORM FUNCTIONS
 	function ValidateTextField($key, $errors){
-		if(!$_REQUEST[$key]){
+		// var_dump($_REQUEST);
+		if(!isset($_REQUEST[$key])||($_REQUEST[$key]) == ''){
 			$errors[$key] = "required";
 		}
 		return $errors;
@@ -112,6 +129,7 @@
 		if($isreq){
 			echo"*";
 		}
+
 		echo":</p><input type='text' name='$name'";
 		if($value == ''||$value == NULL){
 			if(isset($_REQUEST[$name])){
@@ -145,11 +163,14 @@
 			echo"<div class='required'>Does not match.</div>";
 		}else if($errorname == 'DNE'){
 			echo"<div class='required'>There is no account associated with that username.</div>";
-		}else if($errorname == 'taken'){
+		}else{ //if($errorname == 'taken'){
 			echo"<div class='required'>$error</div>";
-		}else{
-			echo"undefined error";
 		}
+		// }else if($errorname == 'old'){
+		// 	echo"<div class='required'>$error</div>";
+		// }else{
+		// 	echo"<div class='required'>undefined error</div>";
+		// }
 	}
 
 	function ValidateUserTaken($username, $email){
@@ -163,10 +184,10 @@
 		return $errors;
 	}
 
-	function ShowTagField(){
+	function ShowTagField($form){
 		echo"
 			<p >tags:</p><input type='text' name='tags'>
-			<input type='submit' name='tagsub' value='add tag'>
+			<input form='$form' type='submit' name='tagsub' value='add tag'>
 			<br><br>
 		";
 	}
@@ -175,6 +196,104 @@
 		echo"
 		<input type='hidden' name='$name' value='".addslashes($value)."'><br>
 		";
+	}
+
+	function ValidateActive($username, $errors){
+		if(!GetUser($username)['active']){
+			$errors['active'] = 'Account Not Active!';
+		}
+		return $errors;
+	}
+
+	//ACTUAL FORMS
+	function CreatePostForm(){
+		$type=$_REQUEST['type'];
+		$errors = array();
+
+		// $tagarray=array();
+		// var_dump($_REQUEST);
+
+		if(isset($_REQUEST['tagsub'])){
+			$_REQUEST['tagString'].=",";
+			$_REQUEST['tagString'].=$_REQUEST['tags'];
+			// var_dump($_REQUEST, $tagarray);
+			echo"tag added!";
+		}
+
+		if(isset($_REQUEST['tagString'])){
+			$tagarray = explode(',', $_REQUEST['tagString']);
+		}else{
+			$tagarray = array();
+		}
+		if(isset($_REQUEST['button'])){
+			if($type == 'blog'){
+				$errors+=ValidateTextField('Title', $errors);
+				$errors+=ValidateTextField('Body', $errors);
+				if(sizeof($errors)==0){
+					InsertBlogPost($_REQUEST['Author'], $_REQUEST['Title'], $_REQUEST['Body'], $tagarray);
+					header('Location: index.php');
+					exit();
+				}
+			}else if($type == 'pic'){
+				$errors+=ValidateTextField('Photographer', $errors);
+				$errors+=ValidateTextField('Title', $errors);
+				$errors+=ValidateTextField('Link', $errors);
+				if(sizeof($errors) == 0){
+					InsertPic($_REQUEST['Photographer'], $_REQUEST['Title'], $_REQUEST['Body'], $_REQUEST['Link'], $_REQUEST['Flavortext'], $tagarray);
+					header('Location: index.php');
+					exit();
+				}
+			}
+		}
+
+		Heading("Create Post", "");
+
+
+		// ShowLoginPage();
+		// ShowCreateAccountPage();
+		echo"
+					<h1>Create Your Own";
+		if($type == 'pic'){
+			echo" Picture ";
+		}else if ($type == 'blog'){
+			echo" Blog ";
+		}
+		echo							"Post</h1>";
+
+
+		foreach($errors as $key=>$val){
+			echo"<span style='color: red'>$key is a required field!<br></span>";
+		}
+
+		echo"
+					<br><form method='post' name='form'>";
+					if($type== 'pic'){
+						ShowTextField(true, 'Photographer', '');
+						ShowTextField(true, 'Title', '');
+						ShowTextField(false, 'Body', '');
+						ShowTextField(true, 'Link', '');
+						ShowTextField(false, 'Flavortext', '');
+						echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
+
+
+					}else if($type=='blog'){
+						ShowTextField(false, 'Author', '');
+						ShowTextField(true, 'Title', '');
+						ShowTextField(true, 'Body', '');
+					}
+					ShowTagField('form');
+					ShowHiddenField('tagString', @$_REQUEST['tagString']);
+					echo"Tags: ";
+					foreach($tagarray as $tag){
+						if(($tag!=NULL)&&($tag!=''))
+						echo" #".$tag;
+					}
+					// var_dump(@$_REQUEST['tagString']);
+
+
+		echo"
+						<br><input type='submit' name = 'button'>
+					</form>";
 	}
 
 	function EditPostForm($postID){
@@ -298,7 +417,7 @@
 						ShowTextField(true, 'Title', $post['title']);
 						ShowTextField(true, 'Body', $post['body']);
 					}
-					ShowTagField();
+					ShowTagField('form');
 					if(isset($_REQUEST['tagString'])){
 						// var_dump($_REQUEST['tagString']);
 						ShowHiddenField('tagString', @$_REQUEST['tagString']);
@@ -320,13 +439,10 @@
 		echo"			<br><br><input type='submit' name='apply' value='Apply Edits'><br>
 						<br><input type='submit' name='cancel' value='Cancel'>
 					</form>
-				</body>
-			</html>
 		";
 
 	}
 
-	//USER FUNCTIONS
 	function CreateAccountForm(){
 		$errors = array();
 		if(isset($_REQUEST['create'])){
@@ -339,7 +455,7 @@
 
 			if(sizeof($errors) == 0){
 				AddNewUser($_REQUEST['username'], $_REQUEST['password'], $_REQUEST['email']);
-				header("Location: /login.php");
+				header("Location: /account/login.php");
 				exit();
 			}else{
 				foreach($errors as $name=>$error){
@@ -363,15 +479,15 @@
 	function LoginForm(){
 		$errors = array();
 		// var_dump($_REQUEST);
-		if(isset($_REQUEST['login'])){		//NOT PASSING THROUGH IF
+		if(isset($_REQUEST['login'])){
 			// var_dump($_REQUEST);
-			$errors+=ValidateTextField('username', $errors);
 			$errors+=ValidateTextField('password', $errors);
-
-			if(UserExists($_REQUEST['username'])){
+			$errors+=ValidateTextField('username', $errors);
+			if(!isset($errors['username'])&&UserExists($_REQUEST['username'])){
 				if(GetUser($_REQUEST['username'])['password'] != $_REQUEST['password']){
 					$errors['match'] = 'incorrect password!';
 				}
+				$errors+=ValidateActive($_REQUEST['username'], $errors);
 			}else{
 				$errors['DNE'] = 'user does not exist!';
 			}
@@ -381,6 +497,9 @@
 				// die();
 				$_SESSION['username'] = $_REQUEST['username'];
 				$_SESSION['userID'] = GetUser($_REQUEST['username'])['userID'];
+				if(HasNickname($_SESSION['userID'])){
+					$_SESSION['nickname'] = GetUser($_REQUEST['username'])['nickname'];
+				}
 				header("Location: /index.php");
 				exit();
 			}else{
@@ -388,7 +507,7 @@
 				foreach($errors as $key=>$error){
 					DisplayError($key, $error);
 				}
-				// if(isset($errors['username'])){
+				// if(isset($errors)){
 				// 	echo"<div class='required'>Please enter your username.</div>";
 				// }
 				// if(isset($errors['password'])){
@@ -409,6 +528,198 @@
 			</form>";
 	}
 
+	function ShowAddCommentForm($postID){
+		$errors = array();
+
+		if(isset($_REQUEST['commentsub'.$postID])){
+			$errors+=ValidateTextField('Comment', $errors);
+			if(sizeof($errors)==0){
+				AddNewComment($_REQUEST['Comment'], $postID);
+			}else{
+				DisplayError('Comment', $errors['Comment']);
+			}
+		}
+
+		echo"
+			<form method='post'>";
+			ShowTextField(false,'Comment','');
+		echo"
+				<input type='submit' name='commentsub".$postID."' value='comment'>
+			</form>
+		";
+	}
+
+	function SettingsForm(){
+		$val = '';
+		if(isset($_REQUEST['option'])){
+			$val = $_REQUEST['option'];
+		}
+		echo"
+			<form method='post'>
+				<select name='setting'>";
+		echo"		<option value='0'";
+		if($val == 0){
+			echo" selected";
+		}
+		echo">-</option>
+					<option value='1'";
+		if($val == 1){
+			echo" selected";
+		}
+		echo">Change Username</option>
+					<option value='2'";
+		if($val == 2){
+			echo" selected";
+		}
+		echo">Change Password</option>
+					<option value='3'";
+		if($val == 3){
+			echo" selected";
+		}
+		echo">Add/Change Nickname</option>
+					<option value='4'";
+		if($val == 4){
+			echo" selected";
+		}
+		echo">Deactivate Account</option>
+				</select><br><br>
+				<input type='submit' value='Go' name='sub'>
+			</form>
+
+		";
+	}
+
+	function ChangeUsernameForm(){
+		$errors = array();
+
+		if(isset($_REQUEST['change'])){
+			$errors += ValidateTextField('NewUsername', $errors);
+			$errors += ValidateTextField('password', $errors);
+			if(!isset($errors['NewUsername'])){
+				$errors += ValidateUserTaken($_REQUEST['NewUsername'], '');
+			}
+			if($_REQUEST['password']!=GetUser($_SESSION['username'])['password']){
+				$errors['match']='Incorrect Password!';
+			}
+			if(sizeof($errors) == 0){
+				ChangeUsername($_SESSION['userID'], $_REQUEST['NewUsername']);
+				header("Location: /user_settings.php?option=6");
+				exit();
+			}else{
+				foreach($errors as $name=>$error){
+					DisplayError($name, $error);
+				}
+			}
+		}
+
+		echo"
+			<form method='post'>
+				";
+				ShowTextField(true, 'NewUsername', '');
+				ShowPasswordField('password', 'Password');
+		echo"
+				<input type='submit' name='change'>
+			</form>
+		";
+	}
+
+	function ChangePasswordForm(){
+		$errors = array();
+
+		if(isset($_REQUEST['change'])){
+			$errors += ValidateTextField('newpswd', $errors);
+			$errors += ValidateTextField('confirm', $errors);
+			$errors += ValidateTextField('oldpswd', $errors);
+			$errors += ValidatePasswordConfirmation('newpswd', 'confirm', $errors);
+			if($_REQUEST['oldpswd']!=GetUser($_SESSION['username'])['password']){
+				$errors['old']='Incorrect Password!';
+			}
+			if(sizeof($errors) == 0){
+				ChangePassword($_SESSION['userID'], $_REQUEST['newpswd']);
+				header("Location: /user_settings.php?option=6");
+				exit();
+			}else{
+				foreach($errors as $name=>$error){
+					DisplayError($name, $error);
+				}
+			}
+		}
+
+		echo"
+			<form method='post'>
+				";
+				ShowPasswordField('newpswd', 'New Password');
+				ShowPasswordField('confirm', 'Confirm New Password');
+				ShowPasswordField('oldpswd', 'Old Password');
+		echo"
+				<input type='submit' name='change'>
+			</form>
+		";
+	}
+
+	function NicknameForm(){
+		$errors = array();
+
+		if(isset($_REQUEST['change'])){
+			$errors += ValidateTextField('Nickname', $errors);
+			$errors += ValidateTextField('password', $errors);
+			if($_REQUEST['password']!=GetUser($_SESSION['username'])['password']){
+				$errors['match']='Incorrect Password!';
+			}
+			if(sizeof($errors) == 0){
+				SetNickname($_SESSION['userID'], $_REQUEST['Nickname']);
+				$_SESSION['nickname'] = $_REQUEST['Nickname'];
+				header("Location: /user_settings.php?option=6");
+				exit();
+			}else{
+				foreach($errors as $name=>$error){
+					DisplayError($name, $error);
+				}
+			}
+		}else{
+
+		}
+
+		echo"
+			<form method='post'>
+				";
+				ShowTextField(true, 'Nickname', '');
+				ShowPasswordField('password', 'Password');
+		echo"
+				<input type='submit' name='change'>
+			</form>
+		";
+	}
+
+	function DeactivateAccountForm(){
+		$errors = array();
+
+		if(isset($_REQUEST['delete'])){
+			$errors += ValidateTextField('password', $errors);
+			if($_REQUEST['password']!=GetUser($_SESSION['username'])['password']){
+				$errors['match']='Incorrect Password!';
+			}
+			if(sizeof($errors) == 0){
+				DeactivateUser($_SESSION['userID']);
+				header("Location: /user_settings.php?option=5");
+				exit();
+			}else{
+				foreach($errors as $name=>$error){
+					DisplayError($name, $error);
+				}
+			}
+		}
+
+		echo"
+			<form method='post'>";
+				ShowPasswordField('password', 'Password');
+		echo"
+				<input type='submit' name='delete' value='Deactivate Account'>
+			</form>
+		";
+	}
+
+	//USER FUNCTIONS
 	function IsLoggedIn(){
 		echo"";
 		if(isset($_SESSION['userID'])){
@@ -418,9 +729,16 @@
 	}
 
 	function PersonalHeading(){
-		echo"
-			<p class='personal'>hi ".$_SESSION['username']."</p>
-		";
+		if(isset($_SESSION['nickname'])){
+			echo"
+				<p class='personal'>hi <a href='/view_user?userID=".$_SESSION['userID']."'>".($_SESSION['nickname'])."</a></p>
+			";
+		}else{
+			echo"
+				<p class='personal'>hi <a href='/view_user?userID=".$_SESSION['userID']."'>".$_SESSION['username']."</a></p>
+			";
+		}
+		ShowSettings();
 		Logout();
 	}
 
@@ -463,14 +781,177 @@
 			if($_SESSION['userID'] == GetPostCreator($postID)){
 				return true;
 			}
-			if(GetUser($_SESSION['username'])['userType'] == 'admin'){
-				return true;
-			}
 		}
 		// if(GetPostCreator($postID) == NULL){
 		// 	return true;
 		// }
 		return false;
+	}
+
+	function ValidComment(){
+		if(isset($_SESSION['userID'])){
+			return true;
+		}
+		return false;
+	}
+
+	function ValidEditComment($commentID){
+		if(isset($_SESSION['userID'])){
+			if($_SESSION['userID']==GetComment($commentID)['userID']){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	//USER SETTINGS FUNCTIONS
+	function ChangeUsername($userID, $newname){
+		// var_dump($userID, $newname);
+		$result=dbQuery("
+			UPDATE users
+			SET username = :newname
+			WHERE userID = :userID
+		", array('userID'=>$userID, 'newname'=>$newname))->fetch();
+		$_SESSION['username'] = $newname;
+	}
+
+	function ChangePassword($userID, $newpswd){
+		$result=dbQuery("
+			UPDATE users
+			SET password = :newpswd
+			WHERE userID = :userID
+		", array('userID'=>$userID, 'newpswd'=>$newpswd))->fetch();
+	}
+
+	function SetNickname($userID, $name){
+		$result=dbQuery("
+			UPDATE users
+			SET nickname = :name
+			WHERE userID = :userID
+		", array('userID'=>$userID, 'name'=>$name))->fetch();
+	}
+
+	function HasNickname($userID){
+		$result=dbQuery("
+			SELECT nickname
+			FROM users
+			WHERE userID = :userID
+		", array('userID'=>$userID))->fetch();
+		// var_dump($result, $userID);
+		if((!$result)||($result['nickname'] == null)){
+			return false;
+		}
+		return true;
+	}
+
+	function DeactivateUser($userID){
+		session_destroy();
+		$result=dbQuery("
+			UPDATE users
+			SET active = 0
+			WHERE userID = :userID
+		", array('userID'=>$userID))->fetch();
+	}
+
+	function ReactivateUser($userID){
+		$result=dbQuery("
+			UPDATE users
+			SET active = 1
+			WHERE userID = :userID
+		", array('userID'=>$userID))->fetch();
+	}
+	//COMMENT DATABASE FUNCTIONS
+	function AddNewComment($comment, $postID){
+		$result=dbQuery("
+			INSERT INTO comments (postID, userID, body)
+			VALUES (:postID, $_SESSION[userID], :comment)
+		", array('postID'=>$postID, 'comment'=>$comment))->fetch();
+	}
+
+	function DisplayComments($postID){
+		if(isset($_REQUEST['DCommentID'])){
+			DeleteComment($_REQUEST['DCommentID']);
+		}
+		if(isset($_REQUEST['ECommentID'])){
+			if(isset($_REQUEST['editcom'.$_REQUEST['ECommentID']])){
+				// var_dump($_REQUEST);
+				EditComment($_REQUEST['ECommentID'], $_REQUEST['Edit']);
+			}else{
+				ShowEditComment($_REQUEST['ECommentID']);
+			}
+		}
+		$comments = GetComments($postID);
+		$type = GetPostType($postID);
+		if($type == 'pic'){
+			$url = '/view_pic.php?postID='.$postID;
+		}else if ($type == 'blog'){
+			$url = '/view_post.php?postID='.$postID;
+		}
+		if(sizeof($comments)){
+			echo"Comments: <br><br>";
+		}
+		foreach($comments as $comment){
+			// var_dump(GetUserWithID($comment['userID'])['username']);
+			echo"\t<span style='padding:4px;
+			background-color:#eee;'class='comment'>
+			<a style='padding:2px;
+			font-weight:bold;
+			background-color:#ddd;
+			color:#fff;'class='userbadge' href='/view_user.php?userID=".$comment['userID']."'>".GetUserWithID($comment['userID'])['username']."</a>
+			".$comment['body'];
+			if(ValidEditComment($comment['commentID'])){
+				echo"\t<a style='color: grey' href='".$url."&DCommentID=".$comment['commentID']."'>delete comment</a>";
+				echo"\t<a style='color: grey' href='".$url."&ECommentID=".$comment['commentID']."'>edit comment</a>";
+				//PLACE EDIT COMMENT HERE
+			}
+			echo"</span><br><br>";
+		}
+		echo"<br><br>";
+	}
+
+	function ShowEditComment($commentID){
+		echo"
+			<form method='post'>";
+			ShowTextField(false, 'Edit Comment', GetComment($commentID)['body']);
+		echo"
+				<input type='submit' name='editcom".$commentID."'>
+			</form>
+		";
+	}
+
+	function GetComments($postID){
+		$result=dbQuery("
+			SELECT *
+			FROM comments
+			WHERE postID = :postID
+		", array('postID'=>$postID))->fetchAll();
+		// var_dump($result);
+		return $result;
+	}
+
+	function GetComment($commentID){
+		$result=dbQuery("
+			SELECT *
+			FROM comments
+			WHERE commentID = :commentID
+		", array('commentID'=>$commentID))->fetch();
+		// var_dump($result);
+		return $result;
+	}
+
+	function DeleteComment($commentID){
+		$result=dbQuery("
+			DELETE FROM comments
+			WHERE commentID = :commentID
+		", array('commentID'=>$commentID))->fetch();
+	}
+
+	function EditComment($commentID, $body){
+		$result = dbQuery("
+			UPDATE comments
+			SET body = :body
+			WHERE commentID = :commentID
+		", array('body'=>$body, 'commentID'=>$commentID))->fetch();
 	}
 
 	//TAG DATABASE FUNCTIONS
@@ -566,7 +1047,7 @@
 		return true;
 	}
 
-	function ShowTags($tagarray){
+	function DisplayTags($tagarray){
 
 		echo"<p>Tags: </p>";
 		foreach($tagarray as $tag){
@@ -580,7 +1061,7 @@
 		";
 	}
 
-	function GetPostsWithTag($tagID){		//CONFIRM SYNTAX OF DBQUERY
+	function GetPostsWithTag($tagID){
 		$result = dbQuery("
 			SELECT *
 			FROM posts
@@ -594,8 +1075,8 @@
 	//USER DATABASE FUNCTIONS
 	function AddNewUser($username, $password, $email){
 		$result = dbQuery("
-			INSERT INTO users (username, password, userType, email)
-			VALUES(:username, :password, 'regUser', :email)
+			INSERT INTO users (username, password, userType, email, active)
+			VALUES(:username, :password, 'regUser', :email, 1)
 		", array('username'=>$username, 'password'=>$password, 'email'=>$email))->fetch();
 	}
 
@@ -632,8 +1113,26 @@
 		return $result;
 	}
 
+	function GetUserWithID($userID){
+		$result = dbQuery("
+			SELECT *
+			FROM users
+			WHERE userID = :userID
+		", array('userID'=>$userID))->fetch();
+		return $result;
+	}
+
 	function GetPostCreator($postID){
 		return GetPost($postID)['userID'];
+	}
+
+	function GetPostsWithUser($userID){
+		$result = dbQuery("
+			SELECT *
+			FROM posts
+			WHERE userID = :userID
+		", array('userID'=>$userID))->fetchAll();
+		return $result;
 	}
 
 	//BLOG DATABASE FUNCTIONS
@@ -679,7 +1178,7 @@
 					<p>".$post['body']."</p><br>
 				</div>";
 		if(HasTags($post['postID'])){
-			ShowTags(GetAllTags($post['postID']));
+			DisplayTags(GetAllTags($post['postID']));
 		}
 		if(HasEditPermission($post['postID'])){
 			ShowEditButton($post['postID']);
@@ -687,6 +1186,10 @@
 		if(HasDeletePermission($post['postID'])){
 			ShowDeleteButton($post['postID']);
 		}
+		if(ValidComment()){
+			ShowAddCommentForm($post['postID']);
+		}
+		DisplayComments($post['postID']);
 		echo		"
 			</body>
 		</html>
@@ -734,7 +1237,7 @@
 				}
 		echo"<br>";
 		if(HasTags($pic['postID'])){
-			ShowTags(GetAllTags($pic['postID']));
+			DisplayTags(GetAllTags($pic['postID']));
 		}
 		if(HasEditPermission($pic['postID'])){
 			ShowEditButton($pic['postID']);
@@ -743,6 +1246,10 @@
 		if(HasDeletePermission($pic['postID'])){
 			ShowDeleteButton($pic['postID']);
 		}
+		if(ValidComment()){
+			ShowAddCommentForm($pic['postID']);
+		}
+		DisplayComments($pic['postID']);
 		echo"
 			</body>
 		</html>

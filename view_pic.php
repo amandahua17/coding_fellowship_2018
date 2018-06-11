@@ -13,4 +13,4 @@
 		// ShowDelete($pic['postID']);
 		// echo"<img src='pictures/0f191f-wes-hicks-464614-unsplash.jpg'alt='".$pic['flavor']."'>";
 	}
-	Home();
+	Footer();

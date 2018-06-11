@@ -5,4 +5,4 @@
 
 	EditPostForm($postID);
 
-	Home();
+	Footer();
