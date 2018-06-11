@@ -8,4 +8,8 @@
 
 	session_start();
 
-	include('/include/phpFunctions.php');
+	include('/include/htmlFunctions.php');
+	include('/include/commentFunctions.php');
+	include('/include/postFunctions.php');
+	include('/include/tagFunctions.php');
+	include('/include/userFunctions.php');
