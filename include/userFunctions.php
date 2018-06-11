@@ -86,6 +86,10 @@ function ValidEditComment($commentID){
 	return false;
 }
 
+function GetPostCreator($postID){
+	return GetPost($postID)['userID'];
+}
+
 //USER SETTINGS FUNCTIONS
 function ChangeUsername($userID, $newname){
 	// var_dump($userID, $newname);
@@ -193,9 +197,6 @@ function GetUserWithID($userID){
 	return $result;
 }
 
-function GetPostCreator($postID){
-	return GetPost($postID)['userID'];
-}
 
 function GetPostsWithUser($userID){
 	$result = dbQuery("

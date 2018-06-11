@@ -29,39 +29,6 @@ function GetAllBlogPosts(){
 	return $result;
 }
 
-function DisplayPost($post){
-	echo"
-	<html>
-		<head>
-			<title>".$post['title']."</title>
-			<link rel='stylesheet' href='/style/mainstyle.css'>
-		</head>
-		<body>
-			<h1>".$post['title']."</h1>
-			<h2>by ".$post['author']."</h2>
-			<h3>date: ".$post['date']."</h3>
-			<div>
-				<p>".$post['body']."</p><br>
-			</div>";
-	if(HasTags($post['postID'])){
-		DisplayTags(GetAllTags($post['postID']));
-	}
-	if(HasEditPermission($post['postID'])){
-		ShowEditButton($post['postID']);
-	}
-	if(HasDeletePermission($post['postID'])){
-		ShowDeleteButton($post['postID']);
-	}
-	if(ValidComment()){
-		ShowAddCommentForm($post['postID']);
-	}
-	DisplayComments($post['postID']);
-	echo		"
-		</body>
-	</html>
-	";
-}
-
 //PIC DATABASE FUNCTIONS
 function InsertPic($photographer, $title, $body, $link, $flavor, $tagarray){
 	if(!$_SESSION['userID']){
@@ -82,44 +49,6 @@ function GetAllPics(){
 		WHERE postType='pic'
 	")->fetchAll();
 	return $result;
-}
-
-function DisplayPic($pic){
-	echo"
-	<html>
-		<head>
-			<title>".$pic['title']."</title>
-			<link rel='stylesheet' href='/style/mainstyle.css'>
-		</head>
-		<body>
-			<h1>".$pic['title']."</h1>
-			<h2>by ".$pic['author']."</h2>
-			<h3>date: ".$pic['date']."</h3>
-			<div>
-				<img src='".$pic['link']."'alt='".$pic['flavor']."'>
-			</div>";
-			if($pic['body']!=null){
-				echo"<p>".$pic['body']."</p><br>";
-			}
-	echo"<br>";
-	if(HasTags($pic['postID'])){
-		DisplayTags(GetAllTags($pic['postID']));
-	}
-	if(HasEditPermission($pic['postID'])){
-		ShowEditButton($pic['postID']);
-		// var_dump($pic['postID']);
-	}
-	if(HasDeletePermission($pic['postID'])){
-		ShowDeleteButton($pic['postID']);
-	}
-	if(ValidComment()){
-		ShowAddCommentForm($pic['postID']);
-	}
-	DisplayComments($pic['postID']);
-	echo"
-		</body>
-	</html>
-	";
 }
 
 //GENERIC POST DATABASE FUNCTIONS
@@ -150,10 +79,6 @@ function DeletePost($postID){
 	", array('postID'=>$postID))->fetch();
 	echo"Post Deleted.<br>";
 	// ResetAuto(GetTotalPosts());
-}
-
-function GetPostType($postID){
-	return GetPost($postID)['postType'];
 }
 
 function GetRecentPost(){
@@ -219,4 +144,80 @@ function GetPostAttributeArray($postID){
 	}
 	// var_dump($result);
 	return $result;
+}
+
+// GENERIC POST FUNCTIONS
+function DisplayPost($post){
+	echo"
+	<html>
+		<head>
+			<title>".$post['title']."</title>
+			<link rel='stylesheet' href='/style/mainstyle.css'>
+		</head>
+		<body>
+			<h1>".$post['title']."</h1>
+			<h2>by ".$post['author']."</h2>
+			<h3>date: ".$post['date']."</h3>
+			<div>
+				<p>".$post['body']."</p><br>
+			</div>";
+	if(HasTags($post['postID'])){
+		DisplayTags(GetAllTags($post['postID']));
+	}
+	if(HasEditPermission($post['postID'])){
+		ShowEditButton($post['postID']);
+	}
+	if(HasDeletePermission($post['postID'])){
+		ShowDeleteButton($post['postID']);
+	}
+	if(ValidComment()){
+		ShowAddCommentForm($post['postID']);
+	}
+	DisplayComments($post['postID']);
+	echo		"
+		</body>
+	</html>
+	";
+}
+
+function DisplayPic($pic){
+	echo"
+	<html>
+		<head>
+			<title>".$pic['title']."</title>
+			<link rel='stylesheet' href='/style/mainstyle.css'>
+		</head>
+		<body>
+			<h1>".$pic['title']."</h1>
+			<h2>by ".$pic['author']."</h2>
+			<h3>date: ".$pic['date']."</h3>
+			<div>
+				<img src='".$pic['link']."'alt='".$pic['flavor']."'>
+			</div>";
+			if($pic['body']!=null){
+				echo"<p>".$pic['body']."</p><br>";
+			}
+	echo"<br>";
+	if(HasTags($pic['postID'])){
+		DisplayTags(GetAllTags($pic['postID']));
+	}
+	if(HasEditPermission($pic['postID'])){
+		ShowEditButton($pic['postID']);
+		// var_dump($pic['postID']);
+	}
+	if(HasDeletePermission($pic['postID'])){
+		ShowDeleteButton($pic['postID']);
+	}
+	if(ValidComment()){
+		ShowAddCommentForm($pic['postID']);
+	}
+	DisplayComments($pic['postID']);
+	echo"
+		</body>
+	</html>
+	";
+}
+
+function GetPostType($postID){
+	return GetPost($postID)['postType'];
 }

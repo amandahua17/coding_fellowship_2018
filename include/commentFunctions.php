@@ -9,6 +9,42 @@ function AddNewComment($comment, $postID){
 	", array('postID'=>$postID, 'comment'=>$comment))->fetch();
 }
 
+function GetComments($postID){
+	$result=dbQuery("
+		SELECT *
+		FROM comments
+		WHERE postID = :postID
+	", array('postID'=>$postID))->fetchAll();
+	// var_dump($result);
+	return $result;
+}
+
+function GetComment($commentID){
+	$result=dbQuery("
+		SELECT *
+		FROM comments
+		WHERE commentID = :commentID
+	", array('commentID'=>$commentID))->fetch();
+	// var_dump($result);
+	return $result;
+}
+
+function DeleteComment($commentID){
+	$result=dbQuery("
+		DELETE FROM comments
+		WHERE commentID = :commentID
+	", array('commentID'=>$commentID))->fetch();
+}
+
+function EditComment($commentID, $body){
+	$result = dbQuery("
+		UPDATE comments
+		SET body = :body
+		WHERE commentID = :commentID
+	", array('body'=>$body, 'commentID'=>$commentID))->fetch();
+}
+
+//OTHER COMMENT FUNCTIONS
 function DisplayComments($postID){
 	if(isset($_REQUEST['DCommentID'])){
 		DeleteComment($_REQUEST['DCommentID']);
@@ -58,39 +94,4 @@ function ShowEditComment($commentID){
 			<input type='submit' name='editcom".$commentID."'>
 		</form>
 	";
-}
-
-function GetComments($postID){
-	$result=dbQuery("
-		SELECT *
-		FROM comments
-		WHERE postID = :postID
-	", array('postID'=>$postID))->fetchAll();
-	// var_dump($result);
-	return $result;
-}
-
-function GetComment($commentID){
-	$result=dbQuery("
-		SELECT *
-		FROM comments
-		WHERE commentID = :commentID
-	", array('commentID'=>$commentID))->fetch();
-	// var_dump($result);
-	return $result;
-}
-
-function DeleteComment($commentID){
-	$result=dbQuery("
-		DELETE FROM comments
-		WHERE commentID = :commentID
-	", array('commentID'=>$commentID))->fetch();
-}
-
-function EditComment($commentID, $body){
-	$result = dbQuery("
-		UPDATE comments
-		SET body = :body
-		WHERE commentID = :commentID
-	", array('body'=>$body, 'commentID'=>$commentID))->fetch();
 }

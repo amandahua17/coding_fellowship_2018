@@ -94,6 +94,18 @@ function TagExists($name){
 	return true;
 }
 
+function GetPostsWithTag($tagID){
+	$result = dbQuery("
+		SELECT *
+		FROM posts
+		INNER JOIN posttags
+		ON posts.postID = posttags.postID
+		WHERE posttags.tagID = :tagID
+	", array('tagID'=>$tagID))->fetchAll();
+	return $result;
+}
+
+//OTHER TAG FUNCTIONS
 function DisplayTags($tagarray){
 
 	echo"<p>Tags: </p>";
@@ -106,15 +118,4 @@ function DisplayTags($tagarray){
 
 		<script src='/include/jsFunctions.js'> </script>
 	";
-}
-
-function GetPostsWithTag($tagID){
-	$result = dbQuery("
-		SELECT *
-		FROM posts
-		INNER JOIN posttags
-		ON posts.postID = posttags.postID
-		WHERE posttags.tagID = :tagID
-	", array('tagID'=>$tagID))->fetchAll();
-	return $result;
 }

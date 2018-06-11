@@ -18,7 +18,7 @@
 			PersonalHeading();
 		}
 		if(!IsLoggedIn()){
-			ShowLoginPage();
+			ShowLoginPageLink();
 			ShowCreateAccountPage();
 			if($title == 'Create Post'){
 				echo"note: if you are not logged in, only an admin can edit or delete your post. To make it so that you can edit or delete your post, log in or create an account.<br>";
@@ -36,10 +36,11 @@
 			</body>
 		</html>
 		";
-		Home();
+		ShowHomeLink();
 	}
 
-	function Home(){
+	//SHOW FUNCTIONS
+	function ShowHomeLink(){
 		echo"
 			<a class='home' href='/index.php'>back to home</a>
 		</html>";
@@ -63,7 +64,7 @@
 
 	}
 
-	function ShowLoginPage(){
+	function ShowLoginPageLink(){
 		echo"
 			<a href='/account/login.php'>Log In</a><br>
 		";
