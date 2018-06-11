@@ -34,7 +34,7 @@
 		</html>";
 	}
 
-	function ShowDelete($postID){
+	function ShowDeleteButton($postID){
 		if(isset($_REQUEST['delete'])){
 			if(HasDeletePermission($postID)){
 				DeletePost($postID);
@@ -64,8 +64,8 @@
 		";
 	}
 
-	function ShowEdit($postID){
-		// echo"ShowEdit called";
+	function ShowEditButton($postID){
+		// echo"ShowEditButton called";
 		// var_dump($postID);
 		if(isset($_REQUEST['edit'.$postID])){
 			// echo"edit button pushed";
@@ -682,10 +682,10 @@
 			ShowTags(GetAllTags($post['postID']));
 		}
 		if(HasEditPermission($post['postID'])){
-			ShowEdit($post['postID']);
+			ShowEditButton($post['postID']);
 		}
 		if(HasDeletePermission($post['postID'])){
-			ShowDelete($post['postID']);
+			ShowDeleteButton($post['postID']);
 		}
 		echo		"
 			</body>
@@ -737,11 +737,11 @@
 			ShowTags(GetAllTags($pic['postID']));
 		}
 		if(HasEditPermission($pic['postID'])){
-			ShowEdit($pic['postID']);
+			ShowEditButton($pic['postID']);
 			// var_dump($pic['postID']);
 		}
 		if(HasDeletePermission($pic['postID'])){
-			ShowDelete($pic['postID']);
+			ShowDeleteButton($pic['postID']);
 		}
 		echo"
 			</body>
