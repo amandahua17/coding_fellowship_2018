@@ -5,22 +5,7 @@
 	// var_dump($postCount);
 	// $picCount=GetNumberPics();
 	// ResetAuto(GetTotalPosts());
-	echo"
-		<html>
-			<head>
-				<title>myBlog</title>
-				<link rel='stylesheet' href='/style/mainstyle.css'>
-			</head>
-			<body>";
-	if(IsLoggedIn()){
-		PersonalHeading();
-	}
-	echo"
-				<h1>Welcome to my blog!</h1>";
-	if(!IsLoggedIn()){
-		ShowLoginPage();
-		ShowCreateAccountPage();
-	}
+	Heading("Welcome!", "Welcome to my blog!");
 	echo"
 				<div>
 					<h2>Blog Posts</h2>

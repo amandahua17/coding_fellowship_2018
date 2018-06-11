@@ -2,15 +2,41 @@
 <?php
 
 	//RANDOM FUNCTIONS
+	function Heading($title, $h1){
+		echo"
+			<html>
+				<header>
+					<title>$title</title>
+					<link rel='stylesheet' href='/style/mainstyle.css'>
+					<script src='/js/jquery.js'></script>
+				</header>
+				<body>";
+		if(IsLoggedIn()){
+			PersonalHeading();
+		}
+		if(!IsLoggedIn()){
+			ShowLoginPage();
+			ShowCreateAccountPage();
+			if($title == 'Create Post'){
+				echo"note: if you are not logged in, only an admin can edit or delete your post. To make it so that you can edit or delete your post, log in or create an account.<br>";
+			}
+		}
+		if($h1 != ""){
+			echo"
+						<h1>".$h1."</h1>";
+		}
+
+	}
+
 	function Home(){
 		echo"
 			<a class='home' href='/index.php'>back to home</a>
-			";
+		</html>";
 	}
 
-	function ShowDelete($postID){
+	function ShowDeleteButton($postID){
 		if(isset($_REQUEST['delete'])){
-			if(ValidDelete($postID)){
+			if(HasDeletePermission($postID)){
 				DeletePost($postID);
 				header("Location: /index.php");
 				exit();
@@ -38,6 +64,27 @@
 		";
 	}
 
+	function ShowEditButton($postID){
+		// echo"ShowEditButton called";
+		// var_dump($postID);
+		if(isset($_REQUEST['edit'.$postID])){
+			// echo"edit button pushed";
+			// die();
+			if(HasEditPermission($postID)){
+				// echo"Go to Edit!";
+				// die();
+				header("Location: /edit_post.php?postID=".$postID);
+			}else{
+				echo"You do not have permission to edit this post!";
+			}
+		}
+		echo"
+			<form method='post'>
+				<input type='submit' name='edit".$postID."' value='Edit Post'><br><br>
+			</form>
+		";
+	}
+
 	//FORM FUNCTIONS
 	function ValidateTextField($key, $errors){
 		if(!$_REQUEST[$key]){
@@ -55,7 +102,7 @@
 		return $errors;
 	}
 
-	function ShowTextField($isreq, $name){
+	function ShowTextField($isreq, $name, $value=''){
 		echo"
 			<p";
 		if($isreq){
@@ -66,8 +113,12 @@
 			echo"*";
 		}
 		echo":</p><input type='text' name='$name'";
-		if(isset($_REQUEST[$name])){
-			echo"value='$_REQUEST[$name]'";
+		if($value == ''||$value == NULL){
+			if(isset($_REQUEST[$name])){
+				echo"value='".addslashes($_REQUEST[$name])."'";
+			}
+		}else{
+			echo"value='".addslashes($value)."'";
 		}
 		echo"><br><br>
 		";
@@ -77,7 +128,7 @@
 		echo"
 			<p class='required'>$text*:</p><input type='password' name='$name'";
 		if(isset($_REQUEST[$name])){
-			echo"value='$_REQUEST[$name]'";
+			echo"value='".addslashes($_REQUEST[$name])."'";
 		}
 		echo"><br><br>
 		";
@@ -122,8 +173,157 @@
 
 	function ShowHiddenField($name, $value){
 		echo"
-		<input type='hidden' name='$name' value=$value><br>
+		<input type='hidden' name='$name' value='".addslashes($value)."'><br>
 		";
+	}
+
+	function EditPostForm($postID){
+		$post = GetPost($postID);
+		$type = $post['postType'];
+		$attributes = GetPostAttributeArray($postID);
+		$errors = array();
+		$edits = array();
+		$tagString = '';
+
+		if(isset($_REQUEST['cancel'])){
+			if($type == 'pic'){
+				header("Location: /view_pic.php?postID=".$postID);
+				exit();
+			}else if($type == 'blog'){
+				header("Location: /view_post.php?postID=".$postID);
+				exit();
+			}
+		}
+
+		if(isset($_REQUEST['tagsub'])){
+			$_REQUEST['tagString'].=",";
+			$_REQUEST['tagString'].=$_REQUEST['tags'];
+			// var_dump($_REQUEST, $tagarray);
+			echo"tag added!";
+		}
+
+		if(isset($_REQUEST['deleteTag'])){
+			// var_dump($_REQUEST);
+			DeleteTagFromPost(GetTag($_REQUEST['deleteTag'])['tagID'], $postID);
+		}
+
+		if(isset($_REQUEST['tagString'])){
+			$tagarray = explode(',', $_REQUEST['tagString']);
+		}else{
+			// $tagString = implode(',', GetAllTags($postID)['Array']);
+			foreach(GetAllTags($postID) as $key=>$val){
+				$tagString.=",";
+				$tagString.=$val['tagname'];
+			}
+			$tagarray = explode(',', $tagString);
+		}
+
+		if(isset($_REQUEST['apply'])){
+			if($type == 'pic'){
+				$errors+=ValidateTextField('Photographer', $errors);
+				$errors+=ValidateTextField('Title', $errors);
+				$errors+=ValidateTextField('Link', $errors);
+			}else if($type == 'blog'){
+				$errors+=ValidateTextField('Title', $errors);
+				$errors+=ValidateTextField('Body', $errors);
+			}
+			if(sizeof($errors) == 0){
+				var_dump($_REQUEST);
+				// var_dump($attributes, $_REQUEST);
+				// die();
+				// foreach($attributes as $key=>$attribute){
+				// 	// var_dump($edits, $_REQUEST);
+				// 	if($type == 'pic'){
+				// 		if($attribute == 'Author'){		//must add exceptions
+				// 			$edits['author'] = $_REQUEST['Photographer'];
+				// 		}else if($attribute == 'Flavortext'){
+				// 			$edits['flavor'] = $_REQUEST['Flavortext'];
+				// 		}else{
+				// 			$edits[$attribute] = $_REQUEST[$attribute];
+				// 		}
+				// 	}else{
+				// 		$edits[$attribute] = $_REQUEST[$attribute];
+				// 	}
+				// }
+
+				foreach($attributes as $key=>$attribute){
+			   	//var_dump($edits, $_REQUEST);
+			   	if($type == 'pic'){
+			   		if($attribute == 'Author'){		//must add exceptions
+			   			$_REQUEST['author'] = $_REQUEST['Photographer'];
+			   		}else if($attribute == 'Flavortext'){
+			   			$_REQUEST['flavor'] = $_REQUEST['Flavortext'];
+			   		}else{
+			   			$_REQUEST[$attribute] = $_REQUEST[$attribute];
+			   		}
+			   	}
+			   }
+				EditPost($postID, $_REQUEST, $tagarray);
+				if($type == 'pic'){
+					header("Location: /view_pic.php?postID=".$postID);
+					exit();
+				}else if($type == 'blog'){
+					header("Location: /view_post.php?postID=".$postID);
+					exit();
+				}
+			}
+		}
+
+		if(isset($_REQUEST['tagID'])){
+			DeleteTagFromPost($_REQUEST['tagID'], $postID);
+			header("Location: /edit_post.php?postID=".$postID);
+		}
+
+		//Form
+		if($type == 'pic'){
+			Heading("Edit Your Post", "Edit Your Picture Post");
+		}else if ($type == 'blog'){
+			Heading("Edit Your Post", "Edit Your Blog Post");
+		}
+				foreach($errors as $key=>$val){
+					echo"<span style='color: red'>$key is a required field!<br></span>";
+				}
+		echo"		<form method='post' name='form'>";
+					if($type== 'pic'){
+						ShowTextField(true, 'Photographer', $post['author']);
+						ShowTextField(true, 'Title', $post['title']);
+						ShowTextField(false, 'Body', $post['body']);
+						ShowTextField(true, 'Link', $post['link']);
+						ShowTextField(false, 'Flavortext', $post['flavor']);
+						echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
+
+
+					}else if($type=='blog'){
+						ShowTextField(false, 'Author', $post['author']);
+						ShowTextField(true, 'Title', $post['title']);
+						ShowTextField(true, 'Body', $post['body']);
+					}
+					ShowTagField();
+					if(isset($_REQUEST['tagString'])){
+						// var_dump($_REQUEST['tagString']);
+						ShowHiddenField('tagString', @$_REQUEST['tagString']);
+					}else{
+						// var_dump($tagString);
+						ShowHiddenField('tagString', @$tagString);
+					}
+					echo"<p>Tags: </p>";
+					// global $j;
+					// $j=0;
+					foreach($tagarray as $tag){
+						if(($tag!='')&&($tag!= NULL)){
+							echo"<span id='tag'>#".$tag;
+							echo" <a class='close' href='/edit_post.php?postID=".$postID."&tagID=".GetTag($tag)['tagID']."'>x</a></span>";
+							// echo"<button onclick=closeTag() class='close' name='$j'>x</button></span>\t";
+						}
+						// $j++;
+					}
+		echo"			<br><br><input type='submit' name='apply' value='Apply Edits'><br>
+						<br><input type='submit' name='cancel' value='Cancel'>
+					</form>
+				</body>
+			</html>
+		";
+
 	}
 
 	//USER FUNCTIONS
@@ -145,21 +345,6 @@
 				foreach($errors as $name=>$error){
 					DisplayError($name, $error);
 				}
-				// if(isset($errors['username'])){
-				// 	echo"<div class='required'>Please enter your username.</div>";
-				// }
-				// if(isset($errors['password'])){
-				// 	echo"<div class='required'>Please enter your password.</div>";
-				// }
-				// if(isset($errors['confirm'])){
-				// 	echo"<div class='required'>Please confirm your password.</div>";
-				// }
-				// if(isset($errors['password'])){
-				// 	echo"<div class='required'>Please enter your email.</div>";
-				// }
-				// if(isset($errors['match'])){
-				// 	echo"<div class='required'>Your passwords do not match.</div>";
-				// }
 			}
 		}
 
@@ -256,8 +441,8 @@
 		";
 	}
 
-	function ValidDelete($postID){
-		// echo"validdelete called";
+	function HasDeletePermission($postID){
+		// echo"HasDeletePermission called";
 		// var_dump($_SESSION);
 		if(isset($_SESSION['userID'])){
 			if($_SESSION['userID'] == GetPostCreator($postID)){
@@ -267,14 +452,29 @@
 				return true;
 			}
 		}
-		if(GetPostCreator($postID) == NULL){
-			return true;
+		// if(GetPostCreator($postID) == NULL){
+		// 	return true;
+		// }
+		return false;
+	}
+
+	function HasEditPermission($postID){
+		if(isset($_SESSION['userID'])){
+			if($_SESSION['userID'] == GetPostCreator($postID)){
+				return true;
+			}
+			if(GetUser($_SESSION['username'])['userType'] == 'admin'){
+				return true;
+			}
 		}
+		// if(GetPostCreator($postID) == NULL){
+		// 	return true;
+		// }
 		return false;
 	}
 
 	//TAG DATABASE FUNCTIONS
-	function DeleteTagFromPost($tagID, $postID){		//CHECK DBQUERY SYNTAX
+	function DeleteTagFromPost($tagID, $postID){
 		$result = dbQuery("
 			DELETE FROM posttags
 			WHERE tagID = :tagID
@@ -309,10 +509,12 @@
 				NewTag($tagarray[$i]);
 			}
 			$tagID=GetTag($tagarray[$i])['tagID'];
+			// if(!TagDuplicate($postID, $tagID)){
 			dbQuery("
-				INSERT INTO posttags (postID, tagID)
+				REPLACE INTO posttags (postID, tagID)
 				VALUES(:postID, :tagID)
 			", array('postID'=>$postID, 'tagID'=>$tagID))->fetchAll();
+			// }
 		}
 		 // die();
 	}
@@ -326,7 +528,7 @@
 		return $result;
 	}
 
-	function GetAllTags($postID){		//CONFIRM SYNTAX OF DBQUERY
+	function GetAllTags($postID){
 		$result=dbQuery("
 			SELECT tagname
 			FROM tags
@@ -351,7 +553,7 @@
 		return true;
 	}
 
-	function TagExists($name){		//NOT GETTING CALLED
+	function TagExists($name){
 		echo"tagexists called";
 		$result = dbQuery("
 			SELECT *
@@ -364,16 +566,29 @@
 		return true;
 	}
 
-	function ShowTags($postID){
-		// echo"ShowTags called";
-		if(HasTags($postID)){
-			$tagarray = GetAllTags($postID);
-			// var_dump($tagarray);
-			echo"Tags: ";
-			for($i=0;$i<sizeof($tagarray);$i++){
-				echo"#".$tagarray[$i]['tagname']."\t";
-			}
+	function ShowTags($tagarray){
+
+		echo"<p>Tags: </p>";
+		foreach($tagarray as $tag){
+			$tagID = GetTag($tag['tagname'])['tagID'];
+			echo"<span id='tag'><a class='tag' href='/view_tag.php?tagID=".$tagID."'>#".$tag['tagname']."</a></span>
+			\t";
 		}
+		echo"<br><br><form><input onclick='textColor()' type='button' value='Change Text Color'></form>
+
+			<script src='/include/jsFunctions.js'> </script>
+		";
+	}
+
+	function GetPostsWithTag($tagID){		//CONFIRM SYNTAX OF DBQUERY
+		$result = dbQuery("
+			SELECT *
+			FROM posts
+			INNER JOIN posttags
+			ON posts.postID = posttags.postID
+			WHERE posttags.tagID = :tagID
+		", array('tagID'=>$tagID))->fetchAll();
+		return $result;
 	}
 
 	//USER DATABASE FUNCTIONS
@@ -429,14 +644,15 @@
 		if(!$_SESSION['userID']){
 			$_SESSION['userID'] = NULL;
 		}
-		var_dump($author, $title, $body, $_SESSION);
-		$result = dbQuery("
+		// var_dump($author, $title, $body, $_SESSION);
+		dbQuery("
 			INSERT INTO posts (author, title, body, postType, userID)
 			VALUES(:author, :title, :body, 'blog', '$_SESSION[userID]')
-		", array('author'=>$author, 'title'=>$title, 'body'=>$body))->fetch();
+		", array('author'=>$author, 'title'=>addslashes($title), 'body'=>addslashes($body)))->fetch();
+		$result = GetLastPostID();
 		// var_dump($result);
 		// die("Blog Post should be inserted by now");
-		AttachTags(GetTotalPosts(), $tagarray);
+		AttachTags($result['postID'], $tagarray);
 	}
 
 	function GetAllBlogPosts(){
@@ -462,10 +678,14 @@
 				<div>
 					<p>".$post['body']."</p><br>
 				</div>";
-		ShowTags($post['postID']);
-		if(ValidDelete($post['postID'])){
-			// echo"valid delete";
-			ShowDelete($post['postID']);
+		if(HasTags($post['postID'])){
+			ShowTags(GetAllTags($post['postID']));
+		}
+		if(HasEditPermission($post['postID'])){
+			ShowEditButton($post['postID']);
+		}
+		if(HasDeletePermission($post['postID'])){
+			ShowDeleteButton($post['postID']);
 		}
 		echo		"
 			</body>
@@ -473,20 +693,17 @@
 		";
 	}
 
-
-
 	//PIC DATABASE FUNCTIONS
 	function InsertPic($photographer, $title, $body, $link, $flavor, $tagarray){
 		if(!$_SESSION['userID']){
 			$_SESSION['userID'] = NULL;
 		}
-		$result = dbQuery("
+		dbQuery("
 		INSERT INTO posts (author, title, body, postType, link, flavor, userID)
 		VALUES(:photographer, :title, :body, 'pic',:link, :flavor, '$_SESSION[userID]')
 		", array('photographer'=>$photographer, 'title'=>$title, 'body'=>$body, 'link'=>$link, 'flavor'=>$flavor))->fetch();
-
-		// var_dump($tagarray);
-		AttachTags(GetTotalPosts(), $tagarray);
+		$result = GetLastPostID();
+		AttachTags($result['postID'], $tagarray);
 	}
 
 	function GetAllPics(){
@@ -516,9 +733,15 @@
 					echo"<p>".$pic['body']."</p><br>";
 				}
 		echo"<br>";
-		ShowTags($pic['postID']);
-		if(ValidDelete($pic['postID'])){
-			ShowDelete($pic['postID']);
+		if(HasTags($pic['postID'])){
+			ShowTags(GetAllTags($pic['postID']));
+		}
+		if(HasEditPermission($pic['postID'])){
+			ShowEditButton($pic['postID']);
+			// var_dump($pic['postID']);
+		}
+		if(HasDeletePermission($pic['postID'])){
+			ShowDeleteButton($pic['postID']);
 		}
 		echo"
 			</body>
@@ -526,9 +749,13 @@
 		";
 	}
 
-
-
 	//GENERIC POST DATABASE FUNCTIONS
+	function GetLastPostID(){
+		$result = dbQuery("
+			SELECT LAST_INSERT_ID() as postID;
+		")->fetch();
+		return $result;
+	}
 
 	function GetPost($postID){
 		$result = dbQuery("
@@ -562,8 +789,63 @@
 			AS recentpost
 			FROM posts
 		")->fetch();
-		var_dump($result);
+		// var_dump($result);
 		return $result['recentpost'];
+	}
+
+	function EditPost($postID, $changes, $tagarray){
+		// var_dump($changes);
+		// die();
+		$type = GetPost($postID)['postType'];
+		// echo"EditPost Called!";
+		// var_dump($changes);
+		// foreach($changes as $column=>$change){
+			// var_dump($column, $change);
+			// var_dump($changes, $type);
+			// die();
+		if($type == 'pic'){
+			dbQuery("
+				UPDATE posts
+				SET author = :phot, title = :title, body = :body, link = :link, flavor = :flavor
+				WHERE postID = :postID
+			", array('phot'=>$changes['Author'],
+					'title'=>$changes['Title'],
+					'body'=>$changes['Body'],
+					'link'=>$changes['Link'],
+					'flavor'=>$changes['Flavor'],
+					'postID'=>$postID))->fetchAll();
+		}else if ($type == 'blog'){
+
+			dbQuery("
+				UPDATE posts
+				SET author = :author, title = :title, body = :body
+				WHERE postID = :postID
+			", array('author'=>$changes['Author'],
+					'title'=>$changes['Title'],
+					'body'=>$changes['Body'],
+					'postID'=>$postID))->fetchAll();
+		}
+		// }
+		AttachTags($postID, $tagarray);
+	}
+
+	function GetPostAttributeArray($postID){
+		$result = array();
+		$type = GetPost($postID)['postType'];
+		$placeholder = dbQuery("
+			SELECT *
+			FROM typeattributes
+			INNER JOIN posttypes ON typeattributes.typeID = posttypes.typeID
+			WHERE posttypes.postType = :type
+		", array('type'=>$type))->fetch();
+		foreach($placeholder as $key=>$val){
+			if($val != NULL){
+				if(($key != 'typeID')&&($key != 'postType'))
+				$result[$key] = $placeholder[$key];
+			}
+		}
+		// var_dump($result);
+		return $result;
 	}
 
 	//REMOVED FUNCTIONS
@@ -599,4 +881,17 @@
 	// 		FROM posts
 	// 	")->fetch();
 	// 	return $result['count'];
+	// }
+
+	// function TagDuplicate($postID, $tagID){
+	// 	$result = dbQuery("
+	// 		SELECT *
+	// 		FROM posttags
+	// 		WHERE postID = :postID
+	// 		AND tagID = :tagID
+	// 	", array('postID'=>$postID, 'tagID'=>$tagID))->fetchAll();
+	// 	if(!$result){
+	// 		return false;
+	// 	}
+	// 	return true;
 	// }

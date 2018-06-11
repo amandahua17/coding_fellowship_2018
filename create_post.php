@@ -40,21 +40,11 @@
 		}
 	}
 
-	echo"
-		<html>
-			<head>
-				<title>Create Your Own Post</title>
-				<link rel='stylesheet' href='/style/mainstyle.css'>
-			</head>
-			<body>";
-	if(IsLoggedIn()){
-		PersonalHeading();
-	}else{
+	Heading("Create Post", "");
 
-		echo"note: if you are not logged in, anyone can edit or delete your post. To make it so that only you or an administrator can edit or delete your post, log in or create an account.<br>";
-		ShowLoginPage();
-		ShowCreateAccountPage();
-	}
+
+	// ShowLoginPage();
+	// ShowCreateAccountPage();
 	echo"
 				<h1>Create Your Own";
 	if($type == 'pic'){
@@ -72,26 +62,31 @@
 	echo"
 				<br><form method='post' name='form'>";
 				if($type== 'pic'){
-					ShowTextField(true, 'Photographer');
-					ShowTextField(true, 'Title');
-					ShowTextField(false, 'Body');
-					ShowTextField(true, 'Link');
-					ShowTextField(false, 'Flavortext');
+					ShowTextField(true, 'Photographer', '');
+					ShowTextField(true, 'Title', '');
+					ShowTextField(false, 'Body', '');
+					ShowTextField(true, 'Link', '');
+					ShowTextField(false, 'Flavortext', '');
 					echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
 
 
 				}else if($type=='blog'){
-					ShowTextField(false, 'Author');
-					ShowTextField(true, 'Title');
-					ShowTextField(true, 'Body');
+					ShowTextField(false, 'Author', '');
+					ShowTextField(true, 'Title', '');
+					ShowTextField(true, 'Body', '');
 				}
 				ShowTagField();
 				ShowHiddenField('tagString', @$_REQUEST['tagString']);
+				echo"Tags: ";
+				foreach($tagarray as $tag){
+					if(($tag!=NULL)&&($tag!=''))
+					echo" #".$tag;
+				}
 				// var_dump(@$_REQUEST['tagString']);
 
 
 	echo"
-					<input type='submit' name = 'button'>
+					<br><input type='submit' name = 'button'>
 				</form>";
 
 	Home();

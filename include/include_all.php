@@ -8,4 +8,4 @@
 
 	session_start();
 
-	include('/include/databaseFunctions_blog_pic.php');
+	include('/include/phpFunctions.php');

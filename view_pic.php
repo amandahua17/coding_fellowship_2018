@@ -1,9 +1,7 @@
 <?php
 	include('include/include_all.php');
-	
-	if(IsLoggedIn()){
-		PersonalHeading();
-	}
+
+	Heading("View Pic", "");
 	if($_REQUEST['postID'] == '0'){
 		foreach(GetAllPics() as $pic){
 			DisplayPic($pic);
