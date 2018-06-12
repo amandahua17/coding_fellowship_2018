@@ -155,15 +155,16 @@ function DisplayPost($post){
 			<link rel='stylesheet' href='/style/mainstyle.css'>
 		</head>
 		<body>
-			<h1>".$post['title']."</h1>
-			<div class='postcontainerB'>
-				<h2>by ".$post['author']."</h2>
+		<div class='postcontainerB'>
+			<h2>".$post['title']."</h2>
+				<h3>by ".$post['author']."</h3>
 				<h3>date: ".$post['date']."</h3>
 				<div>
 					<p>".$post['body']."</p><br>
 				</div>";
 	if(HasTags($post['postID'])){
 		DisplayTags(GetAllTags($post['postID']));
+		echo"<br><br>";
 	}
 	if(HasEditPermission($post['postID'])){
 		ShowEditButton($post['postID']);
@@ -190,8 +191,8 @@ function DisplayPic($pic){
 			<link rel='stylesheet' href='/style/mainstyle.css'>
 		</head>
 		<body>
-			<h1>".$pic['title']."</h1>
-				<h2>by ".$pic['author']."</h2>
+			<h2>".$pic['title']."</h2>
+				<h3>by ".$pic['author']."</h3>
 				<h3>date: ".$pic['date']."</h3>
 				<div>
 					<img src='".$pic['link']."'alt='".$pic['flavor']."'>
@@ -202,6 +203,7 @@ function DisplayPic($pic){
 	echo"<br>";
 	if(HasTags($pic['postID'])){
 		DisplayTags(GetAllTags($pic['postID']));
+		echo"<br><br>";
 	}
 	if(HasEditPermission($pic['postID'])){
 		ShowEditButton($pic['postID']);
@@ -215,7 +217,7 @@ function DisplayPic($pic){
 	}
 	DisplayComments($pic['postID']);
 	echo"
-			
+
 		</body>
 	</html>
 	";

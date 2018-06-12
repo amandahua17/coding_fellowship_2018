@@ -69,16 +69,14 @@ function DisplayComments($postID){
 	}
 	foreach($comments as $comment){
 		// var_dump(GetUserWithID($comment['userID'])['username']);
-		echo"\t<span style='padding:4px;
-		background-color:#eee;'class='comment'>
+		echo"\t<span style='padding:4px;'class='comment'>
 		<a style='padding:2px;
 		font-weight:bold;
-		background-color:#ddd;
-		color:#fff;'class='userbadge' href='/view_user.php?userID=".$comment['userID']."'>".GetUserWithID($comment['userID'])['username']."</a>
+		'class='userbadge' href='/view_user.php?userID=".$comment['userID']."'>".GetUserWithID($comment['userID'])['username']."</a>
 		".$comment['body'];
 		if(ValidEditComment($comment['commentID'])){
-			echo"\t<a style='color: grey' href='".$url."&DCommentID=".$comment['commentID']."'>delete comment</a>";
-			echo"\t<a style='color: grey' href='".$url."&ECommentID=".$comment['commentID']."'>edit comment</a>";
+			echo"\t<a href='".$url."&DCommentID=".$comment['commentID']."'>delete comment</a>";
+			echo"\t<a href='".$url."&ECommentID=".$comment['commentID']."'>edit comment</a>";
 			//PLACE EDIT COMMENT HERE
 		}
 		echo"</span><br><br>";

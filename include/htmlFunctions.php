@@ -11,8 +11,9 @@
 		echo"
 			<html>
 				<header>
-					<title>$title</title>
-					<link rel='stylesheet' href='/style/mainstyle.php'>
+					<title>$title</title>";
+		ThemeBasedEcho();
+		echo"
 					<script src='/js/jquery.js'></script>
 				</header>
 				<body>";
@@ -130,6 +131,17 @@
 	function ShowJS(){				//function credits to RobertPitt on stackoverflow
 		echo("<script type=\"text/javascript\" src=\"/js/jquery.js\"></script>");
 		echo("<script type=\"text/javascript\" src=\"/js/jsFunctions.js\"></script>");
+	}
+
+	function ThemeBasedEcho(){
+		// echo"themebasedecho called";
+		echo"<link rel='stylesheet' href='/style/theme";
+		if(isset($_SESSION['themeID'])){
+			echo $_SESSION['themeID'];
+		}else{
+			echo"1";
+		}
+		echo".css'>";
 	}
 
 	//FORM FUNCTIONS
@@ -393,5 +405,35 @@
 				<input type='submit' name='delete' value='Deactivate Account'>
 			</form>
 		</div>
+		";
+	}
+
+	function ChangeThemeForm(){
+
+		if(isset($_REQUEST['change'])){
+			ChangeTheme($_REQUEST['theme']);
+			header("Location: /account/user_settings.php?option=6");
+		}
+
+		$val = 1;
+		if(isset($_SESSION['themeID'])){
+			$val = $_SESSION['themeID'];
+		}
+		echo"
+			<form method='post'>
+				<select name='theme'>";
+		echo"<option value='1'";
+		if($val == 1){
+			echo" selected";
+		}
+		echo">Ocean Waves</option>
+					<option value='2'";
+		if($val == 2){
+			echo" selected";
+		}
+		echo">Sunset Colors</option>
+			</select><br><br>	
+				<input type='submit' value='Change Theme' name='change'>
+			</form>
 		";
 	}

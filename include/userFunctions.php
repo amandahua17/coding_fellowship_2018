@@ -21,6 +21,7 @@ function PersonalHeading(){
 		";
 	}
 	ShowSettings();
+	echo"<br>";
 	Logout();
 }
 
@@ -147,6 +148,15 @@ function ReactivateUser($userID){
 	", array('userID'=>$userID))->fetch();
 }
 
+function ChangeTheme($themeID){
+	$result=dbQuery("
+		UPDATE users
+		SET themeID = :themeID
+		WHERE userID = :userID
+	", array('themeID'=>$themeID, 'userID'=>$_SESSION['userID']))->fetch();
+	$_SESSION['themeID'] = $themeID;
+}
+
 //USER DATABASE FUNCTIONS
 function AddNewUser($username, $password, $email){
 	$result = dbQuery("
@@ -205,16 +215,4 @@ function GetPostsWithUser($userID){
 		WHERE userID = :userID
 	", array('userID'=>$userID))->fetchAll();
 	return $result;
-}
-
-function GetUserTheme($userID){
-	$result = dbQuery("
-		SELECT theme
-		FROM users
-		WHERE userID = :userID
-	", array('userID'=>$userID))->fetch();
-}
-
-function ChangeUserTheme($userID){
-
 }

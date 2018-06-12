@@ -39,6 +39,11 @@
 		echo" selected";
 	}
 	echo">Deactivate Account</option>
+				<option value='7'";
+	if($val == 5){
+		echo" selected";
+	}
+	echo">Change Theme</option>
 			</select><br><br>
 			<input type='submit' value='Go' name='sub'>
 		</form>
@@ -70,6 +75,10 @@
 				break;
 			case 6:
 				echo"<p>Settings Updated!</p>";
+				break;
+			case 7:
+				echo"<p></p>";
+				ChangeThemeForm();
 				break;
 			default:
 				echo"<p class='required'>Please select an option.</p>";
