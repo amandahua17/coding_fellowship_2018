@@ -13,3 +13,4 @@
 	include('/include/postFunctions.php');
 	include('/include/tagFunctions.php');
 	include('/include/userFunctions.php');
+	include('/include/cssFunctions.php');

@@ -26,6 +26,7 @@
 	}
 
 	echo"
+	<div class='usercontainer'>
 		<form method='post'>
 	";
 	ShowTextField(true, 'username');
@@ -33,6 +34,7 @@
 	ShowPasswordField('confirm', 'confirm password');
 	ShowTextField(true, 'email');
 	echo"<input type='submit' name = 'create' value='Create Account'>
-		</form>";
+		</form>
+	</div>";
 
 	Footer();

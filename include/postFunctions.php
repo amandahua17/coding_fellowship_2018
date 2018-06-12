@@ -156,11 +156,12 @@ function DisplayPost($post){
 		</head>
 		<body>
 			<h1>".$post['title']."</h1>
-			<h2>by ".$post['author']."</h2>
-			<h3>date: ".$post['date']."</h3>
-			<div>
-				<p>".$post['body']."</p><br>
-			</div>";
+			<div class='postcontainerB'>
+				<h2>by ".$post['author']."</h2>
+				<h3>date: ".$post['date']."</h3>
+				<div>
+					<p>".$post['body']."</p><br>
+				</div>";
 	if(HasTags($post['postID'])){
 		DisplayTags(GetAllTags($post['postID']));
 	}
@@ -175,6 +176,7 @@ function DisplayPost($post){
 	}
 	DisplayComments($post['postID']);
 	echo		"
+			</div>
 		</body>
 	</html>
 	";
@@ -189,14 +191,14 @@ function DisplayPic($pic){
 		</head>
 		<body>
 			<h1>".$pic['title']."</h1>
-			<h2>by ".$pic['author']."</h2>
-			<h3>date: ".$pic['date']."</h3>
-			<div>
-				<img src='".$pic['link']."'alt='".$pic['flavor']."'>
-			</div>";
-			if($pic['body']!=null){
-				echo"<p>".$pic['body']."</p><br>";
-			}
+				<h2>by ".$pic['author']."</h2>
+				<h3>date: ".$pic['date']."</h3>
+				<div>
+					<img src='".$pic['link']."'alt='".$pic['flavor']."'>
+				</div>";
+	if($pic['body']!=null){
+		echo"<p>".$pic['body']."</p><br>";
+	}
 	echo"<br>";
 	if(HasTags($pic['postID'])){
 		DisplayTags(GetAllTags($pic['postID']));
@@ -213,6 +215,7 @@ function DisplayPic($pic){
 	}
 	DisplayComments($pic['postID']);
 	echo"
+			
 		</body>
 	</html>
 	";

@@ -4,13 +4,15 @@
 		//"Show" shows a field, button, or link (home, form, etc.)
 		//"Display" shows an element (tag, comment, etc.)
 
+	//Contains HTML and form functions
+
 	//RANDOM FUNCTIONS
 	function Heading($title, $h1){
 		echo"
 			<html>
 				<header>
 					<title>$title</title>
-					<link rel='stylesheet' href='/style/mainstyle.css'>
+					<link rel='stylesheet' href='/style/mainstyle.php'>
 					<script src='/js/jquery.js'></script>
 				</header>
 				<body>";
@@ -31,12 +33,24 @@
 
 	}
 
-	function Footer(){
+	function Footer($val=''){
+		ShowJS();
 		echo"
 			</body>
 		</html>
 		";
-		ShowHomeLink();
+		if($val==''){
+			ShowHomeLink();
+		}
+	}
+
+	function TypeBasedEcho($type, $stringarray){
+		foreach($stringarray as $key=>$string){
+			if($type == $key){
+				echo $string;
+				return;
+			}
+		}
 	}
 
 	//SHOW FUNCTIONS
@@ -99,6 +113,23 @@
 
 	function ShowSettings(){
 		echo"<a href='/account/user_settings.php'>User Settings</a><br>";
+	}
+
+	function ShowFlavorInfo(){
+		echo"
+			<div class='flavorInfo' id='flavorInfo'>
+				<p>In a game, sometimes items, actions, or mechanics etc. will have flavor text, which are just extra snippets of text that
+				<br>aren't related to actual gameplay rules or affect anything-- they're just there for effect. It's pretty much just fluff,
+				<br>but it can add realism, enhance the tone, include extra background information or narrative, or be funny. (Urban Dictionary)
+				<br>In the context of this site, flavor text is essentially the same as as in a game, it's a small snippet that will pop up if
+				<br>the picture doesn't load.</p>
+			</div>
+		";
+	}
+
+	function ShowJS(){				//function credits to RobertPitt on stackoverflow
+		echo("<script type=\"text/javascript\" src=\"/js/jquery.js\"></script>");
+		echo("<script type=\"text/javascript\" src=\"/js/jsFunctions.js\"></script>");
 	}
 
 	//FORM FUNCTIONS
@@ -251,6 +282,7 @@
 		}
 
 		echo"
+		<div class='usercontainer'>
 			<form method='post'>
 				";
 				ShowTextField(true, 'NewUsername', '');
@@ -258,6 +290,7 @@
 		echo"
 				<input type='submit' name='change'>
 			</form>
+		</div>
 		";
 	}
 
@@ -284,6 +317,7 @@
 		}
 
 		echo"
+		<div class='usercontainer'>
 			<form method='post'>
 				";
 				ShowPasswordField('newpswd', 'New Password');
@@ -292,6 +326,7 @@
 		echo"
 				<input type='submit' name='change'>
 			</form>
+		</div>
 		";
 	}
 
@@ -319,6 +354,7 @@
 		}
 
 		echo"
+		<div class='usercontainer'>
 			<form method='post'>
 				";
 				ShowTextField(true, 'Nickname', '');
@@ -326,6 +362,7 @@
 		echo"
 				<input type='submit' name='change'>
 			</form>
+		</div>
 		";
 	}
 
@@ -349,10 +386,12 @@
 		}
 
 		echo"
+		<div class='usercontainer'>
 			<form method='post'>";
 				ShowPasswordField('password', 'Password');
 		echo"
 				<input type='submit' name='delete' value='Deactivate Account'>
 			</form>
+		</div>
 		";
 	}

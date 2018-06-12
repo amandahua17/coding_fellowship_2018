@@ -42,7 +42,6 @@
 			</select><br><br>
 			<input type='submit' value='Go' name='sub'>
 		</form>
-
 	";
 
 	if(isset($_REQUEST['option'])){

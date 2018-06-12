@@ -206,3 +206,15 @@ function GetPostsWithUser($userID){
 	", array('userID'=>$userID))->fetchAll();
 	return $result;
 }
+
+function GetUserTheme($userID){
+	$result = dbQuery("
+		SELECT theme
+		FROM users
+		WHERE userID = :userID
+	", array('userID'=>$userID))->fetch();
+}
+
+function ChangeUserTheme($userID){
+
+}

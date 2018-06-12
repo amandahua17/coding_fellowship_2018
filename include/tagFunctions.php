@@ -114,8 +114,4 @@ function DisplayTags($tagarray){
 		echo"<span id='tag'><a class='tag' href='/view_tag.php?tagID=".$tagID."'>#".$tag['tagname']."</a></span>
 		\t";
 	}
-	echo"<br><br><form><input onclick='textColor()' type='button' value='Change Text Color'></form>
-
-		<script src='/include/jsFunctions.js'> </script>
-	";
 }

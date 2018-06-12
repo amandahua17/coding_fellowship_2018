@@ -5,6 +5,11 @@
 
 	$post = GetPost($postID);
 	$type = $post['postType'];
+	$h1array['pic'] = ' Picture ';
+	$h1array['blog'] = ' Blog ';
+	$containerarray['pic'] = "<div class= 'postcontainerP'>";
+	$containerarray['blog'] = "<div class= 'postcontainerB'>";
+
 	$attributes = GetPostAttributeArray($postID);
 	$errors = array();
 	$edits = array();
@@ -100,11 +105,9 @@
 	}
 
 	//Form
-	if($type == 'pic'){
-		Heading("Edit Your Post", "Edit Your Picture Post");
-	}else if ($type == 'blog'){
-		Heading("Edit Your Post", "Edit Your Blog Post");
-	}
+	Heading("Edit Post", "Edit Post");
+	TypeBasedEcho($type, $h1array);
+	TypeBasedEcho($type, $containerarray);
 			foreach($errors as $key=>$val){
 				echo"<span style='color: red'>$key is a required field!<br></span>";
 			}
@@ -115,7 +118,8 @@
 					ShowTextField(false, 'Body', $post['body']);
 					ShowTextField(true, 'Link', $post['link']);
 					ShowTextField(false, 'Flavortext', $post['flavor']);
-					echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
+					echo"<p>What is flavor text?  <span class='flavorInfoQM' onmouseover='FlavorFadeIn()' onmouseout='FlavorFadeOut()'>?</span></p>";
+					ShowFlavorInfo();
 
 
 				}else if($type=='blog'){
@@ -146,6 +150,4 @@
 					<br><input type='submit' name='cancel' value='Cancel'>
 				</form>
 	";
-
-
 	Footer();

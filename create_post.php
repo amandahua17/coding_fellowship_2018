@@ -2,6 +2,10 @@
 	include('include/include_all.php');
 
 	$type=$_REQUEST['type'];
+	$h1array['pic'] = ' Picture ';
+	$h1array['blog'] = ' Blog ';
+	$containerarray['pic'] = "<div class= 'postcontainerP'>";
+	$containerarray['blog'] = "<div class= 'postcontainerB'>";
 
 	$errors = array();
 
@@ -48,14 +52,11 @@
 	// ShowCreateAccountPage();
 	echo"
 				<h1>Create Your Own";
-	if($type == 'pic'){
-		echo" Picture ";
-	}else if ($type == 'blog'){
-		echo" Blog ";
-	}
+
+	TypeBasedEcho($type, $h1array);
 	echo							"Post</h1>";
 
-
+	TypeBasedEcho($type, $containerarray);
 	foreach($errors as $key=>$val){
 		echo"<span style='color: red'>$key is a required field!<br></span>";
 	}
@@ -68,7 +69,8 @@
 					ShowTextField(false, 'Body', '');
 					ShowTextField(true, 'Link', '');
 					ShowTextField(false, 'Flavortext', '');
-					echo"<a href='flavorInfo.php'>What is flavor text?</a><br>";
+					echo"<p>What is flavor text?  <span class='flavorInfoQM' onmouseover='FlavorFadeIn()' onmouseout='FlavorFadeOut()'>?</span></p>";
+					ShowFlavorInfo();
 
 
 				}else if($type=='blog'){
@@ -88,6 +90,7 @@
 
 	echo"
 					<br><input type='submit' name = 'button'>
-				</form>";
+				</form>
+			</div>";
 
 	Footer();

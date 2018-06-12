@@ -25,6 +25,7 @@
 			// die();
 			$_SESSION['username'] = $_REQUEST['username'];
 			$_SESSION['userID'] = GetUser($_REQUEST['username'])['userID'];
+			$_SESSION['themeID'] = GetUser($_REQUEST['username'])['themeID'];
 			if(HasNickname($_SESSION['userID'])){
 				$_SESSION['nickname'] = GetUser($_REQUEST['username'])['nickname'];
 			}
@@ -49,10 +50,13 @@
 			// }
 		}
 	}
-	echo"<form method='post'>";
+	echo"
+	<div class='usercontainer'>
+		<form method='post'>";
 	ShowTextField(true, 'username');
 	ShowPasswordField('password', 'password');
 	echo"<input type='submit' name = 'login' value='Login'>
-		</form>";
+		</form>
+	</div>";
 
 	Footer();

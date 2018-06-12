@@ -7,7 +7,8 @@
 	// ResetAuto(GetTotalPosts());
 	Heading("Welcome!", "Welcome to my blog!");
 	echo"
-				<div>
+			<div class='maincontainer'>
+				<div class='container1'>
 					<h2>Blog Posts</h2>
 					<div>";
 				// var_dump($postCount, $picCount);
@@ -24,7 +25,12 @@
 					</div>
 				<a href='view_post.php?postID=0'>See All</a>
 				</div>
-				<div>
+				<div class='container2'>
+					<h2>Write your own entry</h2>
+					<a href='create_post.php?type=pic'>Picture</a><br><br>
+					<a href='create_post.php?type=blog'>Blog Post</a>
+				</div>
+				<div class='container3'>
 					<h2>Pictures</h2>
 					<div>";
 				$picposts = GetAllPics();
@@ -39,10 +45,7 @@
 					</div>
 				<a href='view_pic.php?postID=0'>See All</a>
 				</div>
-				<div>
-					<h2>Write your own entry</h2>
-					<a href='create_post.php?type=pic'>Picture</a><br><br>
-					<a href='create_post.php?type=blog'>Blog Post</a>
-				</div>
+
+			</div>
 	";
-	Footer();
+	Footer('no');
