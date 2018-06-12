@@ -9,7 +9,8 @@
 	--buttonColor: #D3DAE5;				/*pale blue*/
 	--flavorColor: #D4AB81;				/*dark orange*/
 	--userColor:  #CBCBD3;				/*grey*/
-	--fontColor: grey;
+	--fontColor: black;
+	--bgdColor: white;
 	--tagColor: #F6F5F2;
 	--picURL: url('/pictures/f7f6f5-anastasia-taioglou-347661-unsplash.jpg');
 	--picpos: center 60%
@@ -24,8 +25,9 @@ img{
 body{
 	text-align:center;
 	/* background-image: url('/pictures/fcfbfa-ugur-akdemir-283278-unsplash.jpg'); */
-	background-color: #fff;
+	background-color: var(--bgdColor);
 	font-family:monospace;
+	color: var(--fontColor);
 }
 
 a:link{
@@ -133,15 +135,15 @@ h2{
 	border-width: 1px;
 	border-color: #DA7;
 	background: var(--tagColor);
-	color: var(--textColor);
+	color: var(--fontColor);
 }
 
 a.tag{
-	color: var(--textColor);
+	color: var(--fontColor);
 }
 
 .close{
-	color: var(--textColor);
+	color: var(--fontColor);
 	text-decoration:none;
 }
 
@@ -169,7 +171,8 @@ a.tag{
 
 .flavorInfoQM{
 	padding:2px;
-	background-color:#ddd;
+	background-color: var(--flavorColor);
+	border-radius: 5px;
 	color: var(--fontColor);
 }
 
@@ -178,4 +181,5 @@ input[type='submit'], button{
 	background-color: var(--buttonColor);
 	border-radius: 8px;
 	border-color: var(--buttonBorderColor);
+	color: var(--fontColor);
 }

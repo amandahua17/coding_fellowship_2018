@@ -1,16 +1,19 @@
+/*NIGHT SKY THEME*/
+
 :root{
-	--picColor: ;
-	--blogColor: ;
-	--commentColor: ;
+	--picColor: #010A20;
+	--blogColor: #010A20;
+	--commentColor: black;
 	--fourthColor: ;
-	--buttonBorderColor: ;
-	--buttonColor: ;
-	--flavorColor: ;
-	--userColor: ;
-	--fontColor: ;
-	--tagColor: ;
-	--picURL: url('/');
-	--picpos: center %;
+	--buttonBorderColor: #021A3B;
+	--buttonColor: #022D59;
+	--flavorColor: #4F5579;
+	--userColor: #021A3B;
+	--fontColor: white;
+	--bgdColor: black;
+	--tagColor: black;
+	--picURL: url('/pictures/010e27-steven-coffey-349167-unsplash.jpg');
+	--picpos: center 7%;
 }
 
 img{
@@ -21,9 +24,10 @@ img{
 
 body{
 	text-align:center;
-	/* background-image: url('/pictures/fcfbfa-ugur-akdemir-283278-unsplash.jpg'); */
-	background-color: #fff;
+	background-color: var(--bgdColor);
 	font-family:monospace;
+
+	color: var(--fontColor);
 }
 
 a:link{
@@ -131,15 +135,15 @@ h2{
 	border-width: 1px;
 	border-color: #DA7;
 	background: var(--tagColor);
-	color: var(--textColor);
+	color: var(--fontColor);
 }
 
 a.tag{
-	color: var(--textColor);
+	color: var(--fontColor);
 }
 
 .close{
-	color: var(--textColor);
+	color: var(--fontColor);
 	text-decoration:none;
 }
 
@@ -167,7 +171,8 @@ a.tag{
 
 .flavorInfoQM{
 	padding:2px;
-	background-color:#ddd;
+	background-color: var(--flavorColor);
+	border-radius: 5px;
 	color: var(--fontColor);
 }
 
@@ -176,4 +181,5 @@ input[type='submit'], button{
 	background-color: var(--buttonColor);
 	border-radius: 8px;
 	border-color: var(--buttonBorderColor);
+	color: var(--fontColor);
 }

@@ -432,7 +432,32 @@
 			echo" selected";
 		}
 		echo">Sunset Colors</option>
-			</select><br><br>	
+					<option value='3'";
+		if($val == 3){
+		echo" selected";
+		}
+		echo">Night Sky</option>
+					<option value='4'";
+		if($val == 4){
+		echo" selected";
+		}
+		echo">Desert Sky</option>
+					<option value='5'";
+		if($val == 5){
+		echo" selected";
+		}
+		echo">Red</option>
+					<option value='6'";
+		if($val == 6){
+		echo" selected";
+		}
+		echo">Blue</option>
+					<option value='7'";
+		if($val == 7){
+		echo" selected";
+		}
+		echo">Green</option>
+			</select><br><br>
 				<input type='submit' value='Change Theme' name='change'>
 			</form>
 		";

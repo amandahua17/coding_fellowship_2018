@@ -1,19 +1,19 @@
-/*SUNSET COLORS THEME*/
+/*DESERT SKY THEME*/
 
 :root{
-	--picColor: #EA7C77;				/**/
-	--blogColor: #AC788B;				/**/
-	--commentColor: #FDB67D;				/**/
-	--fourthColor: ;				/**/
-	--buttonBorderColor: #707889;		/**/
-	--buttonColor: #D3DAE5;				/**/
-	--flavorColor: #D6B09D;				/**/
-	--userColor: #EBD09C;				/**/
-	--fontColor: #000;
-	--bgdColor: white;
-	--tagColor: #FDB57D;
-	--picURL: url('/pictures/e6c599-delfi-de-la-rua-294635-unsplash.jpg');
-	--picpos: center 20%;
+	--picColor: #798F93;
+	--blogColor: #798F93;
+	--commentColor: #4E6E7E;
+	--fourthColor: ;
+	--buttonBorderColor: #798F93;
+	--buttonColor: #BACFD6;
+	--flavorColor: #365466;
+	--userColor: #ADB0A2;
+	--fontColor: white;
+	--bgdColor: #ddcc97;
+	--tagColor: #4E6E7E;
+	--picURL: url('/pictures/a5b0ac-jordan-steranka-645051-unsplash.jpg');
+	--picpos: center 40%;
 }
 
 img{

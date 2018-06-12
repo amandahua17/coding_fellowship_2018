@@ -1,19 +1,18 @@
-/*SUNSET COLORS THEME*/
+/*RED THEME*/
 
 :root{
-	--picColor: #EA7C77;				/**/
-	--blogColor: #AC788B;				/**/
-	--commentColor: #FDB67D;				/**/
-	--fourthColor: ;				/**/
-	--buttonBorderColor: #707889;		/**/
-	--buttonColor: #D3DAE5;				/**/
-	--flavorColor: #D6B09D;				/**/
-	--userColor: #EBD09C;				/**/
-	--fontColor: #000;
+	--picColor: #ff4949;
+	--blogColor: #ff4949;
+	--commentColor: #d13838;
+	--fourthColor: ;
+	--buttonBorderColor: #ce1212;
+	--buttonColor: #de2222;
+	--flavorColor: #d13838;
+	--userColor: #f43a3a;
+	--fontColor: #ddd;
 	--bgdColor: white;
-	--tagColor: #FDB57D;
-	--picURL: url('/pictures/e6c599-delfi-de-la-rua-294635-unsplash.jpg');
-	--picpos: center 20%;
+	--tagColor: #d13838;
+	--h1Color: #ff0000;
 }
 
 img{
@@ -48,8 +47,7 @@ a:active{
 
 h1{
 	padding: 2em;
-	background-image: var(--picURL);
-	background-color: #eee;
+	background-color:  var(--h1Color);
 	background-repeat: no-repeat;
     background-attachment:local;
 	/* background-size: contain; */
