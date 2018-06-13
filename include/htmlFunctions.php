@@ -457,6 +457,11 @@
 		echo" selected";
 		}
 		echo">Green</option>
+					<option value='8'";
+		if($val == 8){
+		echo" selected";
+		}
+		echo">Crayons</option>
 			</select><br><br>
 				<input type='submit' value='Change Theme' name='change'>
 			</form>

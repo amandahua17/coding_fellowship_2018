@@ -52,6 +52,9 @@ function HasDeletePermission($postID){
 		if(GetUser($_SESSION['username'])['userType'] == 'admin'){
 			return true;
 		}
+		if(GetPostCreator == 0){
+			return true;
+		}
 	}
 	// if(GetPostCreator($postID) == NULL){
 	// 	return true;
@@ -62,6 +65,9 @@ function HasDeletePermission($postID){
 function HasEditPermission($postID){
 	if(isset($_SESSION['userID'])){
 		if($_SESSION['userID'] == GetPostCreator($postID)){
+			return true;
+		}
+		if(GetPostCreator == 0){
 			return true;
 		}
 	}

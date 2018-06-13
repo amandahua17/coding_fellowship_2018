@@ -11,6 +11,7 @@
 	if($_REQUEST['userID']=='0'){
 		foreach(GetAllBlogPosts() as $post){
 				DisplayPost($post);
+				echo"<br>";
 		}
 	}else{
 		//InsertBlogPost('Amanda Hua', '2018-05-25', 'TestPost', 'Hi this is a test post');
@@ -25,6 +26,7 @@
 			}else if($post['postType'] == 'blog'){
 				DisplayPost($post);
 			}
+			echo"<br>";
 		}
 		// ShowDelete($post['postID']);
 	}

@@ -6,7 +6,7 @@ function InsertBlogPost($author, $title, $body, $tagarray){
 	if(!$author){
 		$author = 'Anonymous';
 	}
-	if(!$_SESSION['userID']){
+	if(!isset($_SESSION['userID'])){
 		$_SESSION['userID'] = NULL;
 	}
 	// var_dump($author, $title, $body, $_SESSION);
@@ -31,8 +31,8 @@ function GetAllBlogPosts(){
 
 //PIC DATABASE FUNCTIONS
 function InsertPic($photographer, $title, $body, $link, $flavor, $tagarray){
-	if(!$_SESSION['userID']){
-		$_SESSION['userID'] = NULL;
+	if(!isset($_SESSION['userID'])){
+		$_SESSION['userID'] = 0;
 	}
 	dbQuery("
 	INSERT INTO posts (author, title, body, postType, link, flavor, userID)

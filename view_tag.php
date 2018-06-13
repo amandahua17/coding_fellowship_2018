@@ -6,6 +6,7 @@
 		foreach(GetAllBlogPosts() as $post){
 			if(HasTags($post)){
 				DisplayPost($post);
+				echo"<br>";
 			}
 		}
 	}else{
@@ -18,6 +19,7 @@
 			}else if($post['postType'] == 'blog'){
 				DisplayPost($post);
 			}
+			echo"<br>";
 		}
 		// ShowDelete($post['postID']);
 	}

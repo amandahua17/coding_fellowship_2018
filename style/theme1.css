@@ -10,7 +10,7 @@
 	--flavorColor: #D4AB81;				/*dark orange*/
 	--userColor:  #CBCBD3;				/*grey*/
 	--fontColor: black;
-	--bgdColor: white;
+	--bgdColor: #F6F5F2;
 	--tagColor: #F6F5F2;
 	--picURL: url('/pictures/f7f6f5-anastasia-taioglou-347661-unsplash.jpg');
 	--picpos: center 60%
@@ -133,7 +133,7 @@ h2{
 	padding: 2px;
 	border-style:solid;
 	border-width: 1px;
-	border-color: #DA7;
+	border-color: #D6D5D2;
 	background: var(--tagColor);
 	color: var(--fontColor);
 }

@@ -1,18 +1,19 @@
-/*GREEN THEME*/
+/*CRAYONS THEME*/
 
 :root{
-	--picColor: #75f968;
-	--blogColor: #75f968;
-	--commentColor: #2eaf21;
+	--picColor: #ff8989;
+	--blogColor: #ea85fc;
+	--commentColor: #b985fc;
 	--fourthColor: ;
-	--buttonBorderColor: #35c727;
-	--buttonColor: #25b717;
-	--flavorColor: #1ca30e;
-	--userColor: #0f0;
-	--fontColor: black;
-	--bgdColor: white;
-	--tagColor: #2eaf21;
-	--h1Color: #54ce48;
+	--buttonBorderColor: #e9dd71;
+	--buttonColor: #f9ed81;
+	--flavorColor: #ff96d8;
+	--userColor:  #9bff89;
+	--fontColor: ;
+	--bgdColor: ;
+	--tagColor: #89aaff;
+	--h1Color: #89aaff;
+	/* linear-gradient(to bottom left, #ff8989, #9bff89, #89aaff); */
 }
 
 img{
@@ -47,12 +48,9 @@ a:active{
 
 h1{
 	padding: 2em;
-	background-image: var(--picURL);
-	background-color: var(--h1Color);
-	background-repeat: no-repeat;
-    background-attachment:local;
+	background: var(--h1Color);
+	/* background-color: #eee; */
 	/* background-size: contain; */
-    background-position: var(--picpos);
 }
 
 h2{
