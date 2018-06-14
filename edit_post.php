@@ -135,7 +135,7 @@
 					// var_dump($tagString);
 					ShowHiddenField('tagString', @$tagString);
 				}
-				echo"<p>Tags: </p>";
+				echo"<div id='tagSection'>Tags: ";
 				// global $j;
 				// $j=0;
 				foreach($tagarray as $tag){
@@ -146,7 +146,8 @@
 					}
 					// $j++;
 				}
-	echo"			<br><br><input type='submit' name='apply' value='Apply Edits'><br>
+	echo"			</div>
+					<br><br><input type='submit' name='apply' value='Apply Edits'><br>
 					<br><input type='submit' name='cancel' value='Cancel'>
 				</form>
 	";

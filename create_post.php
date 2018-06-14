@@ -12,12 +12,12 @@
 	// $tagarray=array();
 	// var_dump($_REQUEST);
 
-	if(isset($_REQUEST['tagsub'])){
-		$_REQUEST['tagString'].=",";
-		$_REQUEST['tagString'].=$_REQUEST['tags'];
-		// var_dump($_REQUEST, $tagarray);
-		echo"tag added!";
-	}
+	// if(isset($_REQUEST['tagsub'])){
+	// 	$_REQUEST['tagString'].=",";
+	// 	$_REQUEST['tagString'].=$_REQUEST['tags'];
+	// 	// var_dump($_REQUEST, $tagarray);
+	// 	echo"tag added!";
+	// }
 
 	if(isset($_REQUEST['tagString'])){
 		$tagarray = explode(',', $_REQUEST['tagString']);
@@ -80,7 +80,7 @@
 				}
 				ShowTagField();
 				ShowHiddenField('tagString', @$_REQUEST['tagString']);
-				echo"Tags: ";
+				echo"<div id='tagSection'>Tags: ";
 				foreach($tagarray as $tag){
 					if(($tag!=NULL)&&($tag!=''))
 					echo" #".$tag;
@@ -88,7 +88,7 @@
 				// var_dump(@$_REQUEST['tagString']);
 
 
-	echo"
+	echo"		</div>
 					<br><input type='submit' name = 'button'>
 				</form>
 			</div>";

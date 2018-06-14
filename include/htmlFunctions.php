@@ -229,8 +229,8 @@
 
 	function ShowTagField(){
 		echo"
-			<p >tags:</p><input type='text' name='tags'>
-			<input type='submit' name='tagsub' value='add tag'>
+			<p >tags:</p><input id='tagadd' type='text' name='tags'>
+			<input type='button' value='Add Tag' name='tagsub' onclick='addDisplayTag()'>
 			<br><br>
 		";
 	}
