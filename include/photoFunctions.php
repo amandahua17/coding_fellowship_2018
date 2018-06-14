@@ -1,0 +1,2 @@
+<?php
+	//PHOTO FUNCTIONS

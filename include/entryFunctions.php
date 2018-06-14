@@ -1,0 +1,2 @@
+<?php
+	//ENTRY FUNCTIONS
