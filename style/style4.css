@@ -6,7 +6,8 @@
 @import url('https://fonts.googleapis.com/css?family=Indie+Flower');
 
 :root{
-
+	--buttonColor: #7fb0ff;
+	--buttonBorder: #5f90df;
 }
 
 *{
@@ -21,7 +22,7 @@ body{
 
 h1{
 	text-align: center;
-	padding: 1em;
+	/* padding: 1em; */
 	/* background-color: #eee; */
 	font-size: 80px;
 }
@@ -37,8 +38,8 @@ button.login{
 	text-align: center;
 	font-size: 40px;
 	/* margin-left: 40%; */
-	background-color: #fffda3;
-	border-color: #dfdd83;
+	/* background-color: var(--buttonColor);
+	border-color: var(--buttonBorder); */
 }
 
 button.createaccount{
@@ -47,8 +48,13 @@ button.createaccount{
 	text-align: center;
 	font-size: 30px;
 	/* margin-left: 46%; */
-	background-color: #fffda3;
-	border-color: #dfdd83;
+	/* background-color: var(--buttonColor);
+	border-color: var(--buttonBorder); */
+}
+
+button, input[type='submit']{
+	background-color: var(--buttonColor);
+	border-color: var(--buttonBorder);
 }
 
 .booktitle{
@@ -65,4 +71,12 @@ button.createaccount{
 
 .error{
 	color: red;
+}
+
+.banner{
+	font-size: 60px !important;
+}
+
+a.banner{
+	font-size: 60px !important;
 }

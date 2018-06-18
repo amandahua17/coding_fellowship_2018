@@ -5,10 +5,36 @@
 			<html>
 				<head>
 					<title>$title</title>
-					<link rel='stylesheet' href='/style/style.css'>
+					<link rel='stylesheet' href='/style/style".getTheme().".css'>
 				</head>
 				<body>
 					<h1>YOLO \t\t JAR</h1>
+		";
+		// var_dump(getTheme());
+	}
+
+	function timelineHead($title){
+		echo"
+			<html>
+				<head>
+					<title>$title</title>
+					<link rel='stylesheet' href='/style/timelineStyle.css'>
+				</head>
+				<body>
+					<h1>YOLO \t\t JAR</h1>
+		";
+	}
+
+	function userTimelineLink(){
+		echo"
+			<a href='/sitefiles/user_timeline.php?userid=".$_SESSION['userid']."'>Your Timeline</a>
+		";
+	}
+	function logoutButton(){
+		echo"
+			<form method='post'>
+				<input type='submit' class='logout' name='logout' value='logout'>
+			</form>
 		";
 	}
 
