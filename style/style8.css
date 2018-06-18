@@ -8,16 +8,17 @@
 :root{
 	--buttonColor: #d0cad1;
 	--buttonBorder: white;
+	--bgdColor: black;
+	--textColor: white;
 }
 
 *{
 	font-family: Amatic SC;
 	font-size: 30px;
-	color: white;
-	background-color: #333;
+	color: var(--textColor);
+	background-color: var(--bgdColor);
 	box-sizing: border-box;
 }
-
 body{
 	text-align: center;
 }
@@ -81,6 +82,12 @@ a.banner{
 	font-size: 60px !important;
 }
 
+.home{
+	position: absolute;
+	bottom:0;
+}
+
+/*TIMELINE*/
 /* The actual timeline (the vertical ruler) */
 .timeline {
     position: relative;

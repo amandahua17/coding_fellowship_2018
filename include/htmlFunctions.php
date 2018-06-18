@@ -52,6 +52,7 @@
 
 	function foot(){
 		echo"
+					<br><a class='home' href='/index.php'>Home</a>
 					<script src='/js/jquery.js'></script>
 					<script src='/js/jsfunctions.js'></script>
 				</body>
