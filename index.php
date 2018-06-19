@@ -92,5 +92,11 @@
 			</div>
 		";
 	}
+	echo"
+		<button class='jarButton' onclick='toggleYoloDescription()'>What is a Yolo Jar?</button>
+		<div class='yoloDescription'>
+			DESCRIPTION
+		</div>
+	";
 
 	foot();

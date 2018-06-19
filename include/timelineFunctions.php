@@ -8,7 +8,7 @@
 			<div class='container right'>
 				<div class='content'>
 				  <h2>TODAY: ".date('Y-m-d')."</h2>
-				  <a href='view_day.php?date='>Add an entry</a>
+				  <a href='view_day.php?date=".date('Y-m-d')."'>Add an entry</a>
 				</div>
 			</div>
 		";
@@ -20,6 +20,7 @@
 						<div class='content'>
 						  <h2>$date</h2>
 						  <p>".getDateNumEntries($dates, $date)." Entries</p>
+						  <a href='view_day.php?date=$date'>Add an entry</a>
 						</div>
 					</div>
 				";
@@ -29,6 +30,7 @@
 						<div class='content'>
 						  <h2>$date</h2>
 						  <p>".getDateNumEntries($dates, $date)."</p>
+						  <a href='view_day.php?date=$date'>Add an entry</a>
 						</div>
 					</div>
 				";

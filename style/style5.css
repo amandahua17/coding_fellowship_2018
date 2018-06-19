@@ -77,6 +77,10 @@ button, input[type='submit']{
 	display: none;
 }
 
+#addentryform{
+	display: none;
+}
+
 .error{
 	color: red;
 }
@@ -94,8 +98,19 @@ a{
 	color: inherit;
 }
 
+.jarButton{
+	position:fixed;
+	bottom:0;
+}
+
+.yoloDescription{
+	background-color: white;
+	color: black;
+	display: hidden;
+}
+
 .home{
-	position: absolute;
+	position: fixed;
 	bottom:0;
 }
 

@@ -11,7 +11,7 @@
 	include('/include/songFunctions.php');
 	include('/include/photoFunctions.php');
 	include('/include/bookFunctions.php');
-	include('/include/eventFunctions.php');
+	include('/include/occasionFunctions.php');
 	include('/include/formFunctions.php');
 	include('/include/timelineFunctions.php');
 	include('/include/dateFunctions.php');
