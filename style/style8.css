@@ -10,6 +10,7 @@
 	--buttonBorder: white;
 	--bgdColor: black;
 	--textColor: white;
+	--divTextColor: black;
 }
 
 *{
@@ -19,6 +20,7 @@
 	background-color: var(--bgdColor);
 	box-sizing: border-box;
 }
+
 body{
 	text-align: center;
 }
@@ -26,6 +28,11 @@ body{
 h1{
 	text-align: center;
 	font-size: 80px;
+}
+
+h2{
+	background-color: inherit;
+	color: inherit;
 }
 
 input[type='submit']{
@@ -80,6 +87,11 @@ button, input[type='submit']{
 
 a.banner{
 	font-size: 60px !important;
+}
+
+a{
+	background-color: inherit;
+	color: inherit;
 }
 
 .home{
@@ -178,6 +190,7 @@ a.banner{
     background-color: white;
     position: relative;
     border-radius: 6px;
+	color: var(--divTextColor) !important;
 }
 
 /* Media queries - Responsive timeline on screens less than 600px wide */

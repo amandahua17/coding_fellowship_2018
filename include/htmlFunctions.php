@@ -50,10 +50,20 @@
 		";
 	}
 
-	function foot(){
+	function addEntryButton(){
 		echo"
+			<button class='addEntryButton' onclick='showAddEntryForm()'>add entry</button>
+		";
+	}
+
+	function foot(){
+		// echo"FOOT";
+		if($_SERVER['PHP_SELF']!= '/index.php'){
+			echo"
 					<br><a class='home' href='/index.php'>Home</a>
-					<script src='/js/jquery.js'></script>
+			";
+		}
+		echo 		"<script src='/js/jquery.js'></script>
 					<script src='/js/jsfunctions.js'></script>
 				</body>
 			</html>

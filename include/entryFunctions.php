@@ -12,5 +12,9 @@
 	}
 
 	function displayDayEntries(){
-		
+
+	}
+
+	function addEntry(){
+
 	}

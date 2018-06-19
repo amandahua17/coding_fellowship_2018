@@ -10,6 +10,7 @@
 	--buttonBorder: #dfdd83;
 	--bgdColor: white;
 	--textColor: black;
+	--divTextColor: black;
 }
 
 *{
@@ -27,6 +28,11 @@ body{
 h1{
 	text-align: center;
 	font-size: 80px;
+}
+
+h2{
+	background-color: inherit;
+	color: inherit;
 }
 
 input[type='submit']{
@@ -71,6 +77,10 @@ button, input[type='submit']{
 	display: none;
 }
 
+#addEntryForm{
+	display: none;
+}
+
 .error{
 	color: red;
 }
@@ -81,6 +91,11 @@ button, input[type='submit']{
 
 a.banner{
 	font-size: 60px !important;
+}
+
+a{
+	background-color: inherit;
+	color: inherit;
 }
 
 .home{
@@ -101,7 +116,7 @@ a.banner{
     content: '';
     position: absolute;
     width: 6px;
-    background-color: white;
+    background-color: var(--buttonColor);
     top: 0;
     bottom: 0;
     left: 50%;
@@ -124,7 +139,7 @@ a.banner{
     height: 25px;
     right: -17px;
     background-color: white;
-    border: 4px solid #FF9F55;
+    border: 4px solid #777;
     top: 15px;
     border-radius: 50%;
     z-index: 1;
@@ -149,9 +164,9 @@ a.banner{
     width: 0;
     z-index: 1;
     right: 30px;
-    border: medium solid white;
+    border: medium solid var(--buttonColor);
     border-width: 10px 0 10px 10px;
-    border-color: transparent transparent transparent white;
+    border-color: transparent transparent transparent var(--buttonColor);
 }
 
 /* Add arrows to the right container (pointing left) */
@@ -163,9 +178,9 @@ a.banner{
     width: 0;
     z-index: 1;
     left: 30px;
-    border: medium solid white;
+    border: medium solid var(--buttonColor);
     border-width: 10px 10px 10px 0;
-    border-color: transparent white transparent transparent;
+    border-color: transparent var(--buttonColor) transparent transparent;
 }
 
 /* Fix the circle for containers on the right side */
@@ -176,7 +191,7 @@ a.banner{
 /* The actual content */
 .content {
     padding: 20px 30px;
-    background-color: white;
+    background-color: var(--buttonColor);
     position: relative;
     border-radius: 6px;
 }
@@ -198,9 +213,9 @@ a.banner{
   /* Make sure that all arrows are pointing leftwards */
   .container::before {
     left: 60px;
-    border: medium solid white;
+    border: medium solid var(--buttonColor)
     border-width: 10px 10px 10px 0;
-    border-color: transparent white transparent transparent;
+    border-color: transparent black transparent transparent;
   }
 
   /* Make sure all circles are at the same spot */
