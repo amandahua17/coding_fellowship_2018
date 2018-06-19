@@ -42,11 +42,7 @@ function removeElement(stringid){
 function showYoloDescription(){
 	console.log('toggleCalled');
 	var desc = document.getElementsByClassName('yoloDescription')[0];
-	// if($(desc).is(':visible')){
 		$(desc).fadeIn();
-	// }else{
-		// $(desc).fadeOut();
-	// }
 }
 
 function hideYoloDescription(){
@@ -54,64 +50,71 @@ function hideYoloDescription(){
 	$(desc).fadeOut();
 }
 
+function elementExists(id){
+	var element = document.getElementById(id);
+	if (typeof(element) != 'undefined' && element != null){
+		return true;
+	}
+	return false;
+}
+
 //ENTRY FUNCTIONS
 function addOption(){
 	console.log('addOption Called!');
 	var option = document.getElementById('newOption');
 	console.log(option.value);
-	var element =  document.getElementById('warning');
 	switch(option.value){
 		case 'song':
-			if (typeof(element) != 'undefined' && element != null){
+			if (elementExists('warning')){
 				removeElement('warning');
 			}
 			addSongField();
 			break;
 
 		case 'photo':
-				if (typeof(element) != 'undefined' && element != null){
+				if (elementExists('warning')){
 				removeElement('warning');
 			}
 			addPhotoField();
 			break;
 
 		case 'person':
-			if (typeof(element) != 'undefined' && element != null){
+			if (elementExists('warning')){
 				removeElement('warning');
 			}
 			addPersonField();
 			break;
 
 		case 'occasion':
-			if (typeof(element) != 'undefined' && element != null){
+			if (elementExists('warning')){
 				removeElement('warning');
 			}
 			addOccasionField();
 			break;
 
 		case 'meal':
-			if (typeof(element) != 'undefined' && element != null){
+			if (elementExists('warning')){
 				removeElement('warning');
 			}
 			addMealField();
 			break;
 
 		case 'book':
-			if (typeof(element) != 'undefined' && element != null){
+			if (elementExists('warning')){
 				removeElement('warning');
 			}
 			addBookField();
 			break;
 
 		case 'project':
-			if (typeof(element) != 'undefined' && element != null){
+			if (elementExists('warning')){
 				removeElement('warning');
 			}
 			addProjectField();
 			break;
 
 		default:
-			if (typeof(element) == 'undefined' || element == null){
+			if (!elementExists('warning')){
 				var warning = document.createElement('p');
 	  			warning.innerHTML='Please Select A Field!';
 	  			warning.style.color='red';
@@ -127,6 +130,7 @@ function addSongField(){
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
 	song.id='song';
+	song.class='song';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
@@ -165,6 +169,7 @@ function addPhotoField(){
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
 	photo.id='photo';
+	photo.class='photo';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
@@ -201,6 +206,7 @@ function addPersonField(){
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
 	person.id='person';
+	person.class='person';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
@@ -237,6 +243,7 @@ function addOccasionField(){
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
 	occasion.id='occasion';
+	occasion.class='occasion';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
@@ -267,6 +274,7 @@ function addMealField(){
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
 	meal.id='meal';
+	meal.class='meal';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
@@ -302,6 +310,7 @@ function addBookField(){
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
 	book.id='book';
+	book.class='book';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
@@ -338,6 +347,7 @@ function addProjectField(){
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
 	project.id='project';
+	project.class='project';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
@@ -373,4 +383,44 @@ function addProjectField(){
 	//put project node into form
 	var form = document.getElementById('addentryform');
 	form.appendChild(project);
+}
+
+function getNumMeals(){
+	return getElementsByClassName('meal').length;
+}
+
+function getNumBooks(){
+	return getElementsByClassName('book').length;
+}
+
+function getNumSongs(){
+	return getElementsByClassName('song').length;
+}
+
+function getNumPeople(){
+	return getElementsByClassName('person').length;
+}
+
+function getNumPhotos(){
+	return getElementsByClassName('photo').length;
+}
+
+function getNumProjects(){
+	return getElementsByClassName('project').length;
+}
+
+function getNumOccasions(){
+	return getElementsByClassName('').length;
+}
+
+function validateEntryForm(date){
+	$.ajax("/sitefiles/view_day.php?date=".date, {
+		songs: getNumSongs(),
+		photos: getNumPhotos(),
+		people: getNumPeople(),
+		occasions: getNumOccasions(),
+		meals: getNumMeals(),
+		books: getNumBooks(),
+		projects: getNumProjects()
+	});
 }

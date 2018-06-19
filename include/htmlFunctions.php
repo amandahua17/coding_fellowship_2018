@@ -52,7 +52,7 @@
 
 	function addEntryButton(){
 		echo"
-			<button class='addEntryButton' onclick='showAddEntryForm()'>add entry</button>
+			<button class='addEntryButton' onclick='showAddEntryForm()'>new entry</button>
 		";
 	}
 

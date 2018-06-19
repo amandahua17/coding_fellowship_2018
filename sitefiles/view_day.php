@@ -1,6 +1,56 @@
 <?php
 	include('/include/include_all.php');
 
+	$errors = array();
+	if(isset($_REQUEST['addEntrySub'])){		//if want to add entry
+		//SONG
+		$songcount = $_REQUEST['songs'];
+		for($i=0; $i<$songcount; $i++){
+			validateSong($i);
+		}
+		//PHOTO
+		$photocount = $_REQUEST['photos'];
+		for($i=0; $i<$photocount; $i++){
+			validatePhoto($i);
+		}
+
+		//PERSON
+		$personcount = $_REQUEST['people'];
+		for($i=0; $i<$personcount; $i++){
+			validatePerson($i);
+		}
+
+		//OCCASION
+		$occasioncount = $_REQUEST['occasions'];
+		for($i=0; $i<$occasioncount; $i++){
+			validateOccasion($i);
+
+		}
+
+		//MEAL
+		$mealcount = $_REQUEST['meals'];
+		for($i=0; $i<$mealcount; $i++){
+			validateMeal($i);
+
+		}
+
+		//BOOK
+		$bookcount = $_REQUEST['books'];
+		for($i=0; $i<$bookcount; $i++){
+			validateBook($i);
+
+		}
+
+		//PROJECT
+		$projectcount = $_REQUEST['projects'];
+		for($i=0; $i<$projectcount; $i++){
+			validateProject($i);
+
+		}
+
+		//VALIDATION
+	}
+
 	head('View Day');
 
 	addEntryButton();
@@ -23,7 +73,7 @@
 					<option value='project'>project</option>
 				</select>
 				<button type='button' onclick='addOption()'>add field</button><br><br>
-				<input type='submit' name='addEntrySub' value='Add Entry' id='placeOptionsBeforeThis'>
+				<input type='button' onclick='validateEntryForm' name='addEntrySub' value='Add Entry' id='placeOptionsBeforeThis'>
 			</form>
 		</div>
 	";
