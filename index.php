@@ -51,6 +51,16 @@
 		<div id='intro'>
 			<p>inspired by Tim Bono's<br><div class='booktitle'>When Likes Aren't Enough</div></p>
 	";
+
+	echo"
+		<p class='jarButton' onmouseover='showYoloDescription()' onmouseout='hideYoloDescription()'>What is a Yolo Jar?</p>
+		<div class='yoloDescription'>
+			In Tim Bono's book, he tells the story of a student of his who invented a \"Yolo Jar\". The Yolo Jar is a gratitude journal,
+			in which she \"writes a note about what she is grateful for each day\"(Bono). I began my own yolo jar soon after reading about
+			it, writing at least two good things that happen every day in a document. The purpose of this website is to allow its users
+			to write their own customizable entries and keep all entries organized and easily searchable.
+		</div><br>
+	";
 	// var_dump(isLoggedIn());
 	if(isLoggedIn()){
 		// var_dump(getCurrentUsername());
@@ -92,11 +102,5 @@
 			</div>
 		";
 	}
-	echo"
-		<button class='jarButton' onclick='toggleYoloDescription()'>What is a Yolo Jar?</button>
-		<div class='yoloDescription'>
-			DESCRIPTION
-		</div>
-	";
 
 	foot();

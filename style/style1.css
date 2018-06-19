@@ -99,15 +99,19 @@ a{
 }
 
 .jarButton{
-	position:fixed;
-	bottom:5%;
-	text-align: center;
+	/* position:fixed; */
+	/* bottom:5%; */
+	/* text-align: center; */
+	padding: 5px;
+	background-color: var(--buttonColor);
+	margin-left: 40%;
+	margin-right: 40%;
 }
 
 .yoloDescription{
 	background-color: white;
 	color: black;
-	display: hidden;
+	display: none;
 }
 
 .home{

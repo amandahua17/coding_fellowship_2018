@@ -39,13 +39,19 @@ function removeElement(stringid){
 	$(rem).remove();
 }
 
-function toggleYoloDescription(){
-	var desc = document.getElementByClassName('yoloDescription');
-	if(desc.style.display == 'hidden'){
+function showYoloDescription(){
+	console.log('toggleCalled');
+	var desc = document.getElementsByClassName('yoloDescription')[0];
+	// if($(desc).is(':visible')){
 		$(desc).fadeIn();
-	}else{
-		$(desc).fadeOut();
-	}
+	// }else{
+		// $(desc).fadeOut();
+	// }
+}
+
+function hideYoloDescription(){
+	var desc = document.getElementsByClassName('yoloDescription')[0];
+	$(desc).fadeOut();
 }
 
 //ENTRY FUNCTIONS
