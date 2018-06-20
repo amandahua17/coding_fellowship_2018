@@ -7,6 +7,7 @@
 			FROM entries
 			WHERE date = :date
 			AND userid = :userid
+			ORDER BY date DESC;
 		", array('date'=>$date, 'userid'=>$_SESSION['userid']))->fetchAll();
 		return $result;
 	}
@@ -15,63 +16,37 @@
 
 	}
 
-	function addEntry(){
+	function addEntry($songs, $photos, $people, $occasions, $meals, $books, $projects, $freewrite, $date, $entryid){
+		foreach($songs as $song){
+			addSong($song)
+		}
 
-	}
+		foreach($photos as $photo){
 
-	//VALIDATION FUNCTIONS
-	function validateSong($i){
-		$errors = array();
-		$errors+=validateTextField('songTitle');
-		$errors+=validateTextField('songArtist');
-		// $errors+=validateTextField('songLink');		//OPTIONAL
-		return $errors;
-	}
+		}
 
-	function validatePhoto($i){
-		$errors = array();
-		$errors+=validateTextField('photoPath');
-		$errors+=validateTextField('photographer');
-		// $errors+=validateTextField('photoTitle');	//OPTIONAL
-		return $errors;
-	}
+		foreach($people as $person){
 
-	function validatePerson($i){
-		$errors = array();
-		$errors+=validateTextField('personName');
-		// $errors+=validateTextField('personRelationship');	//OPTIONAL
-		$errors+=validateTextField('personDescription');
-		return $errors;
-	}
+		}
 
-	function validateBook($i){
-		$errors = array();
-		$errors+=validateTextField('bookTitle');
-		$errors+=validateTextField('bookAuthor');
-		$errors+=validateTextField('bookNotes');
-		return $errors;
-	}
+		foreach($occasions as $occasion){
 
-	function validateMeal($i){
-		$errors = array();
-		$errors+=validateTextField('mealPlace');
-		$errors+=validateTextField('mealChef');
-		$errors+=validateTextField('mealDescription');
-		return $errors;
-	}
+		}
 
-	function validateOccasion($i){
-		$errors = array();
-		$errors+=validateTextField('occasionName');
-		$errors+=validateTextField('occasionDescription');
-		return $errors;
-	}
+		foreach($meals as $meal){
 
-	function validateProject($i){
-		$errors = array();
-		$errors+=validateTextField('projectTitle');
-		$errors+=validateTextField('projectProgress');
-		$errors+=validateTextField('projectPartners');
-		$errors+=validateTextField('projectNotes');
-		return $errors;
+		}
+
+		foreach($books as $book){
+
+		}
+
+		foreach($projects as $project){
+
+		}
+		dbQuery("
+			INSERT INTO entries
+			(userid)
+			VALUES(:userid)
+		", array('userid'=>$_SESSION['userid'], ''=>))->fetchAll();
 	}

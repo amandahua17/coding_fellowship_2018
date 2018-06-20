@@ -59,6 +59,24 @@ function elementExists(id){
 }
 
 //ENTRY FUNCTIONS
+var songc = 0;
+var photoc = 0;
+var personc = 0;
+var occasionc = 0;
+var mealc = 0;
+var bookc = 0;
+var projectc = 0;
+var date = new Date();
+if(Date() != date){
+	songc = 0;
+	photoc = 0;
+	personc = 0;
+	occasionc = 0;
+	mealc = 0;
+	bookc = 0;
+	projectc = 0;
+}
+
 function addOption(){
 	console.log('addOption Called!');
 	var option = document.getElementById('newOption');
@@ -68,49 +86,56 @@ function addOption(){
 			if (elementExists('warning')){
 				removeElement('warning');
 			}
-			addSongField();
+			addSongField(songc);
+			songc++;
 			break;
 
 		case 'photo':
 				if (elementExists('warning')){
 				removeElement('warning');
 			}
-			addPhotoField();
+			addPhotoField(photoc);
+			photoc++;
 			break;
 
 		case 'person':
 			if (elementExists('warning')){
 				removeElement('warning');
 			}
-			addPersonField();
+			addPersonField(personc);
+			personc++;
 			break;
 
 		case 'occasion':
 			if (elementExists('warning')){
 				removeElement('warning');
 			}
-			addOccasionField();
+			addOccasionField(occasionc);
+			occasionc++;
 			break;
 
 		case 'meal':
 			if (elementExists('warning')){
 				removeElement('warning');
 			}
-			addMealField();
+			addMealField(mealc);
+			mealc++;
 			break;
 
 		case 'book':
 			if (elementExists('warning')){
 				removeElement('warning');
 			}
-			addBookField();
+			addBookField(bookc);
+			bookc++;
 			break;
 
 		case 'project':
 			if (elementExists('warning')){
 				removeElement('warning');
 			}
-			addProjectField();
+			addProjectField(projectc);
+			projectc++;
 			break;
 
 		default:
@@ -123,27 +148,34 @@ function addOption(){
 	  			form.appendChild(warning);
 			}
 	}
+	console.log("song: ", songc,
+	 			"photo: ", photoc,
+				"person: ", personc,
+				"occasion: ", occasionc,
+				"meal: ", mealc,
+				"book: ", bookc,
+				"project: ", projectc);
 }
 
-function addSongField(){
+function addSongField(n){
 	var song = document.createElement('div');
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
-	song.id='song';
+	song.id='song'+n;
 	song.class='song';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
 	x.innerHTML='x';
-	x.setAttribute('onclick', "removeElement('song')");
+	x.setAttribute('onclick', "removeElement('song"+n+"'); songc--;");
 	//make child nodes
 	var title = document.createElement('input');
 	var artist = document.createElement('input');
 	var link = document.createElement('input');
 	link.class='optional';
-	title.name='songTitle';
-	artist.name='songArtist';
-	link.name='songLink';
+	title.name='songTitle'+n;
+	artist.name='songArtist'+n;
+	link.name='songLink'+n;
 
 	//put child nodes into song
 	$(song).append('Song:\t\t');
@@ -164,25 +196,25 @@ function addSongField(){
 
 }
 
-function addPhotoField(){
+function addPhotoField(n){
 	var photo = document.createElement('div');
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
-	photo.id='photo';
+	photo.id='photo'+n;
 	photo.class='photo';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
 	x.innerHTML='x\t';
-	x.setAttribute('onclick', "removeElement('photo')");
+	x.setAttribute('onclick', "removeElement('photo"+n+"'); photoc--;");
 	//make child nodes
 	var path = document.createElement('input');
 	var photographer = document.createElement('input');
 	var title = document.createElement('input');
 	title.class='optional';
-	path.name='photoPath';
-	photographer.name='photographer';
-	title.name='photoTitle';
+	path.name='photoPath'+n;
+	photographer.name='photographer'+n;
+	title.name='photoTitle'+n;
 	//put child nodes into photo
 	$(photo).append('Photo:\t\t');
 	photo.appendChild(x);
@@ -201,25 +233,25 @@ function addPhotoField(){
 	form.appendChild(photo);
 }
 
-function addPersonField(){
+function addPersonField(n){
 	var person = document.createElement('div');
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
-	person.id='person';
+	person.id='person'+n;
 	person.class='person';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
 	x.innerHTML='x\t';
-	x.setAttribute('onclick', "removeElement('person')");
+	x.setAttribute('onclick', "removeElement('person"+n+"'); personc--;");
 	//make child nodes
 	var name = document.createElement('input');
 	var relationship = document.createElement('input');
 	var description = document.createElement('input');
 	relationship.class='optional';
-	name.name='personName';
-	relationship.name='personRelationship';
-	description.name='personDescription';
+	name.name='personName'+n;
+	relationship.name='personRelationship'+n;
+	description.name='personDescription'+n;
 	//put child nodes into person
 	$(person).append('Person:\t\t');
 	person.appendChild(x);
@@ -238,22 +270,22 @@ function addPersonField(){
 	form.appendChild(person);
 }
 
-function addOccasionField(){
+function addOccasionField(n){
 	var occasion = document.createElement('div');
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
-	occasion.id='occasion';
+	occasion.id='occasion'+n;
 	occasion.class='occasion';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
 	x.innerHTML='x\t';
-	x.setAttribute('onclick', "removeElement('occasion')");
+	x.setAttribute('onclick', "removeElement('occasion"+n+"'); occasionc--;");
 	//make child nodes
 	var name = document.createElement('input');
 	var description = document.createElement('input');
-	name.name='occasionName';
-	description.name='occasionDescription';
+	name.name='occasionName'+n;
+	description.name='occasionDescription'+n;
 	//put child nodes into occasion
 	$(occasion).append('Event:\t\t');
 	occasion.appendChild(x);
@@ -269,24 +301,24 @@ function addOccasionField(){
 	form.appendChild(occasion);
 }
 
-function addMealField(){
+function addMealField(n){
 	var meal = document.createElement('div');
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
-	meal.id='meal';
+	meal.id='meal'+n;
 	meal.class='meal';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
 	x.innerHTML='x\t';
-	x.setAttribute('onclick', "removeElement('meal')");
+	x.setAttribute('onclick', "removeElement('meal"+n+"'); meal--");
 	//make child nodes
 	var place = document.createElement('input');
 	var chef = document.createElement('input');
 	var description = document.createElement('input');
-	place.name='mealPlace';
-	chef.name='mealChef';
-	description.name='mealDescription';
+	place.name='mealPlace'+n;
+	chef.name='mealChef'+n;
+	description.name='mealDescription'+n;
 	//put child nodes into meal
 	$(meal).append('Meal:\t\t');
 	meal.appendChild(x);
@@ -305,24 +337,24 @@ function addMealField(){
 	form.appendChild(meal);
 }
 
-function addBookField(){
+function addBookField(n){
 	var book = document.createElement('div');
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
-	book.id='book';
+	book.id='book'+n;
 	book.class='book';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
 	x.innerHTML='x\t';
-	x.setAttribute('onclick', "removeElement('book')");
+	x.setAttribute('onclick', "removeElement('book'); bookc--;");
 	//make child nodes
 	var title = document.createElement('input');
 	var author = document.createElement('input');
 	var notes = document.createElement('input');
-	title.name='bookTitle';
-	author.name='bookAuthor';
-	notes.name='bookNotes';
+	title.name='bookTitle'+n;
+	author.name='bookAuthor'+n;
+	notes.name='bookNotes'+n;
 	notes.class='optional';
 	//put child nodes into book
 	$(book).append('Book:\t\t');
@@ -342,26 +374,26 @@ function addBookField(){
 	form.appendChild(book);
 }
 
-function addProjectField(){
+function addProjectField(n){
 	var project = document.createElement('div');
 	var br = document.createElement('br');
 	var button = document.getElementById('placeOptionsBeforeThis');
-	project.id='project';
+	project.id='project'+n;
 	project.class='project';
 	//make exit
 	var x = document.createElement('button');
 	x.type='button';
 	x.innerHTML='x\t';
-	x.setAttribute('onclick', "removeElement('project')");
+	x.setAttribute('onclick', "removeElement('project"+n+"'); projectc--;");
 	//make child nodes
 	var title = document.createElement('input');
 	var progress = document.createElement('input');
 	var collaborators = document.createElement('input');
 	var notes = document.createElement('input');
-	title.name='projectTitle';
-	progress.name='projectProgress';
-	collaborators.name='projectPartners';
-	notes.name = 'projectNotes';
+	title.name='projectTitle'+n;
+	progress.name='projectProgress'+n;
+	collaborators.name='projectPartners'+n;
+	notes.name = 'projectNotes'+n;
 	notes.class='optional';
 	collaborators.class='optional';
 	//put child nodes into project
@@ -385,42 +417,43 @@ function addProjectField(){
 	form.appendChild(project);
 }
 
-function getNumMeals(){
-	return getElementsByClassName('meal').length;
-}
-
-function getNumBooks(){
-	return getElementsByClassName('book').length;
-}
-
-function getNumSongs(){
-	return getElementsByClassName('song').length;
-}
-
-function getNumPeople(){
-	return getElementsByClassName('person').length;
-}
-
-function getNumPhotos(){
-	return getElementsByClassName('photo').length;
-}
-
-function getNumProjects(){
-	return getElementsByClassName('project').length;
-}
-
-function getNumOccasions(){
-	return getElementsByClassName('').length;
-}
-
 function validateEntryForm(date){
 	$.ajax("/sitefiles/view_day.php?date=".date, {
-		songs: getNumSongs(),
-		photos: getNumPhotos(),
-		people: getNumPeople(),
-		occasions: getNumOccasions(),
-		meals: getNumMeals(),
-		books: getNumBooks(),
-		projects: getNumProjects()
+		songs: songc,
+		photos: photoc,
+		people: personc,
+		occasions: occasionc,
+		meals: mealc,
+		books: bookc,
+		projects: projectc
 	});
 }
+
+
+// function getNumMeals(){
+// 	return getElementsByClassName('meal').length;
+// }
+//
+// function getNumBooks(){
+// 	return getElementsByClassName('book').length;
+// }
+//
+// function getNumSongs(){
+// 	return getElementsByClassName('song').length;
+// }
+//
+// function getNumPeople(){
+// 	return getElementsByClassName('person').length;
+// }
+//
+// function getNumPhotos(){
+// 	return getElementsByClassName('photo').length;
+// }
+//
+// function getNumProjects(){
+// 	return getElementsByClassName('project').length;
+// }
+//
+// function getNumOccasions(){
+// 	return getElementsByClassName('').length;
+// }
