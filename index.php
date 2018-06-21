@@ -1,5 +1,5 @@
 <?php
-	include('/include/include_all.php');
+	include('include/include_all.php');
 	// var_dump($_SESSION);
 
 	if(isset($_REQUEST['logout'])){

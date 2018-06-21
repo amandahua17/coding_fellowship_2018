@@ -1,5 +1,5 @@
 <?php
-	include('/include/include_all.php');
+	include('include/include_all.php');
 
 	head('Your Timeline');
 

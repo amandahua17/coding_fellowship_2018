@@ -1,5 +1,5 @@
 <?php
-	include('/include/include_all.php');
+	include('include/include_all.php');
 
 	$errors = array();
 	if(isset($_REQUEST['addEntrySub'])){		//if want to add entry
@@ -51,7 +51,7 @@
 
 		//VALIDATION
 		if(sizeof($errors)==0){
-			
+
 		}else{
 			displayErrors($errors);
 		}
