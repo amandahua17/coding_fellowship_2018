@@ -8,10 +8,10 @@
 		return $errors;
 	}
 
-	function addMeal(){
-		dbQuery("
-			INSERT
-			INTO
-			VALUES()
-		", array(''=>, ''=>))->fetchAll();
-	}
+	// function addMeal(){
+	// 	dbQuery("
+	// 		INSERT
+	// 		INTO
+	// 		VALUES()
+	// 	", array(''=>, ''=>))->fetchAll();
+	// }

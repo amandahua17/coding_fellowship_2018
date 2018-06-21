@@ -8,10 +8,10 @@
 		return $errors;
 	}
 
-	function addBook(){
-		dbQuery("
-			INSERT
-			INTO
-			VALUES()
-		", array(''=>, ''=>))->fetchAll();
-	}
+	// function addBook(){
+	// 	dbQuery("
+	// 		INSERT
+	// 		INTO
+	// 		VALUES()
+	// 	", array(''=>, ''=>))->fetchAll();
+	// }

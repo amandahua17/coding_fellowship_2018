@@ -8,10 +8,10 @@
 		return $errors;
 	}
 
-	function addPhoto(){
-		dbQuery("
-			INSERT
-			INTO
-			VALUES()
-		", array(''=>, ''=>))->fetchAll();
-	}
+	// function addPhoto(){
+	// 	dbQuery("
+	// 		INSERT
+	// 		INTO
+	// 		VALUES()
+	// 	", array(''=>, ''=>))->fetchAll();
+	// }

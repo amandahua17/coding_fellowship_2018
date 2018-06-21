@@ -8,10 +8,10 @@
 		return $errors;
 	}
 
-	function addPerson(){
-		dbQuery("
-			INSERT
-			INTO
-			VALUES()
-		", array(''=>, ''=>))->fetchAll();
-	}
+	// function addPerson(){
+	// 	dbQuery("
+	// 		INSERT
+	// 		INTO
+	// 		VALUES()
+	// 	", array(''=>, ''=>))->fetchAll();
+	// }

@@ -17,3 +17,4 @@
 	include('/include/dateFunctions.php');
 
 	session_start();
+	// file_uploads = On;

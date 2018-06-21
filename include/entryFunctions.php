@@ -18,7 +18,7 @@
 
 	function addEntry($songs, $photos, $people, $occasions, $meals, $books, $projects, $freewrite, $date, $entryid){
 		foreach($songs as $song){
-			addSong($song)
+			addSong($song);
 		}
 
 		foreach($photos as $photo){
@@ -48,5 +48,5 @@
 			INSERT INTO entries
 			(userid)
 			VALUES(:userid)
-		", array('userid'=>$_SESSION['userid'], ''=>))->fetchAll();
+		", array('userid'=>$_SESSION['userid']))->fetchAll();
 	}

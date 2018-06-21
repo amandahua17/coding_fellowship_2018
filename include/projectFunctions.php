@@ -9,10 +9,10 @@
 		return $errors;
 	}
 
-	function addProject(){
-		dbQuery("
-			INSERT
-			INTO
-			VALUES()
-		", array(''=>, ''=>))->fetchAll();
-	}
+	// function addProject(){
+	// 	dbQuery("
+	// 		INSERT
+	// 		INTO
+	// 		VALUES()
+	// 	", array(''=>, ''=>))->fetchAll();
+	// }

@@ -8,10 +8,10 @@
 		return $errors;
 	}
 
-	function addSong($song){
-		dbQuery("
-			INSERT INTO
-			(userid, )
-			VALUES(:userid)
-		", array(''=>, ''=>))->fetchAll();
-	}
+	// function addSong($song){
+	// 	dbQuery("
+	// 		INSERT INTO
+	// 		( )
+	// 		VALUES(:userid)
+	// 	", array('userid'=>$_SESSION['userid'], ''=>))->fetchAll();
+	// }
