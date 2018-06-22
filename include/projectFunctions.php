@@ -9,10 +9,15 @@
 		return $errors;
 	}
 
-	// function addProject(){
-	// 	dbQuery("
-	// 		INSERT
-	// 		INTO
-	// 		VALUES()
-	// 	", array(''=>, ''=>))->fetchAll();
-	// }
+	function addProject($project, $entryid){
+		dbQuery("
+			INSERT INTO projects
+			(entryid, title, progress, partners, notes)
+			VALUES(:entryid, :title, :progress, :partners, :notes)
+		", array('entryid'=>$entryid,
+				'title'=>$project['projectTitle'],
+				'progress'=>$project['projectProgress'],
+				'partners'=>$project['projectPartners'],
+				'notes'=>$project['projectNotes'])
+		)->fetchAll();
+	}

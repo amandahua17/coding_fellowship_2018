@@ -8,10 +8,17 @@
 		return $errors;
 	}
 
-	// function addPhoto(){
-	// 	dbQuery("
-	// 		INSERT
-	// 		INTO
-	// 		VALUES()
-	// 	", array(''=>, ''=>))->fetchAll();
-	// }
+	function addPhoto($photo, $entryid){
+		if(!isset($photo['photoTitle'])){
+			$photo['photoTitle'] = NULL;
+		}
+		dbQuery("
+			INSERT INTO photos
+			(entryid, path, photographer, title)
+			VALUES(:entryid, :path, :photographer, :title)
+		", array('entryid'=>$entryid,
+				'path'=>$photo['photoPath'],
+				'photographer'=>$photo['photographer'],
+				'title'=>$photo['photoTitle'])
+		)->fetchAll();
+	}

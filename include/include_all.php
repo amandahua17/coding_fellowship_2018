@@ -2,7 +2,7 @@
 
 	date_default_timezone_set('America/Chicago');
 
-	include('config/config.php');
+	include('config/config_local.php');
 	include('include/db_query.php');
 
 	include('include/htmlFunctions.php');

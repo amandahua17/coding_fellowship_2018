@@ -8,6 +8,7 @@
 		$songcount = $_REQUEST['songs'];
 		for($i=0; $i<$songcount; $i++){
 			$errors+=validateSong($i);
+			$songs[];
 		}
 		//PHOTO
 		$photocount = $_REQUEST['photos'];
@@ -51,7 +52,8 @@
 
 		//VALIDATION
 		if(sizeof($errors)==0){
-
+			echo('add entry!');
+			addEntry()
 		}else{
 			displayErrors($errors);
 		}

@@ -8,10 +8,17 @@
 		return $errors;
 	}
 
-	// function addSong($song){
-	// 	dbQuery("
-	// 		INSERT INTO
-	// 		( )
-	// 		VALUES(:userid)
-	// 	", array('userid'=>$_SESSION['userid'], ''=>))->fetchAll();
-	// }
+	function addSong($song, $entryid){
+		if(!isset($song['songLink'])){
+			$song['songLink'] = NULL;
+		}
+		dbQuery("
+			INSERT INTO songs
+			(entryid, title, artist, link)
+			VALUES(:entryid, :title, :artist, :link)
+		", array('entryid'=>$entryid,
+				'title'=>$song['songTitle'],
+				'artist'=>$song['songArtist'],
+				'link'=>$song['songLink'])
+		)->fetchAll();
+	}

@@ -8,10 +8,14 @@
 		return $errors;
 	}
 
-	// function addMeal(){
-	// 	dbQuery("
-	// 		INSERT
-	// 		INTO
-	// 		VALUES()
-	// 	", array(''=>, ''=>))->fetchAll();
-	// }
+	function addMeal($meal, $entryid){
+		dbQuery("
+			INSERT INTO meals
+			(entryid, place, chef, description)
+			VALUES(:entryid, :place, :chef, :description)
+		", array('entryid'=>$entryid,
+				'place'=>$meal['mealPlace'],
+				'chef'=>$meal['mealChef'],
+				'description'=>$meal['mealDescription'])
+		)->fetchAll();
+	}

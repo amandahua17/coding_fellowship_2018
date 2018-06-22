@@ -8,10 +8,17 @@
 		return $errors;
 	}
 
-	// function addBook(){
-	// 	dbQuery("
-	// 		INSERT
-	// 		INTO
-	// 		VALUES()
-	// 	", array(''=>, ''=>))->fetchAll();
-	// }
+	function addBook($book, $entryid){
+		if(!isset($book['bookNotes'])){
+			$book['bookNotes'] = NULL;
+		}
+		dbQuery("
+			INSERT INTO books
+			(entryid, title, author, notes)
+			VALUES(:entryid, :title, :author, :notes)
+		", array('entryid'=>$entryid,
+				'title'=>$book['bookTitle'],
+				'author'=>$book['bookAuthor'],
+				'notes'=>$book['bookNotes'])
+		)->fetchAll();
+	}

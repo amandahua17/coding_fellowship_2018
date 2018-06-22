@@ -8,10 +8,14 @@
 		return $errors;
 	}
 
-	// function addPerson(){
-	// 	dbQuery("
-	// 		INSERT
-	// 		INTO
-	// 		VALUES()
-	// 	", array(''=>, ''=>))->fetchAll();
-	// }
+	function addPerson($person, $entryid){
+		dbQuery("
+			INSERT INTO people
+			(entryid, name, relationship, description)
+			VALUES(:entryid, :name, :relationship, :description)
+		", array('entryid'=>$entryid,
+				'name'=>$person['personName'],
+				'relationship'=> $person['personRelationship'],
+				'description'=>$person['personDescription'])
+		)->fetchAll();
+	}

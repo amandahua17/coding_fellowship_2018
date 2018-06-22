@@ -63,8 +63,8 @@
 					<br><a class='home' href='/index.php'>Home</a>
 			";
 		}
-		echo 		"<script src='js/jquery.js'></script>
-					<script src='js/jsfunctions.js'></script>
+		echo 		"<script src='/js/jquery.js'></script>
+					<script src='/js/jsfunctions.js'></script>
 				</body>
 			</html>
 		";

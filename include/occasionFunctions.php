@@ -7,10 +7,13 @@
 		return $errors;
 	}
 
-	// function addOccasion(){
-	// 	dbQuery("
-	// 		INSERT
-	// 		INTO
-	// 		VALUES()
-	// 	", array(''=>, ''=>))->fetchAll();
-	// }
+	function addOccasion($occasion, $entryid){
+		dbQuery("
+			INSERT INTO occasions
+			(entryid, name, description)
+			VALUES(:entryid, :name, :description)
+		", array('entryid'=>$entryid,
+				'name'=>$occasion['occasionName'],
+				'description'=>$occasion['occasionDescription'])
+		)->fetchAll();
+	}
