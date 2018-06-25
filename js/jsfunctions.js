@@ -87,6 +87,7 @@ function addOption(){
 				removeElement('warning');
 			}
 			addSongField(songc);
+			console.log(document.getElementsByName('songTitle'+songc));
 			songc++;
 			break;
 
@@ -417,15 +418,24 @@ function addProjectField(n){
 	form.appendChild(project);
 }
 
-function validateEntryForm(date){
-	$.ajax("/sitefiles/view_day.php?date=".date, {
-		songs: songc,
-		photos: photoc,
-		people: personc,
-		occasions: occasionc,
-		meals: mealc,
-		books: bookc,
-		projects: projectc
+function validateEntryForm(){
+	console.log('going through js functions');
+	$.ajax({url:window.location.href+"&add=true",
+			type: 'POST',
+			data:{
+				'songs': songc,
+				'photos': photoc,
+				'people': personc,
+				'occasions': occasionc,
+				'meals': mealc,
+				'books': bookc,
+				'projects': projectc
+			},
+			success: function(data){
+				console.log("request sent", data);
+				// die();
+				// window.location.href +="&add=true";
+			}
 	});
 }
 

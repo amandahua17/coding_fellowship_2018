@@ -19,3 +19,11 @@
 				'description'=>$person['personDescription'])
 		)->fetchAll();
 	}
+
+	function getNextArrayPerson($i){
+		$people = array();
+		$people[$i]['personName'] = $_REQUEST['personName'.$i];
+		$people[$i]['personRelationship'] = $_REQUEST['personRelationship'.$i];
+		$people[$i]['personDescription'] = $_REQUEST['personDescription'.$i];
+		return $people;
+	}

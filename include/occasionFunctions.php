@@ -17,3 +17,10 @@
 				'description'=>$occasion['occasionDescription'])
 		)->fetchAll();
 	}
+
+	function getNextArrayOccasion($i){
+		$occasions = array();
+		$occasions[$i]['occasionName'] = $_REQUEST['occasionName'.$i];
+		$occasions[$i]['occasionDescription'] = $_REQUEST['occasionDescription'.$i];
+		return $occasions;
+	}

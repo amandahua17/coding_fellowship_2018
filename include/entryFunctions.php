@@ -24,7 +24,7 @@
 		return $result['entryid'];
 	}
 
-	function addEntry($songs, $photos, $people, $occasions, $meals, $books, $projects, $freewrite, $date, $entryid){
+	function addEntry($songs, $photos, $people, $occasions, $meals, $books, $projects, $freewrite, $date){
 		dbQuery("
 			INSERT INTO entries
 			(userid)

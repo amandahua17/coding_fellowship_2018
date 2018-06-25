@@ -21,3 +21,12 @@
 				'notes'=>$project['projectNotes'])
 		)->fetchAll();
 	}
+
+	function getNextArrayProject($i){
+		$projects = array();
+		$projects[$i]['projectTitle'] = $_REQUEST['projectTitle'.$i];
+		$projects[$i]['projectProgress'] = $_REQUEST['projectProgress'.$i];
+		$projects[$i]['projectPartners'] = $_REQUEST['projectPartners'.$i];
+		$projects[$i]['projectNotes'] = $_REQUEST['projectNotes'.$i];
+		return $projects;
+	}

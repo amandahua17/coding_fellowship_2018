@@ -22,3 +22,11 @@
 				'title'=>$photo['photoTitle'])
 		)->fetchAll();
 	}
+
+	function getNextArrayPhoto($i){
+		$photos = array();
+		$photos[$i]['photoPath'] = $_REQUEST['photoPath'.$i];
+		$photos[$i]['photographer'] = $_REQUEST['photographer'.$i];
+		$photos[$i]['photoTitle'] = $_REQUEST['photoTitle'.$i];
+		return $photos;
+	}

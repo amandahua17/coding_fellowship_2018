@@ -22,3 +22,11 @@
 				'notes'=>$book['bookNotes'])
 		)->fetchAll();
 	}
+
+	function getNextArrayBook($i){
+		$books = array();
+		$books[$i]['bookTitle'] = $_REQUEST['bookTitle'.$i];
+		$books[$i]['bookAuthor'] = $_REQUEST['bookAuthor'.$i];
+		$books[$i]['bookNotes'] = $_REQUEST['bookNotes'.$i];
+		return $books;
+	}

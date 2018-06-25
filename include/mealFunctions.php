@@ -19,3 +19,11 @@
 				'description'=>$meal['mealDescription'])
 		)->fetchAll();
 	}
+
+	function getNextArrayMeal($i){
+		$meals = array();
+		$meals[$i]['mealPlace'] = $_REQUEST['mealPlace'.$i];
+		$meals[$i]['mealChef'] = $_REQUEST['mealChef'.$i];
+		$meals[$i]['mealDescription'] = $_REQUEST['mealDescription'.$i];
+		return $meals;
+	}

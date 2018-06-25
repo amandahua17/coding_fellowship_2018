@@ -22,3 +22,11 @@
 				'link'=>$song['songLink'])
 		)->fetchAll();
 	}
+
+	function getNextArraySong($i){
+		$songs = array();
+		$songs[$i]['songTitle'] = $_REQUEST['songTitle'.$i];
+		$songs[$i]['songArtist'] = $_REQUEST['songArtist'.$i];
+		$songs[$i]['songLink'] = $_REQUEST['songLink'.$i];
+		return $songs;
+	}

@@ -12,6 +12,9 @@
 	include('include/photoFunctions.php');
 	include('include/bookFunctions.php');
 	include('include/occasionFunctions.php');
+	include('include/personFunctions.php');
+	include('include/mealFunctions.php');
+	include('include/projectFunctions.php');
 	include('include/formFunctions.php');
 	include('include/timelineFunctions.php');
 	include('include/dateFunctions.php');
