@@ -149,13 +149,13 @@ function addOption(){
 	  			form.appendChild(warning);
 			}
 	}
-	console.log("song: ", songc,
-	 			"photo: ", photoc,
-				"person: ", personc,
-				"occasion: ", occasionc,
-				"meal: ", mealc,
-				"book: ", bookc,
-				"project: ", projectc);
+	// console.log("song: ", songc,
+	//  			"photo: ", photoc,
+	// 			"person: ", personc,
+	// 			"occasion: ", occasionc,
+	// 			"meal: ", mealc,
+	// 			"book: ", bookc,
+	// 			"project: ", projectc);
 }
 
 function addSongField(n){
@@ -419,9 +419,12 @@ function addProjectField(n){
 }
 
 function validateEntryForm(){
+	var segments = window.location.href.split('?');		//'view_day.php', 'date=xxxx-xx-xx'
+	var postvars = segments[1].split('=');				//'date', 'xxxx-xx-xx'
+	var date = postvars[1];
+	var freeWrite = document.getElementsByName('freeWrite').value;
 	console.log('going through js functions');
-	$.ajax({url:window.location.href+"&add=true",
-			type: 'POST',
+	$.post({url:'/ajax/addEntry.php',
 			data:{
 				'songs': songc,
 				'photos': photoc,
@@ -429,41 +432,16 @@ function validateEntryForm(){
 				'occasions': occasionc,
 				'meals': mealc,
 				'books': bookc,
-				'projects': projectc
+				'projects': projectc,
+				'date': date,
+				'freeWrite': freeWrite
 			},
-			success: function(data){
-				console.log("request sent", data);
-				// die();
-				// window.location.href +="&add=true";
+			success: function(data){		//SUCCESS CARRIES OUT AFTER
+				console.log(data);
+				var title = document.getElementsByTagName('h1');
+				var text = document.createTextNode(data);
+				title[0].after(text);
+
 			}
 	});
 }
-
-
-// function getNumMeals(){
-// 	return getElementsByClassName('meal').length;
-// }
-//
-// function getNumBooks(){
-// 	return getElementsByClassName('book').length;
-// }
-//
-// function getNumSongs(){
-// 	return getElementsByClassName('song').length;
-// }
-//
-// function getNumPeople(){
-// 	return getElementsByClassName('person').length;
-// }
-//
-// function getNumPhotos(){
-// 	return getElementsByClassName('photo').length;
-// }
-//
-// function getNumProjects(){
-// 	return getElementsByClassName('project').length;
-// }
-//
-// function getNumOccasions(){
-// 	return getElementsByClassName('').length;
-// }

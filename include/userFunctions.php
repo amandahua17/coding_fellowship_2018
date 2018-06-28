@@ -84,13 +84,22 @@
 
 	function getBeginningDate(){
 		$result = dbQuery("
-			SELECT DATE_FORMAT(beginning, '%m-%d-%Y')
+			SELECT DATE_FORMAT(beginning, '%Y-%m-%d')
 			AS date
 			from users
 			WHERE userid = :userid
 		", array('userid'=>$_SESSION['userid']))->fetch();
 		return $result['date'];
 	}
+
+	function setNewBeginning($date){
+		$result = dbQuery("
+			UPDATE users
+			SET beginning = :date
+			WHERE userid = :userid
+		", array('userid'=>$_SESSION['userid'], 'date'=>$date))->fetch();
+	}
+
 	//USER SETTINGS FUNCTIONS
 	function changeUsername($userid, $newname){
 		// var_dump($userid, $newname);

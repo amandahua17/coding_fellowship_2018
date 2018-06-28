@@ -23,6 +23,18 @@
 		";
 	}
 
+	function formDateField($name, $label){
+		echo"
+			$label: <input type='date' name=$name
+			";
+		if(isset($_REQUEST[$name])){
+			echo"value = $_REQUEST[$name]";
+		}
+		echo"> 	<input type='submit' name='dateSub' value='Go'><br><br>
+		";
+	}
+
+	//VALIDATE FUNCTIONS
 	function validateTextField($name){
 		$errors = array();
 		if(!isset($_REQUEST[$name])){
@@ -33,8 +45,17 @@
 		return $errors;
 	}
 
-	//VALidATE FUNCTIONS
 	function validatePasswordField($name){
+		$errors = array();
+		if(!isset($_REQUEST[$name])){
+			$errors[$name] = 'required!';
+		}else if(($_REQUEST[$name] == NULL)||($_REQUEST[$name] == '')){
+			$errors[$name] = 'required!';
+		}
+		return $errors;
+	}
+	
+	function validateDateField($name){
 		$errors = array();
 		if(!isset($_REQUEST[$name])){
 			$errors[$name] = 'required!';
@@ -223,5 +244,3 @@
 			</form>
 		";
 	}
-
-	
