@@ -10,6 +10,7 @@
 
 	echo"
 		<div id='addentryform'>
+			<div id='e1'></div>
 			<form method='post'>
 	";
 				formTextField('freeWrite','Free Write');

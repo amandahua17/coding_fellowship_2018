@@ -423,24 +423,89 @@ function validateEntryForm(){
 	var postvars = segments[1].split('=');				//'date', 'xxxx-xx-xx'
 	var date = postvars[1];
 	var freeWrite = document.getElementsByName('freeWrite').value;
+
+	//checking content...		
+	var songa = [songc][];
+	var photoa = [photoc][];
+	var peresona = [personc][];
+	var occasiona = [occasionc][];
+	var meala = [mealc][];
+	var booka = [bookc][];
+	var projecta = [projectc][];
+
+	//song
+	for(var i = 1; i < songa[0]; i++){
+		songa[i][0] = $('#songTitle').val();
+		songa[i][1] = $('#songArtist').val();
+		songa[i][2] = $('#songLink').val();
+	}
+
+	//photo
+	for(var i = 1; i < songa[0]; i++){
+		songa[i][0] = $('#photoPath').val();
+		songa[i][1] = $('#photoPhotographer').val();
+		songa[i][2] = $('#photoTitle').val();
+	}
+
+	//person
+	for(var i = 1; i < songa[0]; i++){
+		songa[i][0] = $('#personName').val();
+		songa[i][1] = $('#personRelationship').val();
+		songa[i][2] = $('#personDescription').val();
+	}
+
+	//occasion
+	for(var i = 1; i < songa[0]; i++){
+		songa[i][0] = $('#occasionName').val();
+		songa[i][1] = $('#occasionDescription').val();
+	}
+
+	//meal
+	for(var i = 1; i < songa[0]; i++){
+		songa[i][0] = $('#mealPlace').val();
+		songa[i][1] = $('#mealChef').val();
+		songa[i][2] = $('#mealDescription').val();
+	}
+
+	//book
+	for(var i = 1; i < songa[0]; i++){
+		songa[i][0] = $('#bookTitle').val();
+		songa[i][1] = $('#bookAuthor').val();
+		songa[i][2] = $('#bookNotes').val();
+	}
+
+	//project
+	for(var i = 1; i < songa[0]; i++){
+		songa[i][0] = $('#projectTitle').val();
+		songa[i][1] = $('#projectProgress').val();
+		songa[i][2] = $('#projectPartners').val();
+		songa[i][3] = $('#projectNotes').val();
+	}
+
 	console.log('going through js functions');
 	$.post({url:'/ajax/addEntry.php',
 			data:{
-				'songs': songc,
-				'photos': photoc,
-				'people': personc,
-				'occasions': occasionc,
-				'meals': mealc,
-				'books': bookc,
-				'projects': projectc,
+				'songs': songa,
+				'photos': photoa,
+				'people': persona,
+				'occasions': occasiona,
+				'meals': meala,
+				'books': booka,
+				'projects': projecta,
 				'date': date,
 				'freeWrite': freeWrite
 			},
 			success: function(data){		//SUCCESS CARRIES OUT AFTER
 				console.log(data);
-				var title = document.getElementsByTagName('h1');
-				var text = document.createTextNode(data);
-				title[0].after(text);
+				$('#e1').html(data);
+				// console.log($('#e1').length);
+				// if(!$('#e1').length){
+					// var title = document.getElementsByTagName('h1');
+					// var text = document.createTextNode(data);
+					// text.id = 'e1';
+					// console.log('text.id = '+text.id);
+					// title[0].after(text);
+				// }
 
 			}
 	});

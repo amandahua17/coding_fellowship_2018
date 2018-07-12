@@ -69,7 +69,8 @@
 		echo('!!!!!!!!!!!!!!!!!!!!!!!add entry!!!!!!!!!!!!!!!!!!!!!!!!');
 		// addEntry($songs, $photos, $people, $occasions, $meals, $books, $projects, $_REQUEST['freeWrite'], $_REQUEST['date']);
 	}else{
-		displayErrors($errors);
-		return($errors);
+		foreach($errors as $key=>$error){
+			echo $key, ' ', $error;
+		}
 	}
 	// }
